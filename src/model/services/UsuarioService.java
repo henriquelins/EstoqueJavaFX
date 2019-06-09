@@ -2,7 +2,7 @@ package model.services;
 
 import model.entities.Usuario;
 
-public class UsuarioServices {
+public class UsuarioService {
 
 	private Usuario logado = new Usuario();
 
