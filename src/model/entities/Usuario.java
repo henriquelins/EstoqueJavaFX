@@ -4,20 +4,15 @@ public class Usuario {
 
 	private Integer idUsuario;
 	private String name;
+	private String login;
 	private String senha;
 	
 	public Usuario() {}
-	
-	public Usuario(String name, String senha) {
-	
-		this.name = name;
-		this.senha = senha;
-	}
 
-	public Usuario(Integer idUsuario, String name, String senha) {
-		
+	public Usuario(Integer idUsuario, String name, String login, String senha) {
 		this.idUsuario = idUsuario;
 		this.name = name;
+		this.login = login;
 		this.senha = senha;
 	}
 
@@ -37,6 +32,14 @@ public class Usuario {
 		this.name = name;
 	}
 
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
 	public String getSenha() {
 		return senha;
 	}
@@ -50,6 +53,7 @@ public class Usuario {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((idUsuario == null) ? 0 : idUsuario.hashCode());
+		result = prime * result + ((login == null) ? 0 : login.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((senha == null) ? 0 : senha.hashCode());
 		return result;
@@ -69,6 +73,11 @@ public class Usuario {
 				return false;
 		} else if (!idUsuario.equals(other.idUsuario))
 			return false;
+		if (login == null) {
+			if (other.login != null)
+				return false;
+		} else if (!login.equals(other.login))
+			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
@@ -84,8 +93,9 @@ public class Usuario {
 
 	@Override
 	public String toString() {
-		return "Usuario [idUsuario=" + idUsuario + ", name=" + name + ", senha=" + senha + "]";
+		return "Usuario [idUsuario=" + idUsuario + ", name=" + name + ", login=" + login + ", senha=" + senha + "]";
 	}
-
+	
+	
 	
 }

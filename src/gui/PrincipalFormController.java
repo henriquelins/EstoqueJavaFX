@@ -2,7 +2,6 @@ package gui;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import application.Main;
@@ -26,14 +25,8 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Produto;
-import model.services.ProdutoService;
 
 public class PrincipalFormController implements Initializable {
-
-	private ObservableList<Produto> obsList;
-
-	private ProdutoService produtoServices;
-
 
 	@FXML
 	private MenuItem menuItemUsuario;
@@ -43,7 +36,7 @@ public class PrincipalFormController implements Initializable {
 
 	@FXML
 	private MenuItem menuItemSobre;
-	
+
 	@FXML
 	public TableView<Produto> tableViewProduto;
 
@@ -98,34 +91,39 @@ public class PrincipalFormController implements Initializable {
 
 	private void initializeNodes() {
 
-		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("Id"));
+		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("idProduto"));
 		tableColumnCod.setCellValueFactory(new PropertyValueFactory<>("Cod"));
 		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("Nome"));
-		tableColumnDescricao.setCellValueFactory(new PropertyValueFactory<>("Descrição"));
+		tableColumnDescricao.setCellValueFactory(new PropertyValueFactory<>("Descricao"));
 		tableColumnQuantidade.setCellValueFactory(new PropertyValueFactory<>("Quantidade"));
+
+		updateTableView();
 
 		Stage stage = (Stage) Main.getMainScene().getWindow();
 		tableViewProduto.prefHeightProperty().bind(stage.heightProperty());
-		
-		updateTableView();
-		
+
+	}
+
+	private ObservableList<Produto> listaProdutos() {
+		return FXCollections.observableArrayList(
+
+				new Produto(1, "001", "Garrafa", "Garrafa de coca-cola", 10),
+				new Produto(2, "051", "Copo", "Copo de cerveja", 05),
+				new Produto(3, "023", "Prato", "Prato de porcelana", 05));
+
 	}
 
 	public void updateTableView() {
-		if (produtoServices == null) {
-			throw new IllegalStateException("ProdutoServices era nulo");
-		}
 
-		List<Produto> list = produtoServices.findAll();
-		obsList = FXCollections.observableArrayList(list);
-		tableViewProduto.setItems(obsList);
+		tableViewProduto.setItems(listaProdutos());
 		initEditButtons();
 		initRemoveButtons();
+
 	}
 
-	public void onDataChanged() {
-		updateTableView();
-	}
+	/*
+	 * public void onDataChanged() { updateTableView(); }
+	 */
 
 	private void createProdutoDialogForm(String absoluteName) {
 
@@ -203,32 +201,32 @@ public class PrincipalFormController implements Initializable {
 
 	}
 
-	@SuppressWarnings("unused")
-	private void createLogoutForm(String absoluteName) {
-
-		try {
-
-			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-			Pane pane = loader.load();
-			Scene produtoScene = new Scene(pane);
-			Stage produtoStage = new Stage();
-			produtoStage.setTitle("Login");
-			produtoStage.setScene(produtoScene);
-			produtoStage.setResizable(true);
-			produtoStage.initOwner(null);
-			produtoStage.show();
-
-		} catch (IOException e) {
-
-			Alerts.showAlert("IO Exception", "Erro ao carregar a tela Login", e.getMessage(), AlertType.ERROR);
-
-		}
-
-	}
+	/*
+	 * @SuppressWarnings("unused") private void createLogoutForm(String
+	 * absoluteName) {
+	 * 
+	 * try {
+	 * 
+	 * FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+	 * Pane pane = loader.load(); Scene produtoScene = new Scene(pane); Stage
+	 * produtoStage = new Stage(); produtoStage.setTitle("Login");
+	 * produtoStage.setScene(produtoScene); produtoStage.setResizable(true);
+	 * produtoStage.initOwner(null); produtoStage.show();
+	 * 
+	 * } catch (IOException e) {
+	 * 
+	 * Alerts.showAlert("IO Exception", "Erro ao carregar a tela Login",
+	 * e.getMessage(), AlertType.ERROR);
+	 * 
+	 * }
+	 * 
+	 * }
+	 */
 
 	private void initEditButtons() {
 		tableColumnEDIT.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
 		tableColumnEDIT.setCellFactory(param -> new TableCell<Produto, Produto>() {
+
 			private final Button button = new Button("Editar");
 
 			@Override
@@ -248,7 +246,8 @@ public class PrincipalFormController implements Initializable {
 	private void initRemoveButtons() {
 		tableColumnREMOVE.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
 		tableColumnREMOVE.setCellFactory(param -> new TableCell<Produto, Produto>() {
-			private final Button button = new Button("remove");
+
+			private final Button button = new Button("Excluir");
 
 			@Override
 			protected void updateItem(Produto prod, boolean empty) {

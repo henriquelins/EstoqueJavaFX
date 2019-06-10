@@ -9,7 +9,9 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
 <ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="595.0" prefWidth="894.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.PrincipalFormController">
@@ -31,34 +33,41 @@
                 </Menu>
               </menus>
             </MenuBar>
-            <ToolBar prefHeight="40.0" prefWidth="200.0">
+            <ToolBar prefHeight="40.0" prefWidth="798.0">
               <items>
-                <Button mnemonicParsing="false" text="Button" />
-              </items>
-            </ToolBar>
-            <TableView fx:id="tableViewProduto" prefHeight="501.0" prefWidth="788.0">
-              <columns>
-                <TableColumn fx:id="tableColumnId" prefWidth="75.0" text="Id" />
-                <TableColumn fx:id="tableColumnCod" prefWidth="75.0" text="Cod" />
-                  <TableColumn fx:id="tableColumnNome" prefWidth="75.0" text="Nome" />
-                  <TableColumn fx:id="tableColumnDescricao" prefWidth="75.0" text="Descrição" />
-                  <TableColumn fx:id="tableColumnQuantidade" prefWidth="75.0" text="Quantidade" />
-                  <TableColumn fx:id="tableColumnEDIT" prefWidth="75.0" />
-                  <TableColumn fx:id="tableColumnREMOVE" prefWidth="75.0" />
-              </columns>
-            </TableView>
-            <VBox prefHeight="97.0" prefWidth="788.0">
-               <children>
-                  <ButtonBar prefHeight="62.0" prefWidth="788.0">
-                    <buttons>
-                      <Button mnemonicParsing="false" text="Button">
+                  <AnchorPane prefHeight="31.0" prefWidth="766.0">
+                     <children>
+                        <Button alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="400.0" layoutY="4.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="65.0" text="Novo" />
+                      <Button alignment="TOP_CENTER" contentDisplay="CENTER" defaultButton="true" layoutX="280.0" layoutY="4.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="90.0" text="Pesquisar" />
+                        <TextField accessibleRole="IMAGE_VIEW" layoutX="9.0" layoutY="3.0" prefHeight="27.0" prefWidth="263.0" promptText="Pesquisar produtos...">
                            <opaqueInsets>
                               <Insets />
-                           </opaqueInsets></Button>
-                    </buttons>
-                  </ButtonBar>
-               </children>
-            </VBox>
+                           </opaqueInsets>
+                        </TextField>
+                     </children>
+                  </AnchorPane>
+              </items>
+            </ToolBar>
+            <TableView fx:id="tableViewProduto" prefHeight="411.0" prefWidth="644.0" VBox.vgrow="ALWAYS">
+              <columns>
+                <TableColumn fx:id="tableColumnId" editable="false" prefWidth="60.0" style="-fx-alignment: CENTER;" text="Id" />
+                <TableColumn fx:id="tableColumnCod" editable="false" prefWidth="75.0" style="-fx-alignment: CENTER;" text="Cod" />
+                  <TableColumn fx:id="tableColumnNome" editable="false" prefWidth="200.0" style="-fx-alignment: CENTER;" text="Nome" />
+                  <TableColumn fx:id="tableColumnDescricao" editable="false" prefWidth="300.0" style="-fx-alignment: CENTER;" text="Descrição" />
+                  <TableColumn fx:id="tableColumnQuantidade" editable="false" prefWidth="75.0" style="-fx-alignment: CENTER;" text="Quantidade" />
+                  <TableColumn fx:id="tableColumnEDIT" prefWidth="100.0" style="-fx-alignment: CENTER;" />
+                  <TableColumn fx:id="tableColumnREMOVE" prefWidth="75.0" style="-fx-alignment: CENTER;" />
+              </columns>
+            </TableView>
+            <ButtonBar prefHeight="40.0" prefWidth="200.0">
+              <buttons>
+                  <AnchorPane prefHeight="40.0" prefWidth="786.0">
+                     <children>
+                      <Button alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="718.0" layoutY="8.0" mnemonicParsing="false" pickOnBounds="false" prefHeight="25.0" prefWidth="65.0" text="Logout" textAlignment="CENTER" AnchorPane.rightAnchor="10.0" />
+                     </children>
+                  </AnchorPane>
+              </buttons>
+            </ButtonBar>
          </children>
       </VBox>
    </content>
