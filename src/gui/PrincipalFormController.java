@@ -16,6 +16,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -56,11 +58,33 @@ public class PrincipalFormController implements Initializable {
 	private TableColumn<Produto, Integer> tableColumnQuantidade;
 
 	@FXML
+	private TableColumn<Produto, Produto> tableColumnSAIDA;
+	
+	@FXML
+	private TableColumn<Produto, Produto> tableColumnENTRADA;
+
+	@FXML
 	private TableColumn<Produto, Produto> tableColumnEDIT;
 
 	@FXML
 	private TableColumn<Produto, Produto> tableColumnREMOVE;
-
+	
+	@FXML
+	private Button btNovo;
+	
+	@FXML
+	private Button btLogout;
+	
+	@FXML
+	private Label labelLogado;
+	
+	@FXML
+	private ComboBox <String> cbProduto;
+	
+	@FXML
+	private Button btPesquisar;
+	
+	
 	@FXML
 	public void onMenuItemUsuario(ActionEvent event) {
 
@@ -79,6 +103,34 @@ public class PrincipalFormController implements Initializable {
 	public void onMenuItemSobre(ActionEvent event) {
 
 		createSobreDialogForm("/gui/SobreView.fxml");
+
+	}
+	
+	@FXML
+	public void onBtNovoAction(ActionEvent event) {
+	
+		 createProdutoDialogForm("/gui/ProdutoView.fxml");
+		 
+	}
+	
+	@FXML
+	public void onBtLogoutAction(ActionEvent event) {
+		
+		 createProdutoDialogForm("/gui/LoginView.fxml");
+		 System.exit(0);
+		 
+	}
+	
+	@FXML
+	public void onBtPesquisarAction(ActionEvent event) {
+		System.out.println("onBtPesquisarAction");
+	}
+	
+	
+	@FXML
+	public void onCbProdutoAction(ActionEvent event) {
+
+		System.out.println("onCbProduto");
 
 	}
 
@@ -116,6 +168,8 @@ public class PrincipalFormController implements Initializable {
 	public void updateTableView() {
 
 		tableViewProduto.setItems(listaProdutos());
+		initSaidaButtons();
+		initEntradaButtons();
 		initEditButtons();
 		initRemoveButtons();
 
@@ -201,28 +255,6 @@ public class PrincipalFormController implements Initializable {
 
 	}
 
-	/*
-	 * @SuppressWarnings("unused") private void createLogoutForm(String
-	 * absoluteName) {
-	 * 
-	 * try {
-	 * 
-	 * FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-	 * Pane pane = loader.load(); Scene produtoScene = new Scene(pane); Stage
-	 * produtoStage = new Stage(); produtoStage.setTitle("Login");
-	 * produtoStage.setScene(produtoScene); produtoStage.setResizable(true);
-	 * produtoStage.initOwner(null); produtoStage.show();
-	 * 
-	 * } catch (IOException e) {
-	 * 
-	 * Alerts.showAlert("IO Exception", "Erro ao carregar a tela Login",
-	 * e.getMessage(), AlertType.ERROR);
-	 * 
-	 * }
-	 * 
-	 * }
-	 */
-
 	private void initEditButtons() {
 		tableColumnEDIT.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
 		tableColumnEDIT.setCellFactory(param -> new TableCell<Produto, Produto>() {
@@ -259,6 +291,46 @@ public class PrincipalFormController implements Initializable {
 				setGraphic(button);
 				button.setOnAction(event -> removeEntity(prod));
 			}
+		});
+	}
+
+	private void initSaidaButtons() {
+		tableColumnSAIDA.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tableColumnSAIDA.setCellFactory(param -> new TableCell<Produto, Produto>() {
+
+			private final Button button = new Button("Saída");
+
+			@Override
+			protected void updateItem(Produto prod, boolean empty) {
+				super.updateItem(prod, empty);
+				if (prod == null) {
+					setGraphic(null);
+					return;
+				}
+				setGraphic(button);
+				button.setOnAction(event -> createProdutoDialogForm("/gui/ProdutoView.fxml"));
+			}
+
+		});
+	}
+
+	private void initEntradaButtons() {
+		tableColumnENTRADA.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tableColumnENTRADA.setCellFactory(param -> new TableCell<Produto, Produto>() {
+
+			private final Button button = new Button("Entrada");
+
+			@Override
+			protected void updateItem(Produto prod, boolean empty) {
+				super.updateItem(prod, empty);
+				if (prod == null) {
+					setGraphic(null);
+					return;
+				}
+				setGraphic(button);
+				button.setOnAction(event -> createProdutoDialogForm("/gui/ProdutoView.fxml"));
+			}
+
 		});
 	}
 
