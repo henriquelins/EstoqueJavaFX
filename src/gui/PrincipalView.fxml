@@ -68,7 +68,7 @@
               <buttons>
                   <AnchorPane prefHeight="40.0" prefWidth="786.0">
                      <children>
-                        <Label fx:id="labelLogado" alignment="CENTER" contentDisplay="CENTER" layoutY="12.0" text="Logado: XXXXX" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="686.0" AnchorPane.topAnchor="12.0" />
+                        <Label fx:id="labelLogado" alignment="CENTER" contentDisplay="CENTER" layoutX="594.0" layoutY="12.0" prefHeight="17.0" prefWidth="92.0" text="Logado: XXXXX" />
                       <Button fx:id="btLogout" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="718.0" layoutY="8.0" mnemonicParsing="false" onAction="#onBtLogoutAction" pickOnBounds="false" prefHeight="25.0" prefWidth="65.0" text="Logout" textAlignment="CENTER" AnchorPane.rightAnchor="10.0" />
                      </children>
                   </AnchorPane>

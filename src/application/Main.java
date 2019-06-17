@@ -21,6 +21,7 @@ public class Main extends Application {
 
 			mainScene = new Scene(pane);
 			primaryStage.setScene(mainScene);
+			primaryStage.setResizable(false);
 			primaryStage.setTitle("Estoque Crachás");
 			primaryStage.show();
 

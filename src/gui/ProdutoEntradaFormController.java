@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 
 import javafx.fxml.Initializable;
 
-public class ProdutoFormController implements Initializable{
+public class ProdutoEntradaFormController implements Initializable{
 
 	
 	

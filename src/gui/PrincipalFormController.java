@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import application.Main;
 import gui.util.Alerts;
+import gui.util.Utils;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -95,7 +96,7 @@ public class PrincipalFormController implements Initializable {
 	@FXML
 	public void onMenuItemProduto(ActionEvent event) {
 
-		createProdutoDialogForm("/gui/ProdutoView.fxml");
+		createProdutoDialogForm("/gui/ProdutoNovoView.fxml");
 
 	}
 
@@ -109,40 +110,33 @@ public class PrincipalFormController implements Initializable {
 	@FXML
 	public void onBtNovoAction(ActionEvent event) {
 	
-		 createProdutoDialogForm("/gui/ProdutoView.fxml");
+		 createProdutoDialogForm("/gui/ProdutoNovoView.fxml");
 		 
 	}
 	
 	@FXML
 	public void onBtLogoutAction(ActionEvent event) {
-		
-		 createProdutoDialogForm("/gui/LoginView.fxml");
-		 System.exit(0);
-		 
+		Utils.fecharTelaAction();
+		createLoginForm("/gui/LoginView.fxml");	 
 	}
 	
 	@FXML
 	public void onBtPesquisarAction(ActionEvent event) {
-		System.out.println("onBtPesquisarAction");
+		Alerts.showAlert("Button Pesquisar", "Não implementado", "onBtPesquisarAction", AlertType.ERROR);
 	}
 	
 	
 	@FXML
 	public void onCbProdutoAction(ActionEvent event) {
-
-		System.out.println("onCbProduto");
-
+		Alerts.showAlert("ComboBox Produto", "Não implementado", "onCbProduto", AlertType.ERROR);
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
 		initializeNodes();
-
 	}
 
 	private void initializeNodes() {
-
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("idProduto"));
 		tableColumnCod.setCellValueFactory(new PropertyValueFactory<>("Cod"));
 		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("Nome"));
@@ -153,7 +147,6 @@ public class PrincipalFormController implements Initializable {
 
 		Stage stage = (Stage) Main.getMainScene().getWindow();
 		tableViewProduto.prefHeightProperty().bind(stage.heightProperty());
-
 	}
 
 	private ObservableList<Produto> listaProdutos() {
@@ -162,7 +155,6 @@ public class PrincipalFormController implements Initializable {
 				new Produto(1, "001", "Garrafa", "Garrafa de coca-cola", 10),
 				new Produto(2, "051", "Copo", "Copo de cerveja", 05),
 				new Produto(3, "023", "Prato", "Prato de porcelana", 05));
-
 	}
 
 	public void updateTableView() {
@@ -178,7 +170,36 @@ public class PrincipalFormController implements Initializable {
 	/*
 	 * public void onDataChanged() { updateTableView(); }
 	 */
+	
+	
+	private void createLoginForm(String absoluteName) {
 
+		try {
+
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			Pane pane = loader.load();
+
+			Scene loginScene = new Scene(pane);
+
+			Stage loginStage = new Stage();
+			loginStage.setTitle("Login");
+			loginStage.setScene(loginScene);
+			loginStage.setResizable(false);
+			loginStage.initModality(Modality.APPLICATION_MODAL);
+			loginStage.initOwner(null);
+			loginStage.show();
+
+		} catch (IOException e) {
+
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela Login", e.getMessage(),
+					AlertType.ERROR);
+
+		}
+
+	}
+
+	
+	
 	private void createProdutoDialogForm(String absoluteName) {
 
 		try {
@@ -269,7 +290,7 @@ public class PrincipalFormController implements Initializable {
 					return;
 				}
 				setGraphic(button);
-				button.setOnAction(event -> createProdutoDialogForm("/gui/ProdutoView.fxml"));
+				button.setOnAction(event -> createProdutoDialogForm("/gui/ProdutoEditarView.fxml"));
 			}
 
 		});
@@ -308,7 +329,7 @@ public class PrincipalFormController implements Initializable {
 					return;
 				}
 				setGraphic(button);
-				button.setOnAction(event -> createProdutoDialogForm("/gui/ProdutoView.fxml"));
+				button.setOnAction(event -> createProdutoDialogForm("/gui/ProdutoSaidaView.fxml"));
 			}
 
 		});
@@ -328,7 +349,7 @@ public class PrincipalFormController implements Initializable {
 					return;
 				}
 				setGraphic(button);
-				button.setOnAction(event -> createProdutoDialogForm("/gui/ProdutoView.fxml"));
+				button.setOnAction(event -> createProdutoDialogForm("/gui/ProdutoEntradaView.fxml"));
 			}
 
 		});
@@ -338,5 +359,6 @@ public class PrincipalFormController implements Initializable {
 
 		return null;
 	}
+	
 
 }

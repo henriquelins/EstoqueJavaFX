@@ -15,14 +15,14 @@
           <Button defaultButton="true" layoutX="484.0" layoutY="255.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="82.0" text="Salvar" />
             <Separator layoutX="1.0" layoutY="234.0" prefHeight="1.0" prefWidth="600.0" />
             <Label layoutX="215.0" layoutY="80.0" text="Nome" />
-            <Label layoutX="316.0" layoutY="152.0" text="Senha" />
+            <Label layoutX="316.0" layoutY="142.0" text="Senha" />
             <Label layoutX="69.0" layoutY="142.0" text="Login" />
             <TextField layoutX="183.0" layoutY="105.0" prefHeight="25.0" prefWidth="376.0" />
             <TextField layoutX="69.0" layoutY="172.0" prefHeight="25.0" prefWidth="226.0" />
-            <Label layoutX="449.0" layoutY="148.0" text="Repetir Senha" />
-            <PasswordField layoutX="316.0" layoutY="182.0" prefHeight="25.0" prefWidth="110.0" />
-            <PasswordField layoutX="449.0" layoutY="179.0" prefHeight="25.0" prefWidth="110.0" />
-            <TextField layoutX="69.0" layoutY="105.0" prefHeight="25.0" prefWidth="92.0" />
+            <Label layoutX="447.0" layoutY="142.0" text="Repetir Senha" />
+            <PasswordField layoutX="316.0" layoutY="172.0" prefHeight="25.0" prefWidth="110.0" />
+            <PasswordField layoutX="447.0" layoutY="172.0" prefHeight="25.0" prefWidth="110.0" />
+            <TextField editable="false" layoutX="69.0" layoutY="105.0" prefHeight="25.0" prefWidth="92.0" />
             <Label layoutX="69.0" layoutY="80.0" text="Id" />
          </children>
       </AnchorPane>
