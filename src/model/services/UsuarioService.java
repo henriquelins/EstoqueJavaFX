@@ -1,16 +1,45 @@
 package model.services;
 
+import gui.util.Alerts;
+import javafx.scene.control.Alert.AlertType;
 import model.entities.Usuario;
 
 public class UsuarioService {
 
-	private Usuario logado = new Usuario();
+	Usuario user = new Usuario();
 
 	public Usuario login(Usuario usuario) {
 
-		this.logado = usuario;
+		String login = "adm";
+		String senha = "10";
 
-		return logado;
+		if (login.equals(usuario.getLogin()) == true && senha.equals(usuario.getSenha())) {
+
+			user.setLogin(login);
+			user.setSenha(senha);
+
+		} else {
+
+			user.setLogin(null);
+			user.setSenha(null);
+		}
+
+		return user;
+
+	}
+
+	public void usuarioNovoOuEditar(Usuario usuario) {
+
+		if (usuario.getIdUsuario() == null) {
+
+			Alerts.showAlert("Usuário", null, "Novo Usuário", AlertType.ERROR);
+
+		} else {
+
+			Alerts.showAlert("Usuário", null, "Editar Usuário", AlertType.ERROR);
+
+		}
+
 	}
 
 }

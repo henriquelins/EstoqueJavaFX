@@ -17,7 +17,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableCell;
@@ -60,7 +59,7 @@ public class PrincipalFormController implements Initializable {
 
 	@FXML
 	private TableColumn<Produto, Produto> tableColumnSAIDA;
-	
+
 	@FXML
 	private TableColumn<Produto, Produto> tableColumnENTRADA;
 
@@ -69,27 +68,23 @@ public class PrincipalFormController implements Initializable {
 
 	@FXML
 	private TableColumn<Produto, Produto> tableColumnREMOVE;
-	
+
 	@FXML
 	private Button btNovo;
-	
+
 	@FXML
 	private Button btLogout;
-	
+
 	@FXML
 	private Label labelLogado;
-	
-	@FXML
-	private ComboBox <String> cbProduto;
-	
+
 	@FXML
 	private Button btPesquisar;
-	
-	
+
 	@FXML
 	public void onMenuItemUsuario(ActionEvent event) {
 
-		createUsuarioDialogForm("/gui/UsuarioView.fxml");
+		createUsuarioDialogForm("/gui/UsuarioNovoView.fxml");
 
 	}
 
@@ -106,29 +101,23 @@ public class PrincipalFormController implements Initializable {
 		createSobreDialogForm("/gui/SobreView.fxml");
 
 	}
-	
+
 	@FXML
 	public void onBtNovoAction(ActionEvent event) {
-	
-		 createProdutoDialogForm("/gui/ProdutoNovoView.fxml");
-		 
+
+		createProdutoDialogForm("/gui/ProdutoNovoView.fxml");
+
 	}
-	
+
 	@FXML
 	public void onBtLogoutAction(ActionEvent event) {
 		Utils.fecharTelaAction();
-		createLoginForm("/gui/LoginView.fxml");	 
+		createLoginForm("/gui/LoginView.fxml");
 	}
-	
+
 	@FXML
 	public void onBtPesquisarAction(ActionEvent event) {
 		Alerts.showAlert("Button Pesquisar", "Não implementado", "onBtPesquisarAction", AlertType.ERROR);
-	}
-	
-	
-	@FXML
-	public void onCbProdutoAction(ActionEvent event) {
-		Alerts.showAlert("ComboBox Produto", "Não implementado", "onCbProduto", AlertType.ERROR);
 	}
 
 	@Override
@@ -147,6 +136,9 @@ public class PrincipalFormController implements Initializable {
 
 		Stage stage = (Stage) Main.getMainScene().getWindow();
 		tableViewProduto.prefHeightProperty().bind(stage.heightProperty());
+
+		labelLogado.setText(LoginFormController.LogadoToString());
+
 	}
 
 	private ObservableList<Produto> listaProdutos() {
@@ -170,8 +162,7 @@ public class PrincipalFormController implements Initializable {
 	/*
 	 * public void onDataChanged() { updateTableView(); }
 	 */
-	
-	
+
 	private void createLoginForm(String absoluteName) {
 
 		try {
@@ -191,15 +182,12 @@ public class PrincipalFormController implements Initializable {
 
 		} catch (IOException e) {
 
-			Alerts.showAlert("IO Exception", "Erro ao carregar a tela Login", e.getMessage(),
-					AlertType.ERROR);
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela Login", e.getMessage(), AlertType.ERROR);
 
 		}
 
 	}
 
-	
-	
 	private void createProdutoDialogForm(String absoluteName) {
 
 		try {
@@ -359,6 +347,5 @@ public class PrincipalFormController implements Initializable {
 
 		return null;
 	}
-	
 
 }

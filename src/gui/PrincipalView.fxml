@@ -2,8 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -16,9 +14,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="595.0" prefWidth="894.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.PrincipalFormController">
+<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="595.0" prefWidth="894.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.PrincipalFormController">
    <content>
-      <VBox prefHeight="594.0" prefWidth="788.0">
+      <VBox alignment="CENTER" prefHeight="594.0" prefWidth="788.0">
          <children>
             <MenuBar>
               <menus>
@@ -39,19 +37,18 @@
               <items>
                   <AnchorPane prefHeight="31.0" prefWidth="766.0">
                      <children>
-                        <Button fx:id="btNovo" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="542.0" layoutY="4.0" mnemonicParsing="false" onAction="#onBtNovoAction" prefHeight="25.0" prefWidth="62.0" text="Novo" />
+                        <Button fx:id="btNovo" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="428.0" layoutY="4.0" mnemonicParsing="false" onAction="#onBtNovoAction" prefHeight="25.0" prefWidth="62.0" text="Novo" />
                       <Button fx:id="btPesquisar" alignment="TOP_CENTER" contentDisplay="CENTER" defaultButton="true" layoutX="280.0" layoutY="4.0" mnemonicParsing="false" onAction="#onBtPesquisarAction" prefHeight="25.0" prefWidth="90.0" text="Pesquisar" />
                         <TextField accessibleRole="IMAGE_VIEW" layoutX="9.0" layoutY="3.0" prefHeight="27.0" prefWidth="263.0" promptText="Pesquisar produtos...">
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets>
                         </TextField>
-                        <ComboBox fx:id="cbProduto" layoutX="387.0" layoutY="4.0" onAction="#onCbProdutoAction" prefHeight="25.0" prefWidth="137.0" promptText="Selecione..." />
                      </children>
                   </AnchorPane>
               </items>
             </ToolBar>
-            <TableView fx:id="tableViewProduto" prefHeight="411.0" prefWidth="644.0" VBox.vgrow="ALWAYS">
+            <TableView fx:id="tableViewProduto" prefHeight="401.0" prefWidth="892.0" VBox.vgrow="SOMETIMES">
               <columns>
                 <TableColumn fx:id="tableColumnId" editable="false" prefWidth="60.0" style="-fx-alignment: CENTER;" text="Id" />
                 <TableColumn fx:id="tableColumnCod" editable="false" prefWidth="75.0" style="-fx-alignment: CENTER;" text="Cod" />
@@ -64,16 +61,15 @@
                   <TableColumn fx:id="tableColumnREMOVE" prefWidth="75.0" style="-fx-alignment: CENTER;" />
               </columns>
             </TableView>
-            <ButtonBar prefHeight="40.0" prefWidth="200.0">
-              <buttons>
-                  <AnchorPane prefHeight="40.0" prefWidth="786.0">
-                     <children>
-                        <Label fx:id="labelLogado" alignment="CENTER" contentDisplay="CENTER" layoutX="594.0" layoutY="12.0" prefHeight="17.0" prefWidth="92.0" text="Logado: XXXXX" />
-                      <Button fx:id="btLogout" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="718.0" layoutY="8.0" mnemonicParsing="false" onAction="#onBtLogoutAction" pickOnBounds="false" prefHeight="25.0" prefWidth="65.0" text="Logout" textAlignment="CENTER" AnchorPane.rightAnchor="10.0" />
-                     </children>
-                  </AnchorPane>
-              </buttons>
-            </ButtonBar>
+            <ToolBar prefHeight="40.0" prefWidth="200.0">
+               <items>
+                  <Label fx:id="labelLogado" prefHeight="23.0" prefWidth="303.0">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </Label>
+               </items>
+            </ToolBar>
          </children>
       </VBox>
    </content>

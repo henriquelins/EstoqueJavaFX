@@ -22,10 +22,10 @@ import model.entities.Usuario;
 import model.services.UsuarioService;
 
 public class LoginFormController implements Initializable {
-
-	private Usuario logado;
-
-	private UsuarioService service;
+		
+	private static Usuario logado;
+		
+	private UsuarioService usuarioService;
 
 	@FXML
 	private TextField txtLogin;
@@ -35,50 +35,59 @@ public class LoginFormController implements Initializable {
 
 	@FXML
 	private Button btOK;
-
+	
+	
 	@FXML
 	public void onBtOKAction(ActionEvent event) {
-
+		
 		Usuario usuario = new Usuario();
 		usuario = getFormData();
-
-		if (usuario.getName() != null && usuario.getSenha() != null) {
-
-			logado = service.login(usuario);
-
-			if (logado.getName() != null && logado.getSenha() != null) {
-
+		
+		if (usuario.getLogin() != null && usuario.getSenha() != null){
+			
+			setLogado(usuarioService.login(usuario));
+			
+			if (logado.getLogin() != null && logado.getSenha() != null) {
+				
 				Utils.currentStage(event).close();
 
 				Stage parentStage = Utils.currentStage(event);
 				createPrincipalForm("/gui/PrincipalView.fxml", parentStage);
-
+				
 			} else {
-
+				
 				Alerts.showAlert("Login", null, "Login não confirmado", AlertType.ERROR);
-
+				
+				txtLogin.setText("");
+				pswSenha.setText("");
+				txtLogin.requestFocus();
+				
 			}
-
-		} else {
-
+			
 		}
 
 	}
 
-	public void setUsuarioServices(UsuarioService service) {
-		this.service = service;
+	public void setLogado(Usuario logado) {
+		LoginFormController.logado = logado;
+	}
+	
+	public static String LogadoToString() {
+		return logado.toString();
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.logado = usuario;
-	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-
+				
+		initializeNodes();
+		
+	}
+	
+	
+	private void initializeNodes() {
 		logado = new Usuario();
-		service = new UsuarioService();
-
+		usuarioService = new UsuarioService();
 	}
 
 	private void createPrincipalForm(String absoluteName, Stage parenteStage) {
@@ -116,18 +125,24 @@ public class LoginFormController implements Initializable {
 		if (txtLogin.getText() == null || txtLogin.getText().trim().equals("")) {
 
 			Alerts.showAlert("Login", null, "Digite seu login", AlertType.INFORMATION);
-
+			
 			txtLogin.requestFocus();
+			
+			usuario.setLogin(null);
+			usuario.setSenha(null);
 
 		} else if (String.valueOf(pswSenha.getText()) == null || pswSenha.getText().trim().equals("")) {
 
 			Alerts.showAlert("Login", null, "Digite sua senha", AlertType.INFORMATION);
 
 			pswSenha.requestFocus();
+			
+			usuario.setLogin(null);
+			usuario.setSenha(null);
 
 		} else {
 
-			usuario.setName(txtLogin.getText());
+			usuario.setLogin(txtLogin.getText());
 			usuario.setSenha(pswSenha.getText());
 
 		}
@@ -135,5 +150,6 @@ public class LoginFormController implements Initializable {
 		return usuario;
 
 	}
+
 
 }
