@@ -3,6 +3,9 @@ package model.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import gui.util.Alerts;
+import gui.util.Utils;
+import javafx.scene.control.Alert.AlertType;
 import model.entities.Produto;
 
 public class ProdutoService {
@@ -19,5 +22,25 @@ public class ProdutoService {
 		
 		
 	}
+	
+	public void prdutoNovoOuEditar(Produto produto) {
+
+		if (produto.getIdProduto() == null) {
+
+			Alerts.showAlert("Produto", null, "Novo Produto", AlertType.ERROR);
+						
+			Utils.fecharDialogAction();
+		
+		} else {
+
+			Alerts.showAlert("Produto", null, "Editar Produto", AlertType.ERROR);
+						
+			Utils.fecharDialogAction();
+		
+		}
+
+	}
+	
+	
 
 }

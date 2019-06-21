@@ -22,7 +22,17 @@ public class Utils {
 	}
 
 	public static void fecharTelaAction() {
-		 Stage stage = (Stage) Main.getMainScene().getWindow(); //Obtendo a janela atual
-		    stage.close(); //Fechando o Stage	
+		
+		Stage stage = (Stage) Main.getMainScene().getWindow(); //Obtendo a janela atual
+		stage.close(); //Fechando o Stage
+		 
 	}
+	
+	public static void fecharDialogAction() {
+		
+		Stage stage = (Stage) Main.getDialogScene().getWindow(); //Obtendo a janela dialog atual
+		stage.close(); //Fechando o Stage
+		 
+	}
+	
 }

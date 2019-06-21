@@ -122,10 +122,13 @@ public class PrincipalFormController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
 		initializeNodes();
+		
 	}
 
 	private void initializeNodes() {
+		
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("idProduto"));
 		tableColumnCod.setCellValueFactory(new PropertyValueFactory<>("Cod"));
 		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("Nome"));
@@ -170,11 +173,11 @@ public class PrincipalFormController implements Initializable {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 
-			Scene loginScene = new Scene(pane);
+			Main.setDialogScene(new Scene(pane));
 
 			Stage loginStage = new Stage();
 			loginStage.setTitle("Login");
-			loginStage.setScene(loginScene);
+			loginStage.setScene(Main.getDialogScene());
 			loginStage.setResizable(false);
 			loginStage.initModality(Modality.APPLICATION_MODAL);
 			loginStage.initOwner(null);
@@ -195,15 +198,15 @@ public class PrincipalFormController implements Initializable {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 
-			Scene produtoScene = new Scene(pane);
+			Main.setDialogScene(new Scene(pane));
 
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Produtos");
-			produtoStage.setScene(produtoScene);
-			produtoStage.setResizable(true);
+			produtoStage.setScene(Main.getDialogScene());
+			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
-			produtoStage.show();
+			produtoStage.showAndWait();
 
 		} catch (IOException e) {
 
@@ -220,16 +223,16 @@ public class PrincipalFormController implements Initializable {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 
-			Scene produtoScene = new Scene(pane);
+			Main.setDialogScene(new Scene(pane));
 
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Usuários");
-			produtoStage.setScene(produtoScene);
-			produtoStage.setResizable(true);
+			produtoStage.setScene(Main.getDialogScene());
+			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
-			produtoStage.show();
-
+			produtoStage.showAndWait();
+			
 		} catch (IOException e) {
 
 			Alerts.showAlert("IO Exception", "Erro ao carregar a tela Usuários", e.getMessage(), AlertType.ERROR);
@@ -245,15 +248,15 @@ public class PrincipalFormController implements Initializable {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 
-			Scene produtoScene = new Scene(pane);
+			Main.setDialogScene(new Scene(pane));
 
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Sobre o aplicativo");
-			produtoStage.setScene(produtoScene);
-			produtoStage.setResizable(true);
+			produtoStage.setScene(Main.getDialogScene());
+			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
-			produtoStage.show();
+			produtoStage.showAndWait();
 
 		} catch (IOException e) {
 

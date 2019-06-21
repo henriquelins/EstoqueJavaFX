@@ -1,6 +1,7 @@
 package model.services;
 
 import gui.util.Alerts;
+import gui.util.Utils;
 import javafx.scene.control.Alert.AlertType;
 import model.entities.Usuario;
 
@@ -33,11 +34,15 @@ public class UsuarioService {
 		if (usuario.getIdUsuario() == null) {
 
 			Alerts.showAlert("Usuário", null, "Novo Usuário", AlertType.ERROR);
-
+						
+			Utils.fecharDialogAction();
+		
 		} else {
 
 			Alerts.showAlert("Usuário", null, "Editar Usuário", AlertType.ERROR);
-
+						
+			Utils.fecharDialogAction();
+		
 		}
 
 	}

@@ -10,19 +10,19 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.UsuarioFormController">
    <children>
-      <AnchorPane fx:id="btSalvarUsuario" prefHeight="300.0" prefWidth="600.0">
+      <AnchorPane prefHeight="300.0" prefWidth="600.0">
          <children>
             <Separator layoutX="1.0" layoutY="234.0" prefHeight="1.0" prefWidth="600.0" />
-            <Label layoutX="170.0" layoutY="56.0" text="Nome" />
-            <Label layoutX="303.0" layoutY="126.0" text="Senha" />
-            <Label layoutX="56.0" layoutY="123.0" text="Login" />
-            <TextField fx:id="txtNome" layoutX="170.0" layoutY="81.0" prefHeight="25.0" prefWidth="376.0" />
-            <TextField fx:id="txtLogin" layoutX="56.0" layoutY="153.0" prefHeight="25.0" prefWidth="226.0" />
-            <Label layoutX="436.0" layoutY="126.0" text="Repetir Senha" />
-            <PasswordField fx:id="pswSenha" layoutX="303.0" layoutY="153.0" prefHeight="25.0" prefWidth="110.0" />
-            <PasswordField fx:id="pswRepetirSenha" layoutX="436.0" layoutY="153.0" prefHeight="25.0" prefWidth="110.0" />
-            <TextField fx:id="txtIdUsuario" editable="false" layoutX="56.0" layoutY="81.0" prefHeight="25.0" prefWidth="92.0" />
             <Label layoutX="56.0" layoutY="56.0" text="Id" />
+            <TextField fx:id="txtIdUsuario" editable="false" layoutX="56.0" layoutY="81.0" prefHeight="25.0" prefWidth="92.0" />
+            <Label layoutX="170.0" layoutY="56.0" text="Nome" />
+            <TextField fx:id="txtNome" layoutX="170.0" layoutY="81.0" prefHeight="25.0" prefWidth="376.0" />
+            <Label layoutX="56.0" layoutY="123.0" text="Login" />
+            <TextField fx:id="txtLogin" layoutX="56.0" layoutY="153.0" prefHeight="25.0" prefWidth="226.0" />
+            <Label layoutX="303.0" layoutY="126.0" text="Senha" />
+            <PasswordField fx:id="pswSenha" layoutX="303.0" layoutY="153.0" prefHeight="25.0" prefWidth="110.0" />
+            <Label layoutX="436.0" layoutY="126.0" text="Repetir Senha" />
+            <PasswordField fx:id="pswRepetirSenha" layoutX="436.0" layoutY="153.0" prefHeight="25.0" prefWidth="110.0" />
             <Button fx:id="btSalvarUsuario" defaultButton="true" layoutX="469.0" layoutY="253.0" mnemonicParsing="false" onAction="#onBtSalvarUsuarioAction" prefHeight="25.0" prefWidth="74.0" text="Salvar" />
          </children>
       </AnchorPane>

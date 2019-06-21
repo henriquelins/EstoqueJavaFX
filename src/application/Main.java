@@ -12,6 +12,8 @@ public class Main extends Application {
 
 	private static Scene mainScene;
 
+	private static Scene dialogScene;
+
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -26,7 +28,9 @@ public class Main extends Application {
 			primaryStage.show();
 
 		} catch (IOException e) {
+
 			e.printStackTrace();
+
 		}
 	}
 
@@ -36,6 +40,14 @@ public class Main extends Application {
 
 	public static void setMainScene(Scene mainScene) {
 		Main.mainScene = mainScene;
+	}
+
+	public static Scene getDialogScene() {
+		return dialogScene;
+	}
+
+	public static void setDialogScene(Scene dialogScene) {
+		Main.dialogScene = dialogScene;
 	}
 
 	public static void main(String[] args) {

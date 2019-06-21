@@ -15,9 +15,9 @@ import model.entities.Usuario;
 import model.services.UsuarioService;
 
 public class UsuarioFormController implements Initializable {
-	
+
 	private UsuarioService usuarioService;
-	
+
 	private Usuario user;
 
 	@FXML
@@ -42,9 +42,13 @@ public class UsuarioFormController implements Initializable {
 	public void onBtSalvarUsuarioAction(ActionEvent event) {
 
 		setUser(getFormData());
-
-		usuarioService.usuarioNovoOuEditar(user);
-
+		
+		if (user != null) {
+			
+			usuarioService.usuarioNovoOuEditar(user);
+		
+		} 
+		
 	}
 
 	public void setUsuarioService(UsuarioService usuarioService) {
@@ -72,55 +76,59 @@ public class UsuarioFormController implements Initializable {
 	private Usuario getFormData() {
 
 		Usuario usuario = new Usuario();
+	
+		if (txtNome.getText() == null || txtNome.getText().trim().equals("")) {
 
-		boolean correto = false;
+			Alerts.showAlert("Novo Usuário", null, "Digite seu nome", AlertType.INFORMATION);
 
-		do  {
+			txtNome.requestFocus();
+			
+			usuario = null;
 
-			if (txtNome.getText() == null || txtNome.getText().trim().equals("")) {
+		} else if (txtLogin.getText() == null || txtLogin.getText().trim().equals("")) {
 
-				Alerts.showAlert("Novo Usuário", null, "Digite seu nome!", AlertType.INFORMATION);
+			Alerts.showAlert("Novo Usuário", null, "Digite seu login", AlertType.INFORMATION);
 
-				txtNome.requestFocus();
+			txtLogin.requestFocus();
+			
+			usuario = null;
 
-			} else if (txtLogin.getText() == null || txtLogin.getText().trim().equals("")) {
 
-				Alerts.showAlert("Login", null, "Digite seu login!", AlertType.INFORMATION);
+		} else if (pswSenha.getText() == null || pswSenha.getText().trim().equals("")) {
 
-				txtLogin.requestFocus();
+			Alerts.showAlert("Novo Usuário", null, "Digite sua senha", AlertType.INFORMATION);
 
-			} else if (pswSenha.getText() == null || pswSenha.getText().trim().equals("")) {
+			pswSenha.requestFocus();
+			
+			usuario = null;
 
-				Alerts.showAlert("Login", null, "Digite sua senha!", AlertType.INFORMATION);
 
-				pswSenha.requestFocus();
+		} else if (pswRepetirSenha.getText() == null || pswRepetirSenha.getText().trim().equals("")) {
 
-			} else if (pswRepetirSenha.getText() == null || pswRepetirSenha.getText().trim().equals("")) {
+			Alerts.showAlert("Novo Usuário", null, "Digite a confirmação da senha", AlertType.INFORMATION);
 
-				Alerts.showAlert("Login", null, "Digite a confirmação da senha!", AlertType.INFORMATION);
+			pswRepetirSenha.requestFocus();
+			
+			usuario = null;
 
-				pswRepetirSenha.requestFocus();
+		} else if (!pswSenha.getText().equals(pswRepetirSenha.getText()) || !pswRepetirSenha.getText().equals(pswSenha.getText()) ) {
 
-			} else if (pswSenha.getText().equals(pswRepetirSenha.getText())) {
+			Alerts.showAlert("Novo Usuário", null, "A confirmação da senha não está igual a senha!", AlertType.INFORMATION);
 
-				Alerts.showAlert("Login", null, "A confirmação da senha não está igual a senha!",
-						AlertType.INFORMATION);
+			pswRepetirSenha.requestFocus();
+			
+			usuario = null;
 
-				pswRepetirSenha.requestFocus();
+		} else {
 
-			} else {
+			usuario.setName(txtNome.getText());
+			usuario.setLogin(txtLogin.getText());
+			usuario.setSenha(pswSenha.getText());
 
-				correto = true;
-
-				usuario.setName(txtNome.getText());
-				usuario.setLogin(txtLogin.getText());
-				usuario.setSenha(pswSenha.getText());
-
-			}
-				}while (correto == false);
+		}
 
 		return usuario;
-
+		
 	}
 
 }
