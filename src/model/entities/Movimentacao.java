@@ -1,33 +1,37 @@
 package model.entities;
 
 
+import java.io.Serializable;
 import java.sql.Date;
 
+import model.entities.enums.TipoMovimentacao;
 
-public class Movimentacao {
 
+public class Movimentacao implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	private int idMovimentacao;
-	private int tipoDaMovimentacao;
-	private Date dataDaTransacao;
-	private int quantidade;
-	private int estoqueAnterior;
-	private int estoqueAtual;
 	private int idProduto;
 	private int idUsuario;
+	private TipoMovimentacao tipo;
+	private int valorMovimento;
+	private String observacoesMovimentacao;
+	private int quantidadeAnterior;
+	private Date dataDaTransacao;
 	
 	public Movimentacao() {}
+
+	public Movimentacao(int idMovimentacao, int idProduto, int idUsuario, TipoMovimentacao tipo, int valorMovimento,
+			String observacoesMovimentacao, int quantidadeAnterior, Date dataDaTransacao) {
 	
-	public Movimentacao(int idMovimentacao, int tipoDaMovimentacao, Date dataDaTransacao, int quantidade,
-			int estoqueAnterior, int estoqueAtual, int idProduto, int idUsuario) {
-		
 		this.idMovimentacao = idMovimentacao;
-		this.tipoDaMovimentacao = tipoDaMovimentacao;
-		this.dataDaTransacao = dataDaTransacao;
-		this.quantidade = quantidade;
-		this.estoqueAnterior = estoqueAnterior;
-		this.estoqueAtual = estoqueAtual;
 		this.idProduto = idProduto;
 		this.idUsuario = idUsuario;
+		this.tipo = tipo;
+		this.valorMovimento = valorMovimento;
+		this.observacoesMovimentacao = observacoesMovimentacao;
+		this.quantidadeAnterior = quantidadeAnterior;
+		this.dataDaTransacao = dataDaTransacao;
 	}
 
 	public int getIdMovimentacao() {
@@ -36,46 +40,6 @@ public class Movimentacao {
 
 	public void setIdMovimentacao(int idMovimentacao) {
 		this.idMovimentacao = idMovimentacao;
-	}
-
-	public int getTipoDaMovimentacao() {
-		return tipoDaMovimentacao;
-	}
-
-	public void setTipoDaMovimentacao(int tipoDaMovimentacao) {
-		this.tipoDaMovimentacao = tipoDaMovimentacao;
-	}
-
-	public Date getDataDaTransacao() {
-		return dataDaTransacao;
-	}
-
-	public void setDataDaTransacao(Date dataDaTransacao) {
-		this.dataDaTransacao = dataDaTransacao;
-	}
-
-	public int getQuantidade() {
-		return quantidade;
-	}
-
-	public void setQuantidade(int quantidade) {
-		this.quantidade = quantidade;
-	}
-
-	public int getEstoqueAnterior() {
-		return estoqueAnterior;
-	}
-
-	public void setEstoqueAnterior(int estoqueAnterior) {
-		this.estoqueAnterior = estoqueAnterior;
-	}
-
-	public int getEstoqueAtual() {
-		return estoqueAtual;
-	}
-
-	public void setEstoqueAtual(int estoqueAtual) {
-		this.estoqueAtual = estoqueAtual;
 	}
 
 	public int getIdProduto() {
@@ -94,18 +58,58 @@ public class Movimentacao {
 		this.idUsuario = idUsuario;
 	}
 
+	public TipoMovimentacao getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(TipoMovimentacao tipo) {
+		this.tipo = tipo;
+	}
+
+	public int getValorMovimento() {
+		return valorMovimento;
+	}
+
+	public void setValorMovimento(int valorMovimento) {
+		this.valorMovimento = valorMovimento;
+	}
+
+	public String getObservacoesMovimentacao() {
+		return observacoesMovimentacao;
+	}
+
+	public void setObservacoesMovimentacao(String observacoesMovimentacao) {
+		this.observacoesMovimentacao = observacoesMovimentacao;
+	}
+
+	public int getQuantidadeAnterior() {
+		return quantidadeAnterior;
+	}
+
+	public void setQuantidadeAnterior(int quantidadeAnterior) {
+		this.quantidadeAnterior = quantidadeAnterior;
+	}
+
+	public Date getDataDaTransacao() {
+		return dataDaTransacao;
+	}
+
+	public void setDataDaTransacao(Date dataDaTransacao) {
+		this.dataDaTransacao = dataDaTransacao;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((dataDaTransacao == null) ? 0 : dataDaTransacao.hashCode());
-		result = prime * result + estoqueAnterior;
-		result = prime * result + estoqueAtual;
 		result = prime * result + idMovimentacao;
 		result = prime * result + idProduto;
 		result = prime * result + idUsuario;
-		result = prime * result + quantidade;
-		result = prime * result + tipoDaMovimentacao;
+		result = prime * result + ((observacoesMovimentacao == null) ? 0 : observacoesMovimentacao.hashCode());
+		result = prime * result + quantidadeAnterior;
+		result = prime * result + ((tipo == null) ? 0 : tipo.hashCode());
+		result = prime * result + valorMovimento;
 		return result;
 	}
 
@@ -123,29 +127,32 @@ public class Movimentacao {
 				return false;
 		} else if (!dataDaTransacao.equals(other.dataDaTransacao))
 			return false;
-		if (estoqueAnterior != other.estoqueAnterior)
-			return false;
-		if (estoqueAtual != other.estoqueAtual)
-			return false;
 		if (idMovimentacao != other.idMovimentacao)
 			return false;
 		if (idProduto != other.idProduto)
 			return false;
 		if (idUsuario != other.idUsuario)
 			return false;
-		if (quantidade != other.quantidade)
+		if (observacoesMovimentacao == null) {
+			if (other.observacoesMovimentacao != null)
+				return false;
+		} else if (!observacoesMovimentacao.equals(other.observacoesMovimentacao))
 			return false;
-		if (tipoDaMovimentacao != other.tipoDaMovimentacao)
+		if (quantidadeAnterior != other.quantidadeAnterior)
+			return false;
+		if (tipo != other.tipo)
+			return false;
+		if (valorMovimento != other.valorMovimento)
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Movimentacao [idMovimentacao=" + idMovimentacao + ", tipoDaMovimentacao=" + tipoDaMovimentacao
-				+ ", dataDaTransacao=" + dataDaTransacao + ", quantidade=" + quantidade + ", estoqueAnterior="
-				+ estoqueAnterior + ", estoqueAtual=" + estoqueAtual + ", idProduto=" + idProduto + ", idUsuario="
-				+ idUsuario + "]";
+		return "Movimentacao [idMovimentacao=" + idMovimentacao + ", idProduto=" + idProduto + ", idUsuario="
+				+ idUsuario + ", tipo=" + tipo + ", valorMovimento=" + valorMovimento + ", observacoesMovimentacao="
+				+ observacoesMovimentacao + ", quantidadeAnterior=" + quantidadeAnterior + ", dataDaTransacao="
+				+ dataDaTransacao + "]";
 	}
 
 	

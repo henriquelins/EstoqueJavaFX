@@ -6,7 +6,6 @@ import java.util.ResourceBundle;
 
 import application.Main;
 import gui.util.Alerts;
-import gui.util.Utils;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,9 +26,13 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Produto;
+import model.entities.enums.Categoria;
+import model.entities.enums.Setor;
 
 public class PrincipalFormController implements Initializable {
-
+	
+	Produto produto = new Produto();	
+	
 	@FXML
 	private MenuItem menuItemUsuario;
 
@@ -46,23 +49,23 @@ public class PrincipalFormController implements Initializable {
 	private TableColumn<Produto, Integer> tableColumnId;
 
 	@FXML
-	private TableColumn<Produto, String> tableColumnCod;
-
-	@FXML
 	private TableColumn<Produto, String> tableColumnNome;
 
 	@FXML
 	private TableColumn<Produto, String> tableColumnDescricao;
-
+	
+	@FXML
+	private TableColumn<Produto, String> tableColumnSetor;
+	
+	@FXML
+	private TableColumn<Produto, String> tableColumnCategoria;
+	
 	@FXML
 	private TableColumn<Produto, Integer> tableColumnQuantidade;
 
 	@FXML
-	private TableColumn<Produto, Produto> tableColumnSAIDA;
-
-	@FXML
-	private TableColumn<Produto, Produto> tableColumnENTRADA;
-
+	private TableColumn<Produto, Produto> tableColumnMOVIMENTACAO;
+	
 	@FXML
 	private TableColumn<Produto, Produto> tableColumnEDIT;
 
@@ -71,10 +74,7 @@ public class PrincipalFormController implements Initializable {
 
 	@FXML
 	private Button btNovo;
-
-	@FXML
-	private Button btLogout;
-
+	
 	@FXML
 	private Label labelLogado;
 
@@ -110,12 +110,6 @@ public class PrincipalFormController implements Initializable {
 	}
 
 	@FXML
-	public void onBtLogoutAction(ActionEvent event) {
-		Utils.fecharTelaAction();
-		createLoginForm("/gui/LoginView.fxml");
-	}
-
-	@FXML
 	public void onBtPesquisarAction(ActionEvent event) {
 		Alerts.showAlert("Button Pesquisar", "Não implementado", "onBtPesquisarAction", AlertType.ERROR);
 	}
@@ -130,8 +124,9 @@ public class PrincipalFormController implements Initializable {
 	private void initializeNodes() {
 		
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("idProduto"));
-		tableColumnCod.setCellValueFactory(new PropertyValueFactory<>("Cod"));
 		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("Nome"));
+		tableColumnSetor.setCellValueFactory(new PropertyValueFactory<>("Setor"));
+		tableColumnCategoria.setCellValueFactory(new PropertyValueFactory<>("Categoria"));
 		tableColumnDescricao.setCellValueFactory(new PropertyValueFactory<>("Descricao"));
 		tableColumnQuantidade.setCellValueFactory(new PropertyValueFactory<>("Quantidade"));
 
@@ -143,22 +138,21 @@ public class PrincipalFormController implements Initializable {
 		labelLogado.setText(LoginFormController.LogadoToString());
 
 	}
-
+	
+	
 	private ObservableList<Produto> listaProdutos() {
 		return FXCollections.observableArrayList(
-
-				new Produto(1, "001", "Garrafa", "Garrafa de coca-cola", 10),
-				new Produto(2, "051", "Copo", "Copo de cerveja", 05),
-				new Produto(3, "023", "Prato", "Prato de porcelana", 05));
+				new Produto(1,"Tinta black", "Tinta pigmentada",Setor.CRACHAS.toString(), Categoria.TINTAS_CRACHAS.toString(),2),
+				new Produto(2,"Protetor rígido", "Protetor para crachá transparente",Setor.CRACHAS.toString(),Categoria.INSUMOS_CRACHAS.toString(),20),
+				new Produto(3,"Presilhas", "Presilhas leitosas para crachás",Setor.CRACHAS.toString(), Categoria.INSUMOS_CRACHAS.toString(),100));
 	}
 
 	public void updateTableView() {
 
 		tableViewProduto.setItems(listaProdutos());
-		initSaidaButtons();
-		initEntradaButtons();
-		initEditButtons();
-		initRemoveButtons();
+		initMovimentacaoButton();
+		initEditButton();
+		initRemoveButton();
 
 	}
 
@@ -166,7 +160,7 @@ public class PrincipalFormController implements Initializable {
 	 * public void onDataChanged() { updateTableView(); }
 	 */
 
-	private void createLoginForm(String absoluteName) {
+	/*private void createLoginForm(String absoluteName) {
 
 		try {
 
@@ -189,7 +183,7 @@ public class PrincipalFormController implements Initializable {
 
 		}
 
-	}
+	}*/
 
 	private void createProdutoDialogForm(String absoluteName) {
 
@@ -266,8 +260,29 @@ public class PrincipalFormController implements Initializable {
 		}
 
 	}
+	
+	private void initMovimentacaoButton() {
+		tableColumnMOVIMENTACAO.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tableColumnMOVIMENTACAO.setCellFactory(param -> new TableCell<Produto, Produto>() {
 
-	private void initEditButtons() {
+			private final Button button = new Button("Movimentação");
+
+			@Override
+			protected void updateItem(Produto prod, boolean empty) {
+				super.updateItem(prod, empty);
+				if (prod == null) {
+					setGraphic(null);
+					return;
+				}
+				setGraphic(button);
+				button.setOnAction(event -> createProdutoDialogForm("/gui/MovimentacaoView.fxml"));
+			}
+
+		});
+	}
+
+
+	private void initEditButton() {
 		tableColumnEDIT.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
 		tableColumnEDIT.setCellFactory(param -> new TableCell<Produto, Produto>() {
 
@@ -287,7 +302,7 @@ public class PrincipalFormController implements Initializable {
 		});
 	}
 
-	private void initRemoveButtons() {
+	private void initRemoveButton() {
 		tableColumnREMOVE.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
 		tableColumnREMOVE.setCellFactory(param -> new TableCell<Produto, Produto>() {
 
@@ -305,50 +320,11 @@ public class PrincipalFormController implements Initializable {
 			}
 		});
 	}
+	
+	
+	protected void removeEntity(Produto obj) {
 
-	private void initSaidaButtons() {
-		tableColumnSAIDA.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-		tableColumnSAIDA.setCellFactory(param -> new TableCell<Produto, Produto>() {
-
-			private final Button button = new Button("Saída");
-
-			@Override
-			protected void updateItem(Produto prod, boolean empty) {
-				super.updateItem(prod, empty);
-				if (prod == null) {
-					setGraphic(null);
-					return;
-				}
-				setGraphic(button);
-				button.setOnAction(event -> createProdutoDialogForm("/gui/ProdutoSaidaView.fxml"));
-			}
-
-		});
-	}
-
-	private void initEntradaButtons() {
-		tableColumnENTRADA.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-		tableColumnENTRADA.setCellFactory(param -> new TableCell<Produto, Produto>() {
-
-			private final Button button = new Button("Entrada");
-
-			@Override
-			protected void updateItem(Produto prod, boolean empty) {
-				super.updateItem(prod, empty);
-				if (prod == null) {
-					setGraphic(null);
-					return;
-				}
-				setGraphic(button);
-				button.setOnAction(event -> createProdutoDialogForm("/gui/ProdutoEntradaView.fxml"));
-			}
-
-		});
-	}
-
-	protected Object removeEntity(Produto obj) {
-
-		return null;
+		Alerts.showAlert("removeEntity", "Não implementado", "Button Exit", AlertType.ERROR);
 	}
 
 }

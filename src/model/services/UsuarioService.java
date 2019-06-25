@@ -24,7 +24,7 @@ public class UsuarioService {
 			user.setLogin(null);
 			user.setSenha(null);
 		}
-
+		
 		return user;
 
 	}

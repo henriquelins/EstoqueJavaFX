@@ -54,6 +54,8 @@ public class LoginFormController implements Initializable {
 				Stage parentStage = Utils.currentStage(event);
 				createPrincipalForm("/gui/PrincipalView.fxml", parentStage);
 				
+				logado = usuario;
+				
 			} else {
 				
 				Alerts.showAlert("Login", null, "Login não confirmado", AlertType.ERROR);
@@ -71,7 +73,12 @@ public class LoginFormController implements Initializable {
 	public void setLogado(Usuario logado) {
 		LoginFormController.logado = logado;
 	}
+		
 	
+	public static Integer getLogadoIdUsuario() {
+		return logado.getIdUsuario();
+	}
+
 	public static String LogadoToString() {
 		return logado.toString();
 	}
@@ -146,7 +153,7 @@ public class LoginFormController implements Initializable {
 			usuario.setSenha(pswSenha.getText());
 
 		}
-
+				
 		return usuario;
 
 	}

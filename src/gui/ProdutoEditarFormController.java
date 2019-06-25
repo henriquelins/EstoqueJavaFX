@@ -20,7 +20,7 @@ import model.entities.enums.Categoria;
 import model.entities.enums.Setor;
 import model.services.ProdutoService;
 
-public class ProdutoNovoFormController implements Initializable {
+public class ProdutoEditarFormController implements Initializable {
 
 	ProdutoService produtoService;
 
@@ -58,7 +58,7 @@ public class ProdutoNovoFormController implements Initializable {
 
 		if (prod != null) {
 
-			produtoService.produtoNovoOuEditar(prod);
+			produtoService.prdutoNovoOuEditar(prod);
 
 		}
 

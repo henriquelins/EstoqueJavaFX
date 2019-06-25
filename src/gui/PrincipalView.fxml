@@ -50,15 +50,15 @@
             </ToolBar>
             <TableView fx:id="tableViewProduto" prefHeight="401.0" prefWidth="892.0" VBox.vgrow="SOMETIMES">
               <columns>
-                <TableColumn fx:id="tableColumnId" editable="false" prefWidth="60.0" style="-fx-alignment: CENTER;" text="Id" />
-                <TableColumn fx:id="tableColumnCod" editable="false" prefWidth="75.0" style="-fx-alignment: CENTER;" text="Cod" />
-                  <TableColumn fx:id="tableColumnNome" editable="false" prefWidth="150.0" style="-fx-alignment: CENTER;" text="Nome" />
-                  <TableColumn fx:id="tableColumnDescricao" editable="false" prefWidth="150.0" style="-fx-alignment: CENTER;" text="Descrição" />
-                  <TableColumn fx:id="tableColumnQuantidade" editable="false" prefWidth="75.0" style="-fx-alignment: CENTER;" text="Quantidade" />
-                  <TableColumn fx:id="tableColumnSAIDA" prefWidth="100.0" style="-fx-alignment: CENTER;" />
-                  <TableColumn fx:id="tableColumnENTRADA" prefWidth="75.0" style="-fx-alignment: CENTER;" />
-                  <TableColumn fx:id="tableColumnEDIT" prefWidth="75.0" style="-fx-alignment: CENTER;" />
-                  <TableColumn fx:id="tableColumnREMOVE" prefWidth="75.0" style="-fx-alignment: CENTER;" />
+                <TableColumn fx:id="tableColumnId" editable="false" prefWidth="30.0" style="-fx-alignment: CENTER;" text="Id" />
+                  <TableColumn fx:id="tableColumnNome" editable="false" prefWidth="160.0" style="-fx-alignment: CENTER;" text="Nome" />
+                  <TableColumn fx:id="tableColumnDescricao" editable="false" prefWidth="200.0" style="-fx-alignment: CENTER;" text="Descrição" />
+                  <TableColumn fx:id="tableColumnSetor" prefWidth="120.0" style="-fx-alignment: CENTER;" text="Setor" />
+                  <TableColumn fx:id="tableColumnCategoria" prefWidth="120.0" style="-fx-alignment: CENTER;" text="Categoria" />
+                  <TableColumn fx:id="tableColumnQuantidade" editable="false" style="-fx-alignment: CENTER;" text="Quantidade" />
+                  <TableColumn fx:id="tableColumnMOVIMENTACAO" prefWidth="120.0" style="-fx-alignment: CENTER;" />
+                  <TableColumn fx:id="tableColumnEDIT" prefWidth="60.0" style="-fx-alignment: CENTER;" />
+                  <TableColumn fx:id="tableColumnREMOVE" prefWidth="60.0" style="-fx-alignment: CENTER;" />
               </columns>
             </TableView>
             <ToolBar prefHeight="40.0" prefWidth="200.0">
