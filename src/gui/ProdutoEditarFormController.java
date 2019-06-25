@@ -22,9 +22,9 @@ import model.services.ProdutoService;
 
 public class ProdutoEditarFormController implements Initializable {
 
-	ProdutoService produtoService;
+	private ProdutoService produtoService;
 
-	Produto prod;
+	private Produto produto;
 
 	@FXML
 	private TextField txtIdProduto;
@@ -54,11 +54,11 @@ public class ProdutoEditarFormController implements Initializable {
 	@FXML
 	public void onBtSalvarProdutoAction(ActionEvent event) {
 
-		setProd(getFormData());
+		setProduto(getFormData());
 
-		if (prod != null) {
+		if (produto != null) {
 
-			produtoService.prdutoNovoOuEditar(prod);
+			produtoService.produtoNovoOuEditar(produto);
 
 		}
 
@@ -68,18 +68,12 @@ public class ProdutoEditarFormController implements Initializable {
 		this.produtoService = produtoService;
 	}
 
-	public void setProd(Produto prod) {
-		this.prod = prod;
+	public void setProduto(Produto produto) {
+		this.produto = produto;
 	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-
-		obsListSetor = FXCollections.observableArrayList(Setor.values());
-		comboBoxSetor.setItems(obsListSetor);
-
-		obsListCategoria = FXCollections.observableArrayList(Categoria.values());
-		comboBoxCategoria.setItems(obsListCategoria);
 
 		initializeNodes();
 
@@ -88,10 +82,22 @@ public class ProdutoEditarFormController implements Initializable {
 	private void initializeNodes() {
 
 		produtoService = new ProdutoService();
-		prod = new Produto();
+		produto = new Produto();
 
 		Constraints.setTextFieldInteger(txtQuantidade);
+		
+		txtNome.setText(produto.getNome());
+		txtQuantidade.setText(String.valueOf(produto.getQuantidade()));
+		txtAreaDescricao.setText(produto.getDescricao());
+		 
+		obsListSetor = FXCollections.observableArrayList(Setor.values());
+		comboBoxSetor.setItems(obsListSetor);
 
+		obsListCategoria = FXCollections.observableArrayList(Categoria.values());
+		comboBoxCategoria.setItems(obsListCategoria);
+		
+		updateFormData();
+	
 	}
 
 	private Produto getFormData() {
@@ -139,17 +145,29 @@ public class ProdutoEditarFormController implements Initializable {
 			produto = null;
 
 		} else {
-			
+
 			produto.setNome(txtNome.getText());
 			produto.setQuantidade(Integer.valueOf(txtQuantidade.getText()));
 			produto.setSetor(String.valueOf(comboBoxSetor.getSelectionModel().getSelectedItem()));
 			produto.setCategoria(String.valueOf(comboBoxCategoria.getSelectionModel().getSelectedItem()));
 			produto.setDescricao(txtAreaDescricao.getText());
-
+			
 		}
 
 		return produto;
 
 	}
+
+	public void updateFormData() {
+				
+		txtIdProduto.setText(String.valueOf(PrincipalFormController.getProduto().getIdProduto()));
+		txtNome.setText(PrincipalFormController.getProduto().getNome());
+		txtQuantidade.setText(String.valueOf(PrincipalFormController.getProduto().getQuantidade()));
+		comboBoxSetor.setPromptText(PrincipalFormController.getProduto().getSetor());
+		comboBoxCategoria.setPromptText(PrincipalFormController.getProduto().getCategoria());
+		txtAreaDescricao.setText(PrincipalFormController.getProduto().getDescricao());		
+
+	}
+	 
 
 }
