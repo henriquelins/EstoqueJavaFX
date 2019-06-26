@@ -3,11 +3,13 @@ package gui;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import application.Main;
 import gui.util.Alerts;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -70,6 +72,9 @@ public class UsuarioFormController implements Initializable {
 
 		usuarioService = new UsuarioService();
 		user = new Usuario();
+		
+		//Stage stage = (Stage) Main.getMainScene().getWindow();
+		//tableViewProduto.prefHeightProperty().bind(stage.heightProperty());
 
 	}
 
