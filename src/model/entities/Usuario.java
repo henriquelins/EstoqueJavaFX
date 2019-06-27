@@ -6,15 +6,15 @@ public class Usuario implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private Integer idUsuario;
-	private String name;
+	private String nome;
 	private String login;
 	private String senha;
 	
 	public Usuario() {}
 
-	public Usuario(Integer idUsuario, String name, String login, String senha) {
+	public Usuario(Integer idUsuario, String nome, String login, String senha) {
 		this.idUsuario = idUsuario;
-		this.name = name;
+		this.nome = nome;
 		this.login = login;
 		this.senha = senha;
 	}
@@ -27,12 +27,12 @@ public class Usuario implements Serializable {
 		this.idUsuario = idUsuario;
 	}
 
-	public String getName() {
-		return name;
+	public String getNome() {
+		return nome;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public String getLogin() {
@@ -59,7 +59,7 @@ public class Usuario implements Serializable {
 		int result = 1;
 		result = prime * result + ((idUsuario == null) ? 0 : idUsuario.hashCode());
 		result = prime * result + ((login == null) ? 0 : login.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		result = prime * result + ((senha == null) ? 0 : senha.hashCode());
 		return result;
 	}
@@ -83,10 +83,10 @@ public class Usuario implements Serializable {
 				return false;
 		} else if (!login.equals(other.login))
 			return false;
-		if (name == null) {
-			if (other.name != null)
+		if (nome == null) {
+			if (other.nome != null)
 				return false;
-		} else if (!name.equals(other.name))
+		} else if (!nome.equals(other.nome))
 			return false;
 		if (senha == null) {
 			if (other.senha != null)
@@ -100,7 +100,7 @@ public class Usuario implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "Usuario [idUsuario=" + idUsuario + ", name=" + name + ", login=" + login + ", senha=" + senha + "]";
+		return "Usuario [idUsuario=" + idUsuario + ", name=" + nome + ", login=" + login + ", senha=" + senha + "]";
 	}
 
 	public String usuarioLogado() {

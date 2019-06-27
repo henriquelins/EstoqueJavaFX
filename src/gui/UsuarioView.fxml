@@ -1,33 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-
-<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="585.0" prefWidth="872.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.UsuarioFormController">
    <content>
-      <VBox prefHeight="372.0" prefWidth="561.0">
+      <VBox prefHeight="500.0" prefWidth="800.0">
          <children>
-            <ToolBar prefHeight="40.0" prefWidth="561.0">
+            <ToolBar prefHeight="72.0" prefWidth="800.0">
               <items>
-                <Button mnemonicParsing="false" text="Button" />
+                  <AnchorPane prefHeight="55.0" prefWidth="547.0">
+                     <children>
+                      <Button fx:id="btSalvarUsuario" layoutY="28.0" mnemonicParsing="false" text="Salvar" />
+                        <Label text="Usuários">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
               </items>
             </ToolBar>
-            <HBox prefHeight="335.0" prefWidth="228.0">
+            <HBox fx:id="hbox" alignment="CENTER" prefHeight="335.0" prefWidth="228.0">
                <children>
-                  <AnchorPane prefHeight="334.0" prefWidth="372.0" />
-                  <TableView prefHeight="334.0" prefWidth="363.0">
+                  <AnchorPane prefHeight="348.0" prefWidth="435.0">
+                     <children>
+                        <TextField fx:id="txtIdUsuario" layoutX="14.0" layoutY="48.0" prefHeight="25.0" prefWidth="91.0" />
+                        <Label layoutX="14.0" layoutY="23.0" text="Id" />
+                        <TextField fx:id="txtNome" layoutX="14.0" layoutY="111.0" prefHeight="25.0" prefWidth="243.0" />
+                        <Label layoutX="14.0" layoutY="86.0" text="Nome" />
+                        <TextField fx:id="txtLogin" layoutX="14.0" layoutY="166.0" prefHeight="25.0" prefWidth="243.0" />
+                        <Label layoutX="14.0" layoutY="143.0" text="Login" />
+                        <PasswordField fx:id="pswSenha" layoutX="14.0" layoutY="215.0" />
+                        <Label layoutX="14.0" layoutY="198.0" text="Senha" />
+                        <PasswordField fx:id="pswRepetirSenha" layoutX="14.0" layoutY="263.0" />
+                        <Label layoutX="14.0" layoutY="246.0" text="Confirmar Senha" />
+                     </children></AnchorPane>
+                  <TableView fx:id="tableViewUsuario" prefHeight="335.0" prefWidth="408.0">
                     <columns>
-                      <TableColumn prefWidth="75.0" text="Id" />
-                      <TableColumn prefWidth="75.0" text="Nome" />
-                        <TableColumn prefWidth="75.0" text="Login" />
+                      <TableColumn fx:id="tableColumnId" prefWidth="75.0" text="Id" />
+                      <TableColumn fx:id="tableColumnNome" prefWidth="75.0" text="Nome" />
+                        <TableColumn fx:id="tableColumnLogin" prefWidth="75.0" text="Login" />
                     </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
                   </TableView>
                </children>
             </HBox>

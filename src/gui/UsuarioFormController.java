@@ -5,22 +5,33 @@ import java.util.ResourceBundle;
 
 import application.Main;
 import gui.util.Alerts;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToolBar;
+import model.entities.Produto;
 import model.entities.Usuario;
+import model.entities.enums.Categoria;
+import model.entities.enums.Setor;
 import model.services.UsuarioService;
 
 public class UsuarioFormController implements Initializable {
 
 	private UsuarioService usuarioService;
 
-	private Usuario user;
+	private Usuario usuario;
 
 	@FXML
 	private TextField txtIdUsuario;
@@ -39,15 +50,32 @@ public class UsuarioFormController implements Initializable {
 
 	@FXML
 	private Button btSalvarUsuario;
+	
+	@FXML
+	private HBox hbox;
+	
+	
+	@FXML
+	public TableView<Usuario> tableViewUsuario;
+	
+	@FXML
+	private TableColumn<Usuario, Integer> tableColumnId;
+
+	@FXML
+	private TableColumn<Usuario, String> tableColumnNome;
+
+	@FXML
+	private TableColumn<Usuario, String> tableColumnLogin;
+	
 
 	@FXML
 	public void onBtSalvarUsuarioAction(ActionEvent event) {
 
 		setUser(getFormData());
 		
-		if (user != null) {
+		if (usuario != null) {
 			
-			usuarioService.usuarioNovoOuEditar(user);
+			usuarioService.usuarioNovoOuEditar(usuario);
 		
 		} 
 		
@@ -57,8 +85,8 @@ public class UsuarioFormController implements Initializable {
 		this.usuarioService = usuarioService;
 	}
 
-	public void setUser(Usuario user) {
-		this.user = user;
+	public void setUser(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 	@Override
@@ -69,12 +97,37 @@ public class UsuarioFormController implements Initializable {
 	}
 
 	private void initializeNodes() {
-
-		usuarioService = new UsuarioService();
-		user = new Usuario();
 		
-		//Stage stage = (Stage) Main.getMainScene().getWindow();
-		//tableViewProduto.prefHeightProperty().bind(stage.heightProperty());
+		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("idUsuario"));
+		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("Nome"));
+		tableColumnLogin.setCellValueFactory(new PropertyValueFactory<>("Login"));
+		
+		updateTableView();
+		
+		Stage stage = (Stage) Main.getMainScene().getWindow();
+		hbox.prefHeightProperty().bind(stage.heightProperty());
+		tableViewUsuario.prefHeightProperty().bind(stage.heightProperty());
+		
+		usuarioService = new UsuarioService();
+		usuario = new Usuario();
+
+	}
+	
+	private ObservableList<Usuario> listaUsuarios() {
+		return FXCollections.observableArrayList(
+		
+				new Usuario(1,"Administrador", "Adm", "10"),
+				new Usuario(2,"Operador1", "op1", "10"),
+				new Usuario(3,"Operador2", "op2", "10"));
+	
+	}
+	
+	public void updateTableView() {
+
+		tableViewUsuario.setItems(listaUsuarios());
+		//initMovimentacaoButton();
+		//initEditButton();
+		//initRemoveButton();
 
 	}
 
@@ -126,7 +179,7 @@ public class UsuarioFormController implements Initializable {
 
 		} else {
 
-			usuario.setName(txtNome.getText());
+			usuario.setNome(txtNome.getText());
 			usuario.setLogin(txtLogin.getText());
 			usuario.setSenha(pswSenha.getText());
 

@@ -18,6 +18,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -84,7 +85,7 @@ public class PrincipalFormController implements Initializable {
 	@FXML
 	public void onMenuItemUsuario(ActionEvent event) {
 
-		createUsuarioDialogForm("/gui/UsuarioNovoView.fxml");
+		createUsuarioDialogForm("/gui/UsuarioView.fxml");
 
 	}
 
@@ -254,17 +255,20 @@ public class PrincipalFormController implements Initializable {
 		try {
 
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-			Pane pane = loader.load();
+			ScrollPane scrollPane = loader.load();
+			
+			scrollPane.setFitToHeight(true);
+			scrollPane.setFitToWidth(true);
 
-			Main.setDialogScene(new Scene(pane));
+			Main.setMainScene(new Scene(scrollPane));
 
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Usuários");
-			produtoStage.setScene(Main.getDialogScene());
-			produtoStage.setResizable(false);
+			produtoStage.setScene(Main.getMainScene());
+			produtoStage.setResizable(true);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
-			produtoStage.showAndWait();
+			produtoStage.show();
 			
 		} catch (IOException e) {
 

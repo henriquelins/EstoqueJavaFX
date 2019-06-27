@@ -26,7 +26,7 @@ public class Movimentacao implements Serializable {
 	
 		this.idMovimentacao = idMovimentacao;
 		this.idProduto = idProduto;
-		this.idUsuario = idUsuario;
+		this.idUsuario =  idUsuario;
 		this.tipo = tipo;
 		this.valorMovimento = valorMovimento;
 		this.observacoesMovimentacao = observacoesMovimentacao;
