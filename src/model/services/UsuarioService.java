@@ -16,16 +16,17 @@ public class UsuarioService {
 		String senha = "10";
 
 		if (login.equals(usuario.getLogin()) == true && senha.equals(usuario.getSenha())) {
-			
+		
 			user.setIdUsuario(id);
 			user.setLogin(login);
 			user.setSenha(senha);
-
+		
 		} else {
 			
 			user.setIdUsuario(null);
 			user.setLogin(null);
 			user.setSenha(null);
+			
 		}
 		
 		return user;
@@ -38,13 +39,13 @@ public class UsuarioService {
 
 			Alerts.showAlert("Usuário", null, "Novo Usuário", AlertType.ERROR);
 						
-			Utils.fecharDialogAction();
+			Utils.fecharTelaAction();
 		
 		} else {
 
 			Alerts.showAlert("Usuário", null, "Editar Usuário", AlertType.ERROR);
 						
-			Utils.fecharDialogAction();
+			Utils.fecharTelaAction();
 		
 		}
 

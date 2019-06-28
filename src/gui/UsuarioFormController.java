@@ -30,6 +30,8 @@ public class UsuarioFormController implements Initializable {
 
 	private Usuario usuario;
 
+	private Usuario usuarioTabela;
+
 	@FXML
 	private TextField txtIdUsuario;
 
@@ -44,9 +46,15 @@ public class UsuarioFormController implements Initializable {
 
 	@FXML
 	private PasswordField pswRepetirSenha;
-
+	
+	@FXML
+	private Button btNovoUsuario;
+	
 	@FXML
 	private Button btSalvarUsuario;
+
+	@FXML
+	private Button btCancelarEditarUsuario;
 
 	@FXML
 	private HBox hbox;
@@ -68,15 +76,83 @@ public class UsuarioFormController implements Initializable {
 
 	@FXML
 	private TableColumn<Usuario, Usuario> tableColumnREMOVE;
+	
+	
+	@FXML
+	public void onBtNovoUsuarioAction(ActionEvent event) {
+		
+		btSalvarUsuario.setVisible(true);
+		
+		limparCampos();
+		
+		btCancelarEditarUsuario.setVisible(true);
+			
+		tableViewUsuario.setDisable(true);
+		
+		editarCamposDoUsuario();
+		
+	}
 
 	@FXML
 	public void onBtSalvarUsuarioAction(ActionEvent event) {
 
 		setUser(getFormData());
-
+		
 		if (usuario != null) {
 
 			usuarioService.usuarioNovoOuEditar(usuario);
+
+		}
+
+	}
+
+	@FXML
+	public void onBtCancelarEditarUsuarioAction(ActionEvent event) {
+
+		txtIdUsuario.setEditable(false);
+		txtNome.setEditable(false);
+		txtLogin.setEditable(false);
+		pswSenha.setEditable(false);
+		pswRepetirSenha.setEditable(false);
+
+		btCancelarEditarUsuario.setVisible(false);
+		btSalvarUsuario.setVisible(false);
+		
+		tableViewUsuario.setDisable(false);
+
+		if (usuarioTabela != null) {
+			
+			showUsuarioDetails(usuarioTabela);
+		
+		} else {
+			
+			limparCampos();
+		}
+		
+		
+		
+
+	}
+
+	public void showUsuarioDetails(Usuario usuario) {
+
+		if (btCancelarEditarUsuario.isVisible() != true) {
+
+			if (usuario != null) {
+
+				txtIdUsuario.setText(String.valueOf(usuario.getIdUsuario()));
+				txtNome.setText(usuario.getNome());
+				txtLogin.setText(usuario.getLogin());
+				pswSenha.setText(usuario.getSenha());
+				pswRepetirSenha.setText(usuario.getSenha());
+
+				setUsuarioTabela(usuario);
+
+			} else {
+				
+				setUsuarioTabela(null);
+				limparCampos();
+			}
 
 		}
 
@@ -90,6 +166,10 @@ public class UsuarioFormController implements Initializable {
 		this.usuario = usuario;
 	}
 
+	public void setUsuarioTabela(Usuario usuario) {
+		this.usuarioTabela = usuario;
+	}
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
@@ -98,6 +178,16 @@ public class UsuarioFormController implements Initializable {
 	}
 
 	private void initializeNodes() {
+
+		showUsuarioDetails(null);
+
+		atualizarDadosUsuario();
+
+		tableViewUsuario.getSelectionModel().selectedItemProperty()
+				.addListener((observable, oldValue, newValue) -> showUsuarioDetails(newValue));
+
+		btCancelarEditarUsuario.setVisible(false);
+		btSalvarUsuario.setVisible(false);
 
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("idUsuario"));
 		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("Nome"));
@@ -111,13 +201,21 @@ public class UsuarioFormController implements Initializable {
 
 		usuarioService = new UsuarioService();
 		usuario = new Usuario();
+		usuarioTabela = new Usuario();
 
+	}
+
+	private void atualizarDadosUsuario() {
+
+		tableViewUsuario.getSelectionModel().selectedItemProperty()
+				.addListener((observable, oldValue, newValue) -> showUsuarioDetails(newValue));
 	}
 
 	private ObservableList<Usuario> listaUsuarios() {
 		return FXCollections.observableArrayList(
 
-				new Usuario(1, "Administrador", "Adm", "10"), new Usuario(2, "Operador1", "op1", "10"),
+				new Usuario(1, "Administrador", "Adm", "10"), 
+				new Usuario(2, "Operador1", "op1", "10"),
 				new Usuario(3, "Operador2", "op2", "10"));
 
 	}
@@ -202,8 +300,7 @@ public class UsuarioFormController implements Initializable {
 					return;
 				}
 				setGraphic(button);
-				// button.setOnAction(event -> createProdutoEditarDialogForm(prod ,
-				// "/gui/ProdutoEditarView.fxml" ));
+				button.setOnAction(event -> editarCamposDoUsuario());
 			}
 
 		});
@@ -223,8 +320,39 @@ public class UsuarioFormController implements Initializable {
 					return;
 				}
 				setGraphic(button);
-				// button.setOnAction(event -> removeEntity(prod));
+				button.setOnAction(event -> removeEntity(usuario));
 			}
 		});
 	}
+
+	protected void removeEntity(Usuario usuario) {
+
+		Alerts.showAlert("removeEntity", "Não implementado", "Button Exit", AlertType.ERROR);
+	}
+
+	protected void editarCamposDoUsuario() {
+
+		txtIdUsuario.setEditable(true);
+		txtNome.setEditable(true);
+		txtLogin.setEditable(true);
+		pswSenha.setEditable(true);
+		pswRepetirSenha.setEditable(true);
+
+		btCancelarEditarUsuario.setVisible(true);
+		btSalvarUsuario.setVisible(true);
+		
+		tableViewUsuario.setDisable(true);
+	}
+	
+	protected void limparCampos() {
+		
+		txtIdUsuario.setText("");
+		txtNome.setText("");
+		txtLogin.setText("");
+		pswSenha.setText("");
+		pswRepetirSenha.setText("");
+		
+	}
+	
+
 }

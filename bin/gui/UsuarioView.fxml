@@ -17,16 +17,18 @@
    <content>
       <VBox prefHeight="500.0" prefWidth="800.0">
          <children>
-            <ToolBar prefHeight="70.0" prefWidth="800.0">
+            <ToolBar prefHeight="19.0" prefWidth="800.0">
               <items>
-                  <AnchorPane prefHeight="50.0" prefWidth="774.0">
+                  <AnchorPane prefHeight="65.0" prefWidth="774.0">
                      <children>
-                      <Button fx:id="btSalvarUsuario" layoutX="9.0" layoutY="27.0" mnemonicParsing="false" text="Salvar" />
-                        <Label layoutX="9.0" layoutY="2.0" text="Usuários">
+                        <Label layoutX="10.0" layoutY="1.0" text="Usuários">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
+                        <Button fx:id="btNovoUsuario" layoutX="10.0" layoutY="33.0" mnemonicParsing="false" onAction="#onBtNovoUsuarioAction" text="Novo" />
+                        <Button fx:id="btSalvarUsuario" layoutX="65.0" layoutY="33.0" mnemonicParsing="false" onAction="#onBtSalvarUsuarioAction" text="Salvar" />
+                        <Button fx:id="btCancelarEditarUsuario" cancelButton="true" layoutX="123.0" layoutY="33.0" mnemonicParsing="false" onAction="#onBtCancelarEditarUsuarioAction" text="Cancelar" />
                      </children>
                   </AnchorPane>
               </items>
@@ -57,6 +59,10 @@
                   </TableView>
                </children>
             </HBox>
+            <ToolBar prefHeight="40.0" prefWidth="200.0">
+               <items>
+                  <AnchorPane prefHeight="30.0" prefWidth="781.0" />
+               </items></ToolBar>
          </children>
       </VBox>
    </content>
