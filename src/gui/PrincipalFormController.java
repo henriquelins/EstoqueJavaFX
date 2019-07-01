@@ -172,6 +172,11 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
+			
+			ProdutoEditarFormController controller = loader.getController();
+			controller.setProduto(produto);
+			controller.setProdutoService(new ProdutoService());
+			controller.subscribeDataChangeListener(this);		
 
 			Main.setDialogScene(new Scene(pane));
 			Stage produtoStage = new Stage();
@@ -191,6 +196,11 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
+			
+			ProdutoNovoFormController controller = loader.getController();
+			controller.setProduto(produto);
+			controller.setProdutoService(new ProdutoService());
+			controller.subscribeDataChangeListener(this);			
 
 			Main.setDialogScene(new Scene(pane));
 			Stage produtoStage = new Stage();

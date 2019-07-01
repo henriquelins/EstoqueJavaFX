@@ -27,7 +27,7 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 	ProdutoService produtoService;
 
-	Produto prod;
+	Produto produto;
 	
 	private PrincipalFormController principalController;
 	
@@ -61,11 +61,11 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 	@FXML
 	public void onBtSalvarProdutoAction(ActionEvent event) {
 
-		setProd(getFormData());
+		setProduto(getFormData());
 
-		if (prod != null) {
+		if (produto != null) {
 
-			produtoService.produtoNovoOuEditar(prod);
+			produtoService.produtoNovoOuEditar(produto);
 			notifyDataChangeListeners();
 			
 		}
@@ -88,8 +88,8 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 		this.produtoService = produtoService;
 	}
 
-	public void setProd(Produto prod) {
-		this.prod = prod;
+	public void setProduto(Produto produto) {
+		this.produto = produto;
 	}
 
 	@Override
@@ -108,7 +108,7 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 	private void initializeNodes() {
 
 		produtoService = new ProdutoService();
-		prod = new Produto();
+		produto = new Produto();
 
 		Constraints.setTextFieldInteger(txtQuantidade);
 		
@@ -158,7 +158,7 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 			txtAreaDescricao.requestFocus();
 
 			produto = null;
-
+			
 		} else {
 			
 			produto.setNome(txtNome.getText());
@@ -166,12 +166,14 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 			produto.setSetor(String.valueOf(comboBoxSetor.getSelectionModel().getSelectedItem()));
 			produto.setCategoria(String.valueOf(comboBoxCategoria.getSelectionModel().getSelectedItem()));
 			produto.setDescricao(txtAreaDescricao.getText());
-
+			
 		}
 
 		return produto;
 
 	}
+	
+	
 
 	@Override
 	public void onDataChanged() {
@@ -179,5 +181,7 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 		principalController.updateTableView();
 		
 	}
+
+	
 
 }

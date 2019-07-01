@@ -1,8 +1,11 @@
 package gui;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import javafx.collections.FXCollections;
@@ -20,11 +23,15 @@ import model.entities.enums.Categoria;
 import model.entities.enums.Setor;
 import model.services.ProdutoService;
 
-public class ProdutoEditarFormController implements Initializable {
+public class ProdutoEditarFormController implements Initializable, DataChangeListener {
 
 	private ProdutoService produtoService;
 
 	private Produto produto;
+
+	private PrincipalFormController principalController;
+
+	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 
 	@FXML
 	private TextField txtIdProduto;
@@ -59,7 +66,20 @@ public class ProdutoEditarFormController implements Initializable {
 		if (produto != null) {
 
 			produtoService.produtoNovoOuEditar(produto);
+			notifyDataChangeListeners();
 
+		}
+
+	}
+
+	public void subscribeDataChangeListener(DataChangeListener listener) {
+		dataChangeListeners.add(listener);
+	}
+
+	private void notifyDataChangeListeners() {
+
+		for (DataChangeListener listener : dataChangeListeners) {
+			 listener.onDataChanged();
 		}
 
 	}
@@ -85,19 +105,19 @@ public class ProdutoEditarFormController implements Initializable {
 		produto = new Produto();
 
 		Constraints.setTextFieldInteger(txtQuantidade);
-		
+
 		txtNome.setText(produto.getNome());
 		txtQuantidade.setText(String.valueOf(produto.getQuantidade()));
 		txtAreaDescricao.setText(produto.getDescricao());
-		 
+
 		obsListSetor = FXCollections.observableArrayList(Setor.values());
 		comboBoxSetor.setItems(obsListSetor);
 
 		obsListCategoria = FXCollections.observableArrayList(Categoria.values());
 		comboBoxCategoria.setItems(obsListCategoria);
-		
+
 		updateFormData();
-	
+
 	}
 
 	private Produto getFormData() {
@@ -146,12 +166,13 @@ public class ProdutoEditarFormController implements Initializable {
 
 		} else {
 
+			produto.setIdProduto(Integer.valueOf(txtIdProduto.getText()));
 			produto.setNome(txtNome.getText());
 			produto.setQuantidade(Integer.valueOf(txtQuantidade.getText()));
 			produto.setSetor(String.valueOf(comboBoxSetor.getSelectionModel().getSelectedItem()));
 			produto.setCategoria(String.valueOf(comboBoxCategoria.getSelectionModel().getSelectedItem()));
 			produto.setDescricao(txtAreaDescricao.getText());
-			
+
 		}
 
 		return produto;
@@ -159,15 +180,21 @@ public class ProdutoEditarFormController implements Initializable {
 	}
 
 	public void updateFormData() {
-				
+
 		txtIdProduto.setText(String.valueOf(PrincipalFormController.getProduto().getIdProduto()));
 		txtNome.setText(PrincipalFormController.getProduto().getNome());
 		txtQuantidade.setText(String.valueOf(PrincipalFormController.getProduto().getQuantidade()));
 		comboBoxSetor.setPromptText(PrincipalFormController.getProduto().getSetor());
 		comboBoxCategoria.setPromptText(PrincipalFormController.getProduto().getCategoria());
-		txtAreaDescricao.setText(PrincipalFormController.getProduto().getDescricao());		
+		txtAreaDescricao.setText(PrincipalFormController.getProduto().getDescricao());
 
 	}
-	 
+
+	@Override
+	public void onDataChanged() {
+
+		principalController.updateTableView();
+
+	}
 
 }

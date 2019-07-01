@@ -16,18 +16,17 @@ import model.entities.Produto;
 public class ProdutoDaoJDBC implements ProdutoDao {
 
 	private Connection conn;
-	
+
 	public ProdutoDaoJDBC(Connection conn) {
 		this.conn = conn;
 	}
-	
+
 	@Override
 	public Produto findById(Integer id) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement(
-				"SELECT * FROM produto WHERE idProduto = ?");
+			st = conn.prepareStatement("SELECT * FROM produto WHERE idProduto = ?");
 			st.setInt(1, id);
 			rs = st.executeQuery();
 			if (rs.next()) {
@@ -41,13 +40,11 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 				return produto;
 			}
 			return null;
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
-		}
-		finally {
+		} finally {
 			DB.closeStatement(st);
-			DB.closeResultSet(rs);
+			
 		}
 	}
 
@@ -56,8 +53,7 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement(
-				"SELECT * FROM produto ORDER BY idProduto");
+			st = conn.prepareStatement("SELECT * FROM produto ORDER BY idProduto");
 			rs = st.executeQuery();
 
 			List<Produto> list = new ArrayList<>();
@@ -73,13 +69,11 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 				list.add(produto);
 			}
 			return list;
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
-		}
-		finally {
+		} finally {
 			DB.closeStatement(st);
-			DB.closeResultSet(rs);
+			
 		}
 	}
 
@@ -87,37 +81,33 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 	public void insert(Produto produto) {
 		PreparedStatement st = null;
 		try {
-			int index = 1;
-			
 			st = conn.prepareStatement(
-				"INSERT INTO produto (nome, descricao, setor, categoria, quantidade)"
-				+ " VALUES (?, ?, ? ,?, ?)", 
-				java.sql.Statement.RETURN_GENERATED_KEYS);
-			
-			st.setString(index, produto.getNome());
-			st.setString(index++, produto.getDescricao());
-			st.setString(index++, produto.getSetor());
-			st.setString(index++, produto.getCategoria());
-			st.setInt(index++, produto.getQuantidade());
+					"INSERT INTO produto (nome, descricao, setor, categoria, quantidade)" + " VALUES (?, ?, ? ,?, ?)",
+					java.sql.Statement.RETURN_GENERATED_KEYS);
+
+			st.setString(1, produto.getNome());
+			st.setString(2, produto.getDescricao());
+			st.setString(3, produto.getSetor());
+			st.setString(4, produto.getCategoria());
+			st.setInt(5, produto.getQuantidade());
 
 			int rowsAffected = st.executeUpdate();
-			
+
 			if (rowsAffected > 0) {
 				ResultSet rs = st.getGeneratedKeys();
 				if (rs.next()) {
 					int id = rs.getInt(1);
 					produto.setIdProduto(id);
 				}
-			}
-			else {
+				DB.closeResultSet(rs);
+			} else {
 				throw new DbException("Unexpected error! No rows affected!");
 			}
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
-		} 
-		finally {
+		} finally {
 			DB.closeStatement(st);
+			
 		}
 	}
 
@@ -125,25 +115,23 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 	public void update(Produto produto) {
 		PreparedStatement st = null;
 		try {
-			int index = 1;
-			
-			st = conn.prepareStatement(
-				"UPDATE produto SET name = ?,  descricao = ?, setor = ?, categoria = ?, quantidade = ? WHERE IdProduto = ?");
 
-			st.setString(index, produto.getNome());
-			st.setString(index++, produto.getDescricao());
-			st.setString(index++, produto.getSetor());
-			st.setString(index++, produto.getCategoria());
-			st.setInt(index++, produto.getQuantidade());
-			st.setInt(index++, produto.getIdProduto());
+			st = conn.prepareStatement(
+					"UPDATE produto SET nome = ?, descricao = ?, setor = ?, categoria = ?, quantidade = ? WHERE IdProduto = ?");
+
+			st.setString(1, produto.getNome());
+			st.setString(2, produto.getDescricao());
+			st.setString(3, produto.getSetor());
+			st.setString(4, produto.getCategoria());
+			st.setInt(5, produto.getQuantidade());
+			st.setInt(6, produto.getIdProduto());
 
 			st.executeUpdate();
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
-		} 
-		finally {
+		} finally {
 			DB.closeStatement(st);
+			
 		}
 	}
 
@@ -151,18 +139,16 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 	public void deleteById(Integer id) {
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement(
-				"DELETE FROM produto WHERE idProduto = ?");
+			st = conn.prepareStatement("DELETE FROM produto WHERE idProduto = ?");
 
 			st.setInt(1, id);
 
-			st.executeUpdate();
-		}
-		catch (SQLException e) {
+			st.executeUpdate();	
+		} catch (SQLException e) {
 			throw new DbIntegrityException(e.getMessage());
-		} 
-		finally {
+		} finally {
 			DB.closeStatement(st);
+			
 		}
 	}
 }

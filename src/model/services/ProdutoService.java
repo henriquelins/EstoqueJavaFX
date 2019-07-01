@@ -16,16 +16,12 @@ public class ProdutoService {
 	}
 
 	public void produtoNovoOuEditar(Produto produto) {
-		if (produto.getIdProduto() == null) {
-
+		if (produto.getIdProduto() == null) {	
 			dao.insert(produto);
 			Utils.fecharDialogAction();
-
-		} else {
-			
+		} else {		
 			dao.update(produto);
 			Utils.fecharDialogAction();
-
 		}
 	}
 
