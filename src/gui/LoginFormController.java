@@ -117,7 +117,7 @@ public class LoginFormController implements Initializable {
 
 		} catch (IOException e) {
 
-			Alerts.showAlert("IO Exception", "Erro ao carregar a tela principal", e.getMessage(), AlertType.ERROR);
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela principal", e.getCause().toString(), AlertType.ERROR);
 
 		}
 

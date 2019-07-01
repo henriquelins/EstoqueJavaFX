@@ -134,7 +134,7 @@ public class MovimentacaoFormController implements Initializable {
 
 			mov.setIdProduto(PrincipalFormController.getProduto().getIdProduto());
 			mov.setIdUsuario(LoginFormController.getLogado().getIdUsuario());
-			mov.setTipo(comboBoxTipoDeSaida.getSelectionModel().getSelectedItem());
+			mov.setTipo(String.valueOf(comboBoxTipoDeSaida.getSelectionModel().getSelectedItem()));
 			mov.setValorMovimento(Integer.valueOf(txtQuantidade.getText()));
 			mov.setObservacoesMovimentacao(txtAreaObservacoes.getText());
 			mov.setQuantidadeAnterior(Integer.valueOf(labelEstoqueAtual.getText()));

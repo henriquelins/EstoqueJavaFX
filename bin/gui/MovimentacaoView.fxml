@@ -24,13 +24,13 @@
             <Separator layoutX="2.0" layoutY="234.0" prefHeight="0.0" prefWidth="600.0" />
             <Label fx:id="labelNome" layoutX="41.0" layoutY="58.0" prefHeight="25.0" prefWidth="315.0">
                <font>
-                  <Font size="16.0" />
+                  <Font size="24.0" />
                </font>
             </Label>
             <Label layoutX="395.0" layoutY="31.0" text="Estoque atual" />
             <Label fx:id="labelEstoqueAtual" layoutX="395.0" layoutY="55.0" prefHeight="30.0" prefWidth="173.0">
                <font>
-                  <Font size="16.0" />
+                  <Font size="24.0" />
                </font>
             </Label>
             <ComboBox fx:id="comboBoxTipoDeSaida" layoutX="41.0" layoutY="131.0" prefHeight="25.0" prefWidth="191.0" promptText="Selecione..." />

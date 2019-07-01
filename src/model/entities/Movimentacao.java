@@ -4,16 +4,14 @@ package model.entities;
 import java.io.Serializable;
 import java.sql.Date;
 
-import model.entities.enums.TipoMovimentacao;
 
-
-public class Movimentacao implements Serializable {
+public class Movimentacao implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private int idMovimentacao;
 	private int idProduto;
 	private int idUsuario;
-	private TipoMovimentacao tipo;
+	private String tipo;
 	private int valorMovimento;
 	private String observacoesMovimentacao;
 	private int quantidadeAnterior;
@@ -21,12 +19,12 @@ public class Movimentacao implements Serializable {
 	
 	public Movimentacao() {}
 
-	public Movimentacao(int idMovimentacao, int idProduto, int idUsuario, TipoMovimentacao tipo, int valorMovimento,
+	public Movimentacao(int idMovimentacao, int idProduto, int idUsuario, String tipo, int valorMovimento,
 			String observacoesMovimentacao, int quantidadeAnterior, Date dataDaTransacao) {
 	
 		this.idMovimentacao = idMovimentacao;
 		this.idProduto = idProduto;
-		this.idUsuario =  idUsuario;
+		this.idUsuario = idUsuario;
 		this.tipo = tipo;
 		this.valorMovimento = valorMovimento;
 		this.observacoesMovimentacao = observacoesMovimentacao;
@@ -58,11 +56,11 @@ public class Movimentacao implements Serializable {
 		this.idUsuario = idUsuario;
 	}
 
-	public TipoMovimentacao getTipo() {
+	public String getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(TipoMovimentacao tipo) {
+	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
 

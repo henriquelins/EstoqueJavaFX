@@ -34,7 +34,8 @@ public class UsuarioService {
 	}
 
 	public void usuarioNovoOuEditar(Usuario usuario) {
-
+		
+	
 		if (usuario.getIdUsuario() == null) {
 
 			Alerts.showAlert("Usuário", null, "Novo Usuário", AlertType.ERROR);

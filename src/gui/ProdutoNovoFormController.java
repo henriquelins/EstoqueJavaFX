@@ -1,8 +1,11 @@
 package gui;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import javafx.collections.FXCollections;
@@ -20,11 +23,15 @@ import model.entities.enums.Categoria;
 import model.entities.enums.Setor;
 import model.services.ProdutoService;
 
-public class ProdutoNovoFormController implements Initializable {
+public class ProdutoNovoFormController implements Initializable, DataChangeListener {
 
 	ProdutoService produtoService;
 
 	Produto prod;
+	
+	private PrincipalFormController principalController;
+	
+	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 
 	@FXML
 	private TextField txtIdProduto;
@@ -59,9 +66,22 @@ public class ProdutoNovoFormController implements Initializable {
 		if (prod != null) {
 
 			produtoService.produtoNovoOuEditar(prod);
-
+			notifyDataChangeListeners();
+			
 		}
 
+	}
+	
+	public void subscribeDataChangeListener(DataChangeListener listener) {
+		dataChangeListeners.add(listener);
+	}
+	
+	private void notifyDataChangeListeners() {
+		
+		for (DataChangeListener listener : dataChangeListeners) {
+			listener.onDataChanged();
+		}
+				
 	}
 
 	public void setProdutoService(ProdutoService produtoService) {
@@ -91,7 +111,8 @@ public class ProdutoNovoFormController implements Initializable {
 		prod = new Produto();
 
 		Constraints.setTextFieldInteger(txtQuantidade);
-
+		
+		principalController = new PrincipalFormController();
 	}
 
 	private Produto getFormData() {
@@ -150,6 +171,13 @@ public class ProdutoNovoFormController implements Initializable {
 
 		return produto;
 
+	}
+
+	@Override
+	public void onDataChanged() {
+		
+		principalController.updateTableView();
+		
 	}
 
 }

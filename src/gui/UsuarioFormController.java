@@ -46,10 +46,10 @@ public class UsuarioFormController implements Initializable {
 
 	@FXML
 	private PasswordField pswRepetirSenha;
-	
+
 	@FXML
 	private Button btNovoUsuario;
-	
+
 	@FXML
 	private Button btSalvarUsuario;
 
@@ -76,34 +76,24 @@ public class UsuarioFormController implements Initializable {
 
 	@FXML
 	private TableColumn<Usuario, Usuario> tableColumnREMOVE;
-	
-	
+
 	@FXML
 	public void onBtNovoUsuarioAction(ActionEvent event) {
-		
-		btSalvarUsuario.setVisible(true);
-		
+
 		limparCampos();
-		
-		btCancelarEditarUsuario.setVisible(true);
-			
+		novoCamposDoUsuario();
+
 		tableViewUsuario.setDisable(true);
-		
-		editarCamposDoUsuario();
-		
+
 	}
 
 	@FXML
 	public void onBtSalvarUsuarioAction(ActionEvent event) {
 
 		setUser(getFormData());
-		
-		if (usuario != null) {
-
-			usuarioService.usuarioNovoOuEditar(usuario);
-
-		}
-
+			
+		usuarioService.usuarioNovoOuEditar(usuario);
+	
 	}
 
 	@FXML
@@ -117,20 +107,66 @@ public class UsuarioFormController implements Initializable {
 
 		btCancelarEditarUsuario.setVisible(false);
 		btSalvarUsuario.setVisible(false);
-		
+		btNovoUsuario.setDisable(false);
+
 		tableViewUsuario.setDisable(false);
 
-		if (usuarioTabela != null) {
-			
+		if (usuarioTabela.getIdUsuario() != null) {
+
 			showUsuarioDetails(usuarioTabela);
+
+		} else {
+
+			limparCampos();
+		}
+
+	}
+
+	protected void editarCamposDoUsuario() {
 		
+		if (usuarioTabela.getIdUsuario() != null) {
+			
+			txtNome.setEditable(true);
+			txtLogin.setEditable(true);
+			pswSenha.setEditable(true);
+			pswRepetirSenha.setEditable(true);
+			
+			btNovoUsuario.setDisable(true);
+			btCancelarEditarUsuario.setVisible(true);
+			btSalvarUsuario.setVisible(true);
+	
+			tableViewUsuario.setDisable(true);
+			
 		} else {
 			
-			limparCampos();
+			Alerts.showAlert("Usuários", null, "Selecione um registro", AlertType.INFORMATION);
+			
 		}
 		
 		
-		
+	}
+
+	protected void novoCamposDoUsuario() {
+
+		txtNome.setEditable(true);
+		txtLogin.setEditable(true);
+		pswSenha.setEditable(true);
+		pswRepetirSenha.setEditable(true);
+
+		btNovoUsuario.setDisable(true);
+		btCancelarEditarUsuario.setVisible(true);
+		btSalvarUsuario.setVisible(true);
+
+		tableViewUsuario.setDisable(true);
+	}
+
+	protected void limparCampos() {
+
+		txtIdUsuario.setText("");
+		txtNome.setText("");
+		txtLogin.setText("");
+		pswSenha.setText("");
+		pswRepetirSenha.setText("");
 
 	}
 
@@ -149,7 +185,7 @@ public class UsuarioFormController implements Initializable {
 				setUsuarioTabela(usuario);
 
 			} else {
-				
+
 				setUsuarioTabela(null);
 				limparCampos();
 			}
@@ -214,8 +250,7 @@ public class UsuarioFormController implements Initializable {
 	private ObservableList<Usuario> listaUsuarios() {
 		return FXCollections.observableArrayList(
 
-				new Usuario(1, "Administrador", "Adm", "10"), 
-				new Usuario(2, "Operador1", "op1", "10"),
+				new Usuario(1, "Administrador", "Adm", "10"), new Usuario(2, "Operador1", "op1", "10"),
 				new Usuario(3, "Operador2", "op2", "10"));
 
 	}
@@ -275,7 +310,17 @@ public class UsuarioFormController implements Initializable {
 			usuario = null;
 
 		} else {
-
+			
+			if (txtIdUsuario.getText().equals("")) {
+				
+				usuario.setIdUsuario(null);
+			
+			} else {
+				
+				usuario.setIdUsuario(Integer.valueOf(txtIdUsuario.getText()));
+				
+			}
+			
 			usuario.setNome(txtNome.getText());
 			usuario.setLogin(txtLogin.getText());
 			usuario.setSenha(pswSenha.getText());
@@ -290,7 +335,7 @@ public class UsuarioFormController implements Initializable {
 		tableColumnEDIT.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
 		tableColumnEDIT.setCellFactory(param -> new TableCell<Usuario, Usuario>() {
 
-			private final Button button = new Button("Editar");
+			private final Button btEditar = new Button("Editar");
 
 			@Override
 			protected void updateItem(Usuario usuario, boolean empty) {
@@ -299,8 +344,10 @@ public class UsuarioFormController implements Initializable {
 					setGraphic(null);
 					return;
 				}
-				setGraphic(button);
-				button.setOnAction(event -> editarCamposDoUsuario());
+
+				setGraphic(btEditar);
+				btEditar.setOnAction(event -> editarCamposDoUsuario());
+
 			}
 
 		});
@@ -310,7 +357,7 @@ public class UsuarioFormController implements Initializable {
 		tableColumnREMOVE.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
 		tableColumnREMOVE.setCellFactory(param -> new TableCell<Usuario, Usuario>() {
 
-			private final Button button = new Button("Excluir");
+			private final Button btExcluir = new Button("Excluir");
 
 			@Override
 			protected void updateItem(Usuario usuario, boolean empty) {
@@ -319,40 +366,18 @@ public class UsuarioFormController implements Initializable {
 					setGraphic(null);
 					return;
 				}
-				setGraphic(button);
-				button.setOnAction(event -> removeEntity(usuario));
+				setGraphic(btExcluir);
+				btExcluir.setOnAction(event -> removeEntity(usuario));
 			}
+
 		});
+
 	}
 
 	protected void removeEntity(Usuario usuario) {
 
 		Alerts.showAlert("removeEntity", "Não implementado", "Button Exit", AlertType.ERROR);
-	}
 
-	protected void editarCamposDoUsuario() {
-
-		txtIdUsuario.setEditable(true);
-		txtNome.setEditable(true);
-		txtLogin.setEditable(true);
-		pswSenha.setEditable(true);
-		pswRepetirSenha.setEditable(true);
-
-		btCancelarEditarUsuario.setVisible(true);
-		btSalvarUsuario.setVisible(true);
-		
-		tableViewUsuario.setDisable(true);
 	}
-	
-	protected void limparCampos() {
-		
-		txtIdUsuario.setText("");
-		txtNome.setText("");
-		txtLogin.setText("");
-		pswSenha.setText("");
-		pswRepetirSenha.setText("");
-		
-	}
-	
 
 }
