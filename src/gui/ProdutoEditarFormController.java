@@ -9,7 +9,6 @@ import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,8 +18,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import model.entities.Produto;
-import model.entities.enums.Categoria;
-import model.entities.enums.Setor;
 import model.services.ProdutoService;
 
 public class ProdutoEditarFormController implements Initializable, DataChangeListener {
@@ -34,7 +31,7 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 
 	@FXML
-	private TextField txtIdProduto;
+	private  TextField txtIdProduto;
 
 	@FXML
 	private TextField txtNome;
@@ -43,14 +40,10 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 	private TextField txtQuantidade;
 
 	@FXML
-	private ComboBox<Setor> comboBoxSetor;
-
-	private ObservableList<Setor> obsListSetor;
+	private ComboBox<String> comboBoxSetor;
 
 	@FXML
-	private ComboBox<Categoria> comboBoxCategoria;
-
-	private ObservableList<Categoria> obsListCategoria;
+	private ComboBox<String> comboBoxCategoria;
 
 	@FXML
 	private TextArea txtAreaDescricao;
@@ -60,14 +53,12 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 	@FXML
 	public void onBtSalvarProdutoAction(ActionEvent event) {
-
 		setProduto(getFormData());
 
 		if (produto != null) {
 
 			produtoService.produtoNovoOuEditar(produto);
 			notifyDataChangeListeners();
-
 		}
 
 	}
@@ -79,7 +70,7 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 	private void notifyDataChangeListeners() {
 
 		for (DataChangeListener listener : dataChangeListeners) {
-			 listener.onDataChanged();
+			listener.onDataChanged();
 		}
 
 	}
@@ -92,6 +83,29 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 		this.produto = produto;
 	}
 
+	private List<String> listaSetor() {
+
+		List<String> listaSetor = new ArrayList<>();
+		listaSetor.add("Crachás");
+		listaSetor.add("Suporte");
+		return listaSetor;
+
+	}
+
+	private List<String> listaCategoria() {
+
+		List<String> listaCategoria = new ArrayList<>();
+		listaCategoria.add("Tintas crachás");
+		listaCategoria.add("Insumos crachás");
+		listaCategoria.add("Insumos Laminação");
+		listaCategoria.add("Equipamentos Suporte");
+		listaCategoria.add("Insumos suporte");
+		listaCategoria.add("Material escritório");
+
+		return listaCategoria;
+
+	}
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
@@ -100,6 +114,9 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 	}
 
 	private void initializeNodes() {
+
+		comboBoxSetor.setItems(FXCollections.observableArrayList(listaSetor()));
+		comboBoxCategoria.setItems(FXCollections.observableArrayList(listaCategoria()));
 
 		produtoService = new ProdutoService();
 		produto = new Produto();
@@ -110,11 +127,7 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 		txtQuantidade.setText(String.valueOf(produto.getQuantidade()));
 		txtAreaDescricao.setText(produto.getDescricao());
 
-		obsListSetor = FXCollections.observableArrayList(Setor.values());
-		comboBoxSetor.setItems(obsListSetor);
-
-		obsListCategoria = FXCollections.observableArrayList(Categoria.values());
-		comboBoxCategoria.setItems(obsListCategoria);
+		startFields();
 
 		updateFormData();
 
@@ -184,8 +197,8 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 		txtIdProduto.setText(String.valueOf(PrincipalFormController.getProduto().getIdProduto()));
 		txtNome.setText(PrincipalFormController.getProduto().getNome());
 		txtQuantidade.setText(String.valueOf(PrincipalFormController.getProduto().getQuantidade()));
-		comboBoxSetor.setPromptText(PrincipalFormController.getProduto().getSetor());
-		comboBoxCategoria.setPromptText(PrincipalFormController.getProduto().getCategoria());
+		comboBoxSetor.setValue(PrincipalFormController.getProduto().getSetor());
+		comboBoxCategoria.setValue(PrincipalFormController.getProduto().getCategoria());
 		txtAreaDescricao.setText(PrincipalFormController.getProduto().getDescricao());
 
 	}
@@ -195,6 +208,12 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 		principalController.updateTableView();
 
+	}
+
+	public void startFields() {
+		txtNome.setText(produto.getNome());
+		txtQuantidade.setText(String.valueOf(produto.getQuantidade()));
+		txtAreaDescricao.setText(produto.getDescricao());
 	}
 
 }

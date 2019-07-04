@@ -31,7 +31,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import model.entities.Movimentacao;
 import model.entities.Produto;
+import model.services.MovimentacaoService;
 import model.services.ProdutoService;
 
 public class PrincipalFormController implements Initializable, DataChangeListener {
@@ -152,7 +154,6 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		if (service == null) {
 			throw new IllegalStateException("Service está nulo");
 		}
-
 		List<Produto> listaProduto = service.findAll();
 		listaProdutos = FXCollections.observableArrayList(listaProduto);
 		tableViewProduto.setItems(listaProdutos);
@@ -177,7 +178,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			controller.setProduto(produto);
 			controller.setProdutoService(new ProdutoService());
 			controller.subscribeDataChangeListener(this);		
-
+			
 			Main.setDialogScene(new Scene(pane));
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Editar Produto");
@@ -220,12 +221,19 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	private void createMovimentacaoDialogForm(Produto prod, String absoluteName) {
 		try {
 			setProduto(prod);
-
+			
+			Movimentacao movimentacao = new Movimentacao();
+			
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 
+			MovimentacaoFormController controller = loader.getController();
+			controller.setProduto(produto);
+			controller.setMovimentacao(movimentacao);
+			controller.setMovimentacaoService(new MovimentacaoService());
+			controller.subscribeDataChangeListener(this);			
+			
 			Main.setDialogScene(new Scene(pane));
-
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Movimentação de Produtos");
 			produtoStage.setScene(Main.getDialogScene());
@@ -340,11 +348,11 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	}
 
 	private void removeEntity(Produto prod) {
-		Optional<ButtonType> result = Alerts.showConfirmation("Confirmation", "Are you sure to delete?");
+		Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você quer deletar o produto?");
 		
 		if(result.get() == ButtonType.OK) {
 			if(service == null) {
-				throw new IllegalThreadStateException("Service was null");				
+				throw new IllegalThreadStateException("Service está nulo");				
 			}
 			try {
 				service.remove(prod);

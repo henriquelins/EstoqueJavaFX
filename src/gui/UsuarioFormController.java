@@ -1,9 +1,13 @@
 package gui;
 
 import java.net.URL;
+import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import application.Main;
+import db.DbIntegrityException;
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -13,6 +17,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -24,13 +29,15 @@ import javafx.stage.Stage;
 import model.entities.Usuario;
 import model.services.UsuarioService;
 
-public class UsuarioFormController implements Initializable {
+public class UsuarioFormController implements Initializable, DataChangeListener {
 
-	private UsuarioService usuarioService;
+	private UsuarioService service;
 
-	private Usuario usuario;
+	private static Usuario usuario;
 
 	private Usuario usuarioTabela;
+
+	private static ObservableList<Usuario> listaUsuarios;
 
 	@FXML
 	private TextField txtIdUsuario;
@@ -79,35 +86,32 @@ public class UsuarioFormController implements Initializable {
 
 	@FXML
 	public void onBtNovoUsuarioAction(ActionEvent event) {
-
 		limparCampos();
+		editarCamposFalso();
 		novoCamposDoUsuario();
-
 		tableViewUsuario.setDisable(true);
-
 	}
 
 	@FXML
 	public void onBtSalvarUsuarioAction(ActionEvent event) {
+		setUsuario(getFormData());
+		editarCamposFalso();
+		botoesFalso();
+		tableViewUsuario.setDisable(false);
 
-		setUser(getFormData());
-			
-		usuarioService.usuarioNovoOuEditar(usuario);
-	
+		if (usuario != null) {
+
+			service.usuarioNovoOuEditar(usuario);
+			onDataChanged();
+
+		}
 	}
 
 	@FXML
 	public void onBtCancelarEditarUsuarioAction(ActionEvent event) {
-
-		txtIdUsuario.setEditable(false);
-		txtNome.setEditable(false);
-		txtLogin.setEditable(false);
-		pswSenha.setEditable(false);
-		pswRepetirSenha.setEditable(false);
-
-		btCancelarEditarUsuario.setVisible(false);
-		btSalvarUsuario.setVisible(false);
-		btNovoUsuario.setDisable(false);
+		limparCampos();
+		botoesFalso();
+		editarCamposFalso();
 
 		tableViewUsuario.setDisable(false);
 
@@ -123,31 +127,28 @@ public class UsuarioFormController implements Initializable {
 	}
 
 	protected void editarCamposDoUsuario() {
-		
 		if (usuarioTabela.getIdUsuario() != null) {
-			
+
 			txtNome.setEditable(true);
 			txtLogin.setEditable(true);
 			pswSenha.setEditable(true);
 			pswRepetirSenha.setEditable(true);
-			
+
 			btNovoUsuario.setDisable(true);
 			btCancelarEditarUsuario.setVisible(true);
 			btSalvarUsuario.setVisible(true);
-	
+
 			tableViewUsuario.setDisable(true);
-			
+
 		} else {
-			
+
 			Alerts.showAlert("Usuários", null, "Selecione um registro", AlertType.INFORMATION);
-			
+
 		}
-		
-		
+
 	}
 
 	protected void novoCamposDoUsuario() {
-
 		txtNome.setEditable(true);
 		txtLogin.setEditable(true);
 		pswSenha.setEditable(true);
@@ -161,45 +162,53 @@ public class UsuarioFormController implements Initializable {
 	}
 
 	protected void limparCampos() {
-
 		txtIdUsuario.setText("");
 		txtNome.setText("");
 		txtLogin.setText("");
 		pswSenha.setText("");
 		pswRepetirSenha.setText("");
+	}
 
+	protected void editarCamposFalso() {
+		txtIdUsuario.setEditable(false);
+		txtNome.setEditable(false);
+		txtLogin.setEditable(false);
+		pswSenha.setEditable(false);
+		pswRepetirSenha.setEditable(false);
+	}
+
+	protected void botoesFalso() {
+		btCancelarEditarUsuario.setVisible(false);
+		btSalvarUsuario.setVisible(false);
+		btNovoUsuario.setDisable(false);
 	}
 
 	public void showUsuarioDetails(Usuario usuario) {
-
 		if (btCancelarEditarUsuario.isVisible() != true) {
-
 			if (usuario != null) {
-
 				txtIdUsuario.setText(String.valueOf(usuario.getIdUsuario()));
 				txtNome.setText(usuario.getNome());
 				txtLogin.setText(usuario.getLogin());
 				pswSenha.setText(usuario.getSenha());
 				pswRepetirSenha.setText(usuario.getSenha());
-
 				setUsuarioTabela(usuario);
-
 			} else {
-
 				setUsuarioTabela(null);
 				limparCampos();
 			}
-
 		}
-
 	}
 
-	public void setUsuarioService(UsuarioService usuarioService) {
-		this.usuarioService = usuarioService;
+	public void setUsuarioService(UsuarioService service) {
+		this.service = service;
 	}
 
-	public void setUser(Usuario usuario) {
-		this.usuario = usuario;
+	public void setUsuario(Usuario usuario) {
+		UsuarioFormController.usuario = usuario;
+	}
+
+	public static Usuario getUsuario() {
+		return usuario;
 	}
 
 	public void setUsuarioTabela(Usuario usuario) {
@@ -208,16 +217,11 @@ public class UsuarioFormController implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-
 		initializeNodes();
-
 	}
 
 	private void initializeNodes() {
-
 		showUsuarioDetails(null);
-
-		atualizarDadosUsuario();
 
 		tableViewUsuario.getSelectionModel().selectedItemProperty()
 				.addListener((observable, oldValue, newValue) -> showUsuarioDetails(newValue));
@@ -229,112 +233,72 @@ public class UsuarioFormController implements Initializable {
 		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("Nome"));
 		tableColumnLogin.setCellValueFactory(new PropertyValueFactory<>("Login"));
 
-		updateTableView();
-
 		Stage stage = (Stage) Main.getMainScene().getWindow();
 		hbox.prefHeightProperty().bind(stage.heightProperty());
 		tableViewUsuario.prefHeightProperty().bind(stage.heightProperty());
 
-		usuarioService = new UsuarioService();
-		usuario = new Usuario();
+		service = new UsuarioService();
 		usuarioTabela = new Usuario();
 
-	}
-
-	private void atualizarDadosUsuario() {
-
-		tableViewUsuario.getSelectionModel().selectedItemProperty()
-				.addListener((observable, oldValue, newValue) -> showUsuarioDetails(newValue));
-	}
-
-	private ObservableList<Usuario> listaUsuarios() {
-		return FXCollections.observableArrayList(
-
-				new Usuario(1, "Administrador", "Adm", "10"), new Usuario(2, "Operador1", "op1", "10"),
-				new Usuario(3, "Operador2", "op2", "10"));
-
+		updateTableView();
 	}
 
 	public void updateTableView() {
+		if (service == null) {
+			throw new IllegalStateException("Serviço está nulo");
+		}
 
-		tableViewUsuario.setItems(listaUsuarios());
+		List<Usuario> listaUsuario = service.findAll();
+		listaUsuarios = FXCollections.observableArrayList(listaUsuario);
+		tableViewUsuario.setItems(listaUsuarios);
+
+		tableViewUsuario.setDisable(false);
+		limparCampos();
+
 		initEditButton();
 		initRemoveButton();
-
 	}
 
 	private Usuario getFormData() {
-
 		Usuario usuario = new Usuario();
-
 		if (txtNome.getText() == null || txtNome.getText().trim().equals("")) {
-
 			Alerts.showAlert("Novo Usuário", null, "Digite seu nome", AlertType.INFORMATION);
-
 			txtNome.requestFocus();
-
 			usuario = null;
-
 		} else if (txtLogin.getText() == null || txtLogin.getText().trim().equals("")) {
-
 			Alerts.showAlert("Novo Usuário", null, "Digite seu login", AlertType.INFORMATION);
-
 			txtLogin.requestFocus();
-
 			usuario = null;
-
 		} else if (pswSenha.getText() == null || pswSenha.getText().trim().equals("")) {
-
 			Alerts.showAlert("Novo Usuário", null, "Digite sua senha", AlertType.INFORMATION);
-
 			pswSenha.requestFocus();
-
 			usuario = null;
-
 		} else if (pswRepetirSenha.getText() == null || pswRepetirSenha.getText().trim().equals("")) {
-
 			Alerts.showAlert("Novo Usuário", null, "Digite a confirmação da senha", AlertType.INFORMATION);
-
 			pswRepetirSenha.requestFocus();
-
 			usuario = null;
-
 		} else if (!pswSenha.getText().equals(pswRepetirSenha.getText())
 				|| !pswRepetirSenha.getText().equals(pswSenha.getText())) {
-
 			Alerts.showAlert("Novo Usuário", null, "A confirmação da senha não está igual a senha!",
 					AlertType.INFORMATION);
-
 			pswRepetirSenha.requestFocus();
-
 			usuario = null;
-
 		} else {
-			
 			if (txtIdUsuario.getText().equals("")) {
-				
 				usuario.setIdUsuario(null);
-			
 			} else {
-				
 				usuario.setIdUsuario(Integer.valueOf(txtIdUsuario.getText()));
-				
 			}
-			
 			usuario.setNome(txtNome.getText());
 			usuario.setLogin(txtLogin.getText());
 			usuario.setSenha(pswSenha.getText());
-
 		}
-
 		return usuario;
-
 	}
 
 	private void initEditButton() {
 		tableColumnEDIT.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
 		tableColumnEDIT.setCellFactory(param -> new TableCell<Usuario, Usuario>() {
-
 			private final Button btEditar = new Button("Editar");
 
 			@Override
@@ -344,19 +308,15 @@ public class UsuarioFormController implements Initializable {
 					setGraphic(null);
 					return;
 				}
-
 				setGraphic(btEditar);
 				btEditar.setOnAction(event -> editarCamposDoUsuario());
-
 			}
-
 		});
 	}
 
 	private void initRemoveButton() {
 		tableColumnREMOVE.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
 		tableColumnREMOVE.setCellFactory(param -> new TableCell<Usuario, Usuario>() {
-
 			private final Button btExcluir = new Button("Excluir");
 
 			@Override
@@ -369,15 +329,27 @@ public class UsuarioFormController implements Initializable {
 				setGraphic(btExcluir);
 				btExcluir.setOnAction(event -> removeEntity(usuario));
 			}
-
 		});
-
 	}
 
-	protected void removeEntity(Usuario usuario) {
+	private void removeEntity(Usuario usuario) {
+		Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você quer deletar o usuário?");
+		if (result.get() == ButtonType.OK) {
+			if (service == null) {
+				throw new IllegalThreadStateException("O serviço está nulo");
+			}
+			try {
+				service.remove(usuario);
+				onDataChanged();
+			} catch (DbIntegrityException e) {
+				Alerts.showAlert("Erro ao remover ", null, e.getMessage(), AlertType.ERROR);
+			}
+		}
+	}
 
-		Alerts.showAlert("removeEntity", "Não implementado", "Button Exit", AlertType.ERROR);
-
+	@Override
+	public void onDataChanged() {
+		this.updateTableView();
 	}
 
 }

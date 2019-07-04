@@ -22,9 +22,9 @@ import model.entities.Usuario;
 import model.services.UsuarioService;
 
 public class LoginFormController implements Initializable {
-		
+
 	private static Usuario logado;
-		
+
 	private UsuarioService usuarioService;
 
 	@FXML
@@ -35,35 +35,41 @@ public class LoginFormController implements Initializable {
 
 	@FXML
 	private Button btOK;
-	
-	
+
 	@FXML
 	public void onBtOKAction(ActionEvent event) {
-		
+
 		Usuario usuario = new Usuario();
 		usuario = getFormData();
-		
-		if (usuario.getLogin() != null && usuario.getSenha() != null){
-			
-			setLogado(usuarioService.login(usuario));
-			
-			if (logado.getLogin() != null && logado.getSenha() != null) {
-				
-				Utils.currentStage(event).close();
 
-				Stage parentStage = Utils.currentStage(event);
-				createPrincipalForm("/gui/PrincipalView.fxml", parentStage);
-												
-			} else {
-				
-				Alerts.showAlert("Login", null, "Login não confirmado", AlertType.ERROR);
-				
-				txtLogin.setText("");
-				pswSenha.setText("");
-				txtLogin.requestFocus();
-				
+		if (usuario.getLogin() != null && usuario.getSenha() != null) {
+
+			setLogado(usuarioService.login(usuario));
+
+			try {
+
+				if (logado != null) {
+
+					Utils.currentStage(event).close();
+
+					Stage parentStage = Utils.currentStage(event);
+					createPrincipalForm("/gui/PrincipalView.fxml", parentStage);
+
+				} else {
+
+					Alerts.showAlert("Login", null, "Login não confirmado", AlertType.ERROR);
+
+					txtLogin.setText("");
+					pswSenha.setText("");
+					txtLogin.requestFocus();
+
+				}
+
+			} catch (NullPointerException e) {
+
+				Alerts.showAlert("Login", null, e.getLocalizedMessage(), AlertType.ERROR);
 			}
-			
+
 		}
 
 	}
@@ -71,8 +77,7 @@ public class LoginFormController implements Initializable {
 	public static void setLogado(Usuario logado) {
 		LoginFormController.logado = logado;
 	}
-		
-	
+
 	public static Usuario getLogado() {
 		return logado;
 	}
@@ -81,15 +86,13 @@ public class LoginFormController implements Initializable {
 		return logado.usuarioLogado();
 	}
 
-
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-				
+
 		initializeNodes();
-		
+
 	}
-	
-	
+
 	private void initializeNodes() {
 		logado = new Usuario();
 		usuarioService = new UsuarioService();
@@ -117,7 +120,8 @@ public class LoginFormController implements Initializable {
 
 		} catch (IOException e) {
 
-			Alerts.showAlert("IO Exception", "Erro ao carregar a tela principal", e.getCause().toString(), AlertType.ERROR);
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela principal", e.getCause().toString(),
+					AlertType.ERROR);
 
 		}
 
@@ -130,9 +134,9 @@ public class LoginFormController implements Initializable {
 		if (txtLogin.getText() == null || txtLogin.getText().trim().equals("")) {
 
 			Alerts.showAlert("Login", null, "Digite seu login", AlertType.INFORMATION);
-			
+
 			txtLogin.requestFocus();
-			
+
 			usuario.setLogin(null);
 			usuario.setSenha(null);
 
@@ -141,20 +145,19 @@ public class LoginFormController implements Initializable {
 			Alerts.showAlert("Login", null, "Digite sua senha", AlertType.INFORMATION);
 
 			pswSenha.requestFocus();
-			
+
 			usuario.setLogin(null);
 			usuario.setSenha(null);
 
 		} else {
-						
+
 			usuario.setLogin(txtLogin.getText());
 			usuario.setSenha(pswSenha.getText());
 
 		}
-				
+
 		return usuario;
 
 	}
-
 
 }

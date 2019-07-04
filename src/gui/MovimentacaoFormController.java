@@ -1,12 +1,15 @@
 package gui;
 
 import java.net.URL;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,15 +21,22 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import model.entities.Movimentacao;
 import model.entities.Produto;
-import model.entities.enums.TipoMovimentacao;
 import model.services.MovimentacaoService;
+import model.services.ProdutoService;
 
-public class MovimentacaoFormController implements Initializable {
+public class MovimentacaoFormController implements Initializable, DataChangeListener {
+
+	private PrincipalFormController principalController;
+
+	// Lista de ouvintes para receber alguma modificação
+	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 
 	MovimentacaoService movimentacaoService;
 
 	Movimentacao movimentacao;
-	
+
+	Produto produto;
+
 	@FXML
 	private Label labelNome;
 
@@ -34,9 +44,7 @@ public class MovimentacaoFormController implements Initializable {
 	private Label labelEstoqueAtual;
 
 	@FXML
-	private ComboBox<TipoMovimentacao> comboBoxTipoDeSaida;
-
-	private ObservableList<TipoMovimentacao> obsListTipoMovimentacao;
+	private ComboBox<String> comboBoxTipoDeSaida;
 
 	@FXML
 	private TextField txtQuantidade;
@@ -55,52 +63,75 @@ public class MovimentacaoFormController implements Initializable {
 		if (movimentacao != null) {
 
 			movimentacaoService.movimentacaoSaidaOuEntrada(movimentacao);
+			ProdutoService produtoService = new ProdutoService();
+			produtoService.findById(PrincipalFormController.getProduto().getIdProduto());
+			updateFormData2();
+			notifyDataChangeListeners();
 
+		}
+	}
+
+	// Adiciona a lista um ouvinte, quando há uma modificação
+	public void subscribeDataChangeListener(DataChangeListener listener) {
+		dataChangeListeners.add(listener);
+	}
+
+	// Função que faz a atualização da tabela
+	private void notifyDataChangeListeners() {
+
+		for (DataChangeListener listener : dataChangeListeners) {
+			listener.onDataChanged();
 		}
 
 	}
 
-	public void setMovimentacaService(MovimentacaoService movimentacaoService) {
+	public void setMovimentacaoService(MovimentacaoService movimentacaoService) {
 		this.movimentacaoService = movimentacaoService;
 	}
 
 	public void setMovimentacao(Movimentacao movimentacao) {
 		this.movimentacao = movimentacao;
 	}
-	
+
 	public void setProduto(Produto produto) {
+		this.produto = produto;
 	}
-	
-	
-	
-	
+
+	private List<String> listaTipos() {
+
+		List<String> listaTipos = new ArrayList<>();
+		listaTipos.add("Entrada do produtos");
+		listaTipos.add("Ajuste de entrada");
+		listaTipos.add("Saída de produtos");
+		listaTipos.add("Ajuste de saída");
+
+		return listaTipos;
+
+	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
-		
 		initializeNodes();
-
 	}
 
 	private void initializeNodes() {
-		
-		obsListTipoMovimentacao = FXCollections.observableArrayList(TipoMovimentacao.values());
-		comboBoxTipoDeSaida.setItems(obsListTipoMovimentacao);
-		
+
+		comboBoxTipoDeSaida.setItems(FXCollections.observableArrayList(listaTipos()));
+
 		labelNome.setText(PrincipalFormController.getProduto().getNome());
 		labelEstoqueAtual.setText(String.valueOf(PrincipalFormController.getProduto().getQuantidade()));
-		
+
 		movimentacaoService = new MovimentacaoService();
 		movimentacao = new Movimentacao();
-		new Produto(); 
+		produto = new Produto();
 
 		Constraints.setTextFieldInteger(txtQuantidade);
-		
+
 		updateFormData();
-			
+
 	}
-	
+
 	private Movimentacao getFormData() {
 
 		Movimentacao mov = new Movimentacao();
@@ -132,24 +163,48 @@ public class MovimentacaoFormController implements Initializable {
 
 		} else {
 
+			Date hoje = new Date(System.currentTimeMillis());
+			java.sql.Date data = new java.sql.Date(hoje.getTime());
+
+			// DateFormat formatBR = new SimpleDateFormat("dd/MM/YYYY");
+			// String dataBr = formatBR.format(data);
+
 			mov.setIdProduto(PrincipalFormController.getProduto().getIdProduto());
 			mov.setIdUsuario(LoginFormController.getLogado().getIdUsuario());
 			mov.setTipo(String.valueOf(comboBoxTipoDeSaida.getSelectionModel().getSelectedItem()));
 			mov.setValorMovimento(Integer.valueOf(txtQuantidade.getText()));
 			mov.setObservacoesMovimentacao(txtAreaObservacoes.getText());
 			mov.setQuantidadeAnterior(Integer.valueOf(labelEstoqueAtual.getText()));
-
+			mov.setDataDaTransacao(data);
 		}
 
 		return mov;
 
 	}
 
-		public void updateFormData() {
-		
+	public void updateFormData() {
+
 		labelNome.setText(PrincipalFormController.getProduto().getNome());
 		labelEstoqueAtual.setText(String.valueOf(PrincipalFormController.getProduto().getQuantidade()));
-		
+
 	}
-	
+
+	public void updateFormData2() {
+
+		labelNome.setText(PrincipalFormController.getProduto().getNome());
+		labelEstoqueAtual.setText(String.valueOf(PrincipalFormController.getProduto().getQuantidade()));
+		txtQuantidade.setText("");
+		txtQuantidade.requestFocus();
+		txtAreaObservacoes.setText("");
+		comboBoxTipoDeSaida.setValue("Selecione...");
+
+	}
+
+	@Override
+	public void onDataChanged() {
+
+		principalController.updateTableView();
+
+	}
+
 }

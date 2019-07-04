@@ -17,15 +17,14 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			
-			//String style = getClass().getResource("application.css").toExternalForm();
-			
+					
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LoginView.fxml"));
 			Pane pane = loader.load();
 
 			mainScene = new Scene(pane);
 			
-			//mainScene.getStylesheets().addAll(style);
+			String style = getClass().getResource("caspian.css").toExternalForm();
+			mainScene.getStylesheets().addAll(style);
 			
 			primaryStage.setScene(mainScene);
 			primaryStage.setResizable(false);

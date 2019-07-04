@@ -2,6 +2,7 @@ package model.services;
 
 import java.util.List;
 
+import gui.PrincipalFormController;
 import gui.util.Utils;
 import model.dao.DaoFactory;
 import model.dao.ProdutoDao;
@@ -28,5 +29,10 @@ public class ProdutoService {
 	public void remove(Produto produto) {
 		dao.deleteById(produto.getIdProduto());
 	}
-
+	
+	public Produto findById(Integer id) {
+		PrincipalFormController.setProduto(dao.findById(id));
+		return PrincipalFormController.getProduto();
+	}
+	
 }

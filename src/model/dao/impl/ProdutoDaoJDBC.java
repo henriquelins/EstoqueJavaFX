@@ -151,4 +151,26 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			
 		}
 	}
+
+	@Override
+	public void updateEstoqueAtual(Integer estoqueAtual, Integer idProduto) {
+		PreparedStatement st = null;
+		try {
+
+			st = conn.prepareStatement(
+					"UPDATE produto SET quantidade = ? WHERE IdProduto = ?");
+
+			st.setInt(1, estoqueAtual);
+			st.setInt(2, idProduto);
+			
+
+			st.executeUpdate();
+		} catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		} finally {
+			DB.closeStatement(st);
+			
+		}
+		
+	}
 }

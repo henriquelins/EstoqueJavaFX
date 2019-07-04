@@ -9,7 +9,6 @@ import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,8 +18,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import model.entities.Produto;
-import model.entities.enums.Categoria;
-import model.entities.enums.Setor;
 import model.services.ProdutoService;
 
 public class ProdutoNovoFormController implements Initializable, DataChangeListener {
@@ -28,9 +25,10 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 	ProdutoService produtoService;
 
 	Produto produto;
-	
+
 	private PrincipalFormController principalController;
-	
+
+	// Lista de ouvintes para receber alguma modificação
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 
 	@FXML
@@ -43,14 +41,10 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 	private TextField txtQuantidade;
 
 	@FXML
-	private ComboBox<Setor> comboBoxSetor;
-
-	private ObservableList<Setor> obsListSetor;
+	private ComboBox<String> comboBoxSetor;
 
 	@FXML
-	private ComboBox<Categoria> comboBoxCategoria;
-
-	private ObservableList<Categoria> obsListCategoria;
+	private ComboBox<String> comboBoxCategoria;
 
 	@FXML
 	private TextArea txtAreaDescricao;
@@ -67,21 +61,23 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 			produtoService.produtoNovoOuEditar(produto);
 			notifyDataChangeListeners();
-			
+
 		}
 
 	}
-	
+
+	// Adiciona a lista um ouvinte, quando há uma modificação
 	public void subscribeDataChangeListener(DataChangeListener listener) {
 		dataChangeListeners.add(listener);
 	}
-	
+
+	// Função que faz a atualização da tabela
 	private void notifyDataChangeListeners() {
-		
+
 		for (DataChangeListener listener : dataChangeListeners) {
 			listener.onDataChanged();
 		}
-				
+
 	}
 
 	public void setProdutoService(ProdutoService produtoService) {
@@ -92,14 +88,31 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 		this.produto = produto;
 	}
 
+	private List<String> listaSetor() {
+
+		List<String> listaSetor = new ArrayList<>();
+		listaSetor.add("Crachás");
+		listaSetor.add("Suporte");
+		return listaSetor;
+
+	}
+
+	private List<String> listaCategoria() {
+
+		List<String> listaCategoria = new ArrayList<>();
+		listaCategoria.add("Tintas crachás");
+		listaCategoria.add("Insumos crachás");
+		listaCategoria.add("Insumos Laminação");
+		listaCategoria.add("Equipamentos Suporte");
+		listaCategoria.add("Insumos suporte");
+		listaCategoria.add("Material escritório");
+
+		return listaCategoria;
+
+	}
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-
-		obsListSetor = FXCollections.observableArrayList(Setor.values());
-		comboBoxSetor.setItems(obsListSetor);
-
-		obsListCategoria = FXCollections.observableArrayList(Categoria.values());
-		comboBoxCategoria.setItems(obsListCategoria);
 
 		initializeNodes();
 
@@ -107,11 +120,14 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 	private void initializeNodes() {
 
+		comboBoxSetor.setItems(FXCollections.observableArrayList(listaSetor()));
+		comboBoxCategoria.setItems(FXCollections.observableArrayList(listaCategoria()));
+
 		produtoService = new ProdutoService();
 		produto = new Produto();
 
 		Constraints.setTextFieldInteger(txtQuantidade);
-		
+
 		principalController = new PrincipalFormController();
 	}
 
@@ -158,30 +174,26 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 			txtAreaDescricao.requestFocus();
 
 			produto = null;
-			
+
 		} else {
-			
+
 			produto.setNome(txtNome.getText());
 			produto.setQuantidade(Integer.valueOf(txtQuantidade.getText()));
 			produto.setSetor(String.valueOf(comboBoxSetor.getSelectionModel().getSelectedItem()));
 			produto.setCategoria(String.valueOf(comboBoxCategoria.getSelectionModel().getSelectedItem()));
 			produto.setDescricao(txtAreaDescricao.getText());
-			
+
 		}
 
 		return produto;
 
 	}
-	
-	
 
 	@Override
 	public void onDataChanged() {
-		
-		principalController.updateTableView();
-		
-	}
 
-	
+		principalController.updateTableView();
+
+	}
 
 }
