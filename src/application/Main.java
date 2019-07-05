@@ -13,20 +13,25 @@ public class Main extends Application {
 	private static Scene mainScene;
 
 	private static Scene dialogScene;
-	
-	//private static String style;
+
+	// public static String style = "/application/app2.css" ;
+	// public static String style = "" ;
 
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-					
+
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LoginView.fxml"));
 			Pane pane = loader.load();
 
 			mainScene = new Scene(pane);
-			
-			mainScene.getStylesheets().add("/application/caspian.css");
-			
+
+			// mainScene.getStylesheets().add(style);
+
+			setUserAgentStylesheet(STYLESHEET_CASPIAN);
+			// setUserAgentStylesheet(STYLESHEET_MODENA);
+			// setUserAgentStylesheet(style);
+
 			primaryStage.setScene(mainScene);
 			primaryStage.setResizable(false);
 			primaryStage.setTitle("Estoque Crachás");

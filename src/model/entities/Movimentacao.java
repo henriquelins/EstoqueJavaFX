@@ -9,8 +9,8 @@ public class Movimentacao implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private int idMovimentacao;
-	private int idProduto;
-	private int idUsuario;
+	private Produto produto;
+	private Usuario usuario;
 	private String tipo;
 	private int valorMovimento;
 	private String observacoesMovimentacao;
@@ -19,12 +19,12 @@ public class Movimentacao implements Serializable{
 	
 	public Movimentacao() {}
 
-	public Movimentacao(int idMovimentacao, int idProduto, int idUsuario, String tipo, int valorMovimento,
+	public Movimentacao(int idMovimentacao, Produto produto, Usuario usuario, String tipo, int valorMovimento,
 			String observacoesMovimentacao, int quantidadeAnterior, Date dataDaTransacao) {
-	
+		
 		this.idMovimentacao = idMovimentacao;
-		this.idProduto = idProduto;
-		this.idUsuario = idUsuario;
+		this.produto = produto;
+		this.usuario = usuario;
 		this.tipo = tipo;
 		this.valorMovimento = valorMovimento;
 		this.observacoesMovimentacao = observacoesMovimentacao;
@@ -40,20 +40,20 @@ public class Movimentacao implements Serializable{
 		this.idMovimentacao = idMovimentacao;
 	}
 
-	public int getIdProduto() {
-		return idProduto;
+	public Produto getProduto() {
+		return produto;
 	}
 
-	public void setIdProduto(int idProduto) {
-		this.idProduto = idProduto;
+	public void setProduto(Produto produto) {
+		this.produto = produto;
 	}
 
-	public int getIdUsuario() {
-		return idUsuario;
+	public Usuario getUsuario() {
+		return usuario;
 	}
 
-	public void setIdUsuario(int idUsuario) {
-		this.idUsuario = idUsuario;
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 	public String getTipo() {
@@ -102,11 +102,11 @@ public class Movimentacao implements Serializable{
 		int result = 1;
 		result = prime * result + ((dataDaTransacao == null) ? 0 : dataDaTransacao.hashCode());
 		result = prime * result + idMovimentacao;
-		result = prime * result + idProduto;
-		result = prime * result + idUsuario;
 		result = prime * result + ((observacoesMovimentacao == null) ? 0 : observacoesMovimentacao.hashCode());
+		result = prime * result + ((produto == null) ? 0 : produto.hashCode());
 		result = prime * result + quantidadeAnterior;
 		result = prime * result + ((tipo == null) ? 0 : tipo.hashCode());
+		result = prime * result + ((usuario == null) ? 0 : usuario.hashCode());
 		result = prime * result + valorMovimento;
 		return result;
 	}
@@ -127,18 +127,27 @@ public class Movimentacao implements Serializable{
 			return false;
 		if (idMovimentacao != other.idMovimentacao)
 			return false;
-		if (idProduto != other.idProduto)
-			return false;
-		if (idUsuario != other.idUsuario)
-			return false;
 		if (observacoesMovimentacao == null) {
 			if (other.observacoesMovimentacao != null)
 				return false;
 		} else if (!observacoesMovimentacao.equals(other.observacoesMovimentacao))
 			return false;
+		if (produto == null) {
+			if (other.produto != null)
+				return false;
+		} else if (!produto.equals(other.produto))
+			return false;
 		if (quantidadeAnterior != other.quantidadeAnterior)
 			return false;
-		if (tipo != other.tipo)
+		if (tipo == null) {
+			if (other.tipo != null)
+				return false;
+		} else if (!tipo.equals(other.tipo))
+			return false;
+		if (usuario == null) {
+			if (other.usuario != null)
+				return false;
+		} else if (!usuario.equals(other.usuario))
 			return false;
 		if (valorMovimento != other.valorMovimento)
 			return false;
@@ -147,12 +156,11 @@ public class Movimentacao implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Movimentacao [idMovimentacao=" + idMovimentacao + ", idProduto=" + idProduto + ", idUsuario="
-				+ idUsuario + ", tipo=" + tipo + ", valorMovimento=" + valorMovimento + ", observacoesMovimentacao="
+		return "Movimentacao [idMovimentacao=" + idMovimentacao + ", produto=" + produto + ", usuario=" + usuario
+				+ ", tipo=" + tipo + ", valorMovimento=" + valorMovimento + ", observacoesMovimentacao="
 				+ observacoesMovimentacao + ", quantidadeAnterior=" + quantidadeAnterior + ", dataDaTransacao="
 				+ dataDaTransacao + "]";
 	}
-
 	
 }
 

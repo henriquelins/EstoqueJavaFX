@@ -43,6 +43,8 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	private static ObservableList<Produto> listaProdutos;
 
 	private ProdutoService service;
+	
+	private Movimentacao movimentacao;
 
 	@FXML
 	private MenuItem menuItemUsuario;
@@ -52,6 +54,9 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 	@FXML
 	private MenuItem menuItemSobre;
+	
+	@FXML
+	private MenuItem menuItemMovimentacao;
 
 	@FXML
 	public TableView<Produto> tableViewProduto;
@@ -91,6 +96,11 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 	@FXML
 	private Button btPesquisar;
+
+	@FXML
+	public void onMenuItemMovimentacao(ActionEvent event) {
+		createMovimentacaoListDialogForm("/gui/MovimentacaoListView.fxml");
+	}
 
 	@FXML
 	public void onMenuItemUsuario(ActionEvent event) {
@@ -147,6 +157,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 		labelLogado.setText(LoginFormController.usuarioLogado());
 		service = new ProdutoService();
+		movimentacao = new Movimentacao();
 		updateTableView();
 	}
 
@@ -167,19 +178,49 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		updateTableView();
 	}
 
+	private void createMovimentacaoListDialogForm(String absoluteName) {
+		try {
+			
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			ScrollPane scrollPane = loader.load();
+
+			scrollPane.setFitToHeight(true);
+			scrollPane.setFitToWidth(true);
+
+			Scene mainScene = new Scene(scrollPane);
+			// mainScene.getStylesheets().add(Main.style);
+
+			Main.setMainScene(mainScene);
+			Stage produtoStage = new Stage();
+			produtoStage.setTitle("Movimentação");
+			produtoStage.setScene(Main.getMainScene());
+			produtoStage.setResizable(false);
+			produtoStage.initModality(Modality.APPLICATION_MODAL);
+			produtoStage.initOwner(null);
+			produtoStage.showAndWait();
+			
+		} catch (IOException e) {
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela Movimentação", e.getLocalizedMessage(), AlertType.ERROR);
+		}
+
+	}
+
 	private void createProdutoEditarDialogForm(Produto prod, String absoluteName) {
 		try {
 			setProduto(prod);
 
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
-			
+
 			ProdutoEditarFormController controller = loader.getController();
 			controller.setProduto(produto);
 			controller.setProdutoService(new ProdutoService());
-			controller.subscribeDataChangeListener(this);		
-			
-			Main.setDialogScene(new Scene(pane));
+			controller.subscribeDataChangeListener(this);
+
+			Scene mainScene = new Scene(pane);
+			// mainScene.getStylesheets().add(Main.style);
+
+			Main.setDialogScene(mainScene);
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Editar Produto");
 			produtoStage.setScene(Main.getDialogScene());
@@ -197,14 +238,14 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
-			
+
 			ProdutoNovoFormController controller = loader.getController();
 			controller.setProduto(produto);
 			controller.setProdutoService(new ProdutoService());
 			controller.subscribeDataChangeListener(this);
-			
+
 			Scene mainScene = new Scene(pane);
-			mainScene.getStylesheets().add("/application/caspian.css");
+			// mainScene.getStylesheets().add(Main.style);
 
 			Main.setDialogScene(mainScene);
 			Stage produtoStage = new Stage();
@@ -224,22 +265,20 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	private void createMovimentacaoDialogForm(Produto prod, String absoluteName) {
 		try {
 			setProduto(prod);
-			
-			Movimentacao movimentacao = new Movimentacao();
-			
+
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
-			
-			Scene mainScene = new Scene(pane);
-			mainScene.getStylesheets().add("/application/caspian.css");
-			
+
 			MovimentacaoFormController controller = loader.getController();
 			controller.setProduto(produto);
 			controller.setMovimentacao(movimentacao);
 			controller.setMovimentacaoService(new MovimentacaoService());
-			controller.subscribeDataChangeListener(this);			
-			
-			Main.setDialogScene( mainScene );
+			controller.subscribeDataChangeListener(this);
+
+			Scene mainScene = new Scene(pane);
+			// mainScene.getStylesheets().add(Main.style);
+
+			Main.setDialogScene(mainScene);
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Movimentação de Produtos");
 			produtoStage.setScene(Main.getDialogScene());
@@ -257,15 +296,14 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			ScrollPane scrollPane = loader.load();
-			
-			Scene mainScene = new Scene(scrollPane);
-			mainScene.getStylesheets().add("/application/caspian.css");
 
 			scrollPane.setFitToHeight(true);
 			scrollPane.setFitToWidth(true);
 
-			Main.setMainScene(mainScene);
+			Scene mainScene = new Scene(scrollPane);
+			// mainScene.getStylesheets().add(Main.style);
 
+			Main.setMainScene(mainScene);
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Usuários");
 			produtoStage.setScene(Main.getMainScene());
@@ -282,12 +320,11 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
-			
+
 			Scene mainScene = new Scene(pane);
-			mainScene.getStylesheets().add("/application/caspian.css");
+			// mainScene.getStylesheets().add(Main.style);
 
 			Main.setDialogScene(mainScene);
-
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Sobre o aplicativo");
 			produtoStage.setScene(Main.getDialogScene());
@@ -361,17 +398,16 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 	private void removeEntity(Produto prod) {
 		Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você quer deletar o produto?");
-		
-		if(result.get() == ButtonType.OK) {
-			if(service == null) {
-				throw new IllegalThreadStateException("Service está nulo");				
+
+		if (result.get() == ButtonType.OK) {
+			if (service == null) {
+				throw new IllegalThreadStateException("Service está nulo");
 			}
 			try {
 				service.remove(prod);
 				updateTableView();
-			}
-			catch(DbIntegrityException e) {
-				Alerts.showAlert("Error removing object", null, e.getMessage(),AlertType.ERROR);		
+			} catch (DbIntegrityException e) {
+				Alerts.showAlert("Error removing object", null, e.getMessage(), AlertType.ERROR);
 			}
 		}
 	}

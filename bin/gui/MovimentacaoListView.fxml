@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="509.0" prefWidth="872.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MovimentacaoListFormController">
+   <content>
+      <VBox prefHeight="500.0" prefWidth="800.0">
+         <children>
+            <ToolBar prefHeight="19.0" prefWidth="800.0">
+              <items>
+                  <AnchorPane prefHeight="65.0" prefWidth="774.0">
+                     <children>
+                        <Label layoutX="10.0" layoutY="1.0" text="Movimentação">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+              </items>
+            </ToolBar>
+            <TableView fx:id="tableViewMovimentacao" prefHeight="335.0" prefWidth="642.0">
+              <columns>
+                <TableColumn fx:id="tableColumnId" prefWidth="43.0" style="-fx-alignment: CENTER;" text="Id" />
+                <TableColumn fx:id="tableColumnProduto" prefWidth="171.0" style="-fx-alignment: CENTER;" text="Produto" />
+                  <TableColumn fx:id="tableColumnUsuario" minWidth="0.0" prefWidth="132.0" style="-fx-alignment: CENTER;" text="Usuário" />
+                  <TableColumn fx:id="tableColumnTipo" prefWidth="126.0" style="-fx-alignment: CENTER;" text="Tipo" />
+                  <TableColumn fx:id="tableColumnEstoqueAnterior" minWidth="0.0" prefWidth="122.0" style="-fx-alignment: CENTER;" text="Estoque anterior" />
+                  <TableColumn fx:id="tableColumnValorDoMovimentacao" minWidth="0.0" prefWidth="0.0" style="-fx-alignment: CENTER;" text="Valor da movimentação" />
+                  <TableColumn fx:id="tableColumnEstoqueAtual" minWidth="0.0" prefWidth="0.0" style="-fx-alignment: CENTER;" text="Estoque atual" />
+                  <TableColumn fx:id="tableColumnObservacoes" prefWidth="122.0" style="-fx-alignment: CENTER;" text="Observações" />
+                  <TableColumn fx:id="tableColumnDataDaMovimentacao" minWidth="0.0" prefWidth="67.0" style="-fx-alignment: CENTER;" text="Data do movimentação" />
+              </columns>
+            </TableView>
+            <ToolBar prefHeight="40.0" prefWidth="200.0">
+               <items>
+                  <AnchorPane prefHeight="30.0" prefWidth="781.0" />
+               </items></ToolBar>
+         </children>
+      </VBox>
+   </content>
+</ScrollPane>

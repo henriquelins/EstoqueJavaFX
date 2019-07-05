@@ -112,7 +112,7 @@ public class LoginFormController implements Initializable {
 			principalStage.setTitle("Controle de Estoque");	
 			
 			Scene mainScene = new Scene(scrollPane);
-			mainScene.getStylesheets().add("/application/caspian.css");
+			//mainScene.getStylesheets().add(Main.style);
 			
 			Main.setMainScene(mainScene);
 	
