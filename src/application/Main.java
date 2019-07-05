@@ -13,6 +13,8 @@ public class Main extends Application {
 	private static Scene mainScene;
 
 	private static Scene dialogScene;
+	
+	//private static String style;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -23,8 +25,7 @@ public class Main extends Application {
 
 			mainScene = new Scene(pane);
 			
-			String style = getClass().getResource("caspian.css").toExternalForm();
-			mainScene.getStylesheets().addAll(style);
+			mainScene.getStylesheets().add("/application/caspian.css");
 			
 			primaryStage.setScene(mainScene);
 			primaryStage.setResizable(false);

@@ -201,9 +201,12 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			ProdutoNovoFormController controller = loader.getController();
 			controller.setProduto(produto);
 			controller.setProdutoService(new ProdutoService());
-			controller.subscribeDataChangeListener(this);			
+			controller.subscribeDataChangeListener(this);
+			
+			Scene mainScene = new Scene(pane);
+			mainScene.getStylesheets().add("/application/caspian.css");
 
-			Main.setDialogScene(new Scene(pane));
+			Main.setDialogScene(mainScene);
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Novo Produto");
 			produtoStage.setScene(Main.getDialogScene());
@@ -226,14 +229,17 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
-
+			
+			Scene mainScene = new Scene(pane);
+			mainScene.getStylesheets().add("/application/caspian.css");
+			
 			MovimentacaoFormController controller = loader.getController();
 			controller.setProduto(produto);
 			controller.setMovimentacao(movimentacao);
 			controller.setMovimentacaoService(new MovimentacaoService());
 			controller.subscribeDataChangeListener(this);			
 			
-			Main.setDialogScene(new Scene(pane));
+			Main.setDialogScene( mainScene );
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Movimentação de Produtos");
 			produtoStage.setScene(Main.getDialogScene());
@@ -251,11 +257,14 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			ScrollPane scrollPane = loader.load();
+			
+			Scene mainScene = new Scene(scrollPane);
+			mainScene.getStylesheets().add("/application/caspian.css");
 
 			scrollPane.setFitToHeight(true);
 			scrollPane.setFitToWidth(true);
 
-			Main.setMainScene(new Scene(scrollPane));
+			Main.setMainScene(mainScene);
 
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Usuários");
@@ -273,8 +282,11 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
+			
+			Scene mainScene = new Scene(pane);
+			mainScene.getStylesheets().add("/application/caspian.css");
 
-			Main.setDialogScene(new Scene(pane));
+			Main.setDialogScene(mainScene);
 
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Sobre o aplicativo");

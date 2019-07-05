@@ -109,11 +109,15 @@ public class LoginFormController implements Initializable {
 			scrollPane.setFitToWidth(true);
 
 			Stage principalStage = new Stage();
-			principalStage.setTitle("Controle de Estoque");
-
-			Main.setMainScene(new Scene(scrollPane));
-
+			principalStage.setTitle("Controle de Estoque");	
+			
+			Scene mainScene = new Scene(scrollPane);
+			mainScene.getStylesheets().add("/application/caspian.css");
+			
+			Main.setMainScene(mainScene);
+	
 			principalStage.setScene(Main.getMainScene());
+					
 			principalStage.setResizable(true);
 			principalStage.initOwner(parenteStage);
 			principalStage.show();
