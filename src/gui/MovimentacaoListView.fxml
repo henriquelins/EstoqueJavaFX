@@ -28,15 +28,15 @@
             </ToolBar>
             <TableView fx:id="tableViewMovimentacao" prefHeight="335.0" prefWidth="642.0">
               <columns>
-                <TableColumn fx:id="tableColumnId" prefWidth="43.0" style="-fx-alignment: CENTER;" text="Id" />
-                <TableColumn fx:id="tableColumnProduto" prefWidth="171.0" style="-fx-alignment: CENTER;" text="Produto" />
-                  <TableColumn fx:id="tableColumnUsuario" minWidth="0.0" prefWidth="132.0" style="-fx-alignment: CENTER;" text="Usuário" />
-                  <TableColumn fx:id="tableColumnTipo" prefWidth="126.0" style="-fx-alignment: CENTER;" text="Tipo" />
-                  <TableColumn fx:id="tableColumnEstoqueAnterior" minWidth="0.0" prefWidth="122.0" style="-fx-alignment: CENTER;" text="Estoque anterior" />
-                  <TableColumn fx:id="tableColumnValorDoMovimentacao" minWidth="0.0" prefWidth="0.0" style="-fx-alignment: CENTER;" text="Valor da movimentação" />
-                  <TableColumn fx:id="tableColumnEstoqueAtual" minWidth="0.0" prefWidth="0.0" style="-fx-alignment: CENTER;" text="Estoque atual" />
-                  <TableColumn fx:id="tableColumnObservacoes" prefWidth="122.0" style="-fx-alignment: CENTER;" text="Observações" />
-                  <TableColumn fx:id="tableColumnDataDaMovimentacao" minWidth="0.0" prefWidth="67.0" style="-fx-alignment: CENTER;" text="Data do movimentação" />
+                <TableColumn fx:id="tableColumnId" prefWidth="40.0" style="-fx-alignment: CENTER;" text="Id" />
+                <TableColumn fx:id="tableColumnProduto" prefWidth="180.0" style="-fx-alignment: CENTER;" text="Produto" />
+                  <TableColumn fx:id="tableColumnUsuario" prefWidth="150.0" style="-fx-alignment: CENTER;" text="Usuário" />
+                  <TableColumn fx:id="tableColumnTipo" prefWidth="150.0" style="-fx-alignment: CENTER;" text="Tipo" />
+                  <TableColumn fx:id="tableColumnEstoqueAnterior" minWidth="0.0" prefWidth="120.0" style="-fx-alignment: CENTER;" text="Estoque anterior" />
+                  <TableColumn fx:id="tableColumnValorDoMovimentacao" prefWidth="150.0" style="-fx-alignment: CENTER;" text="Valor da movimentação" />
+                  <TableColumn fx:id="tableColumnEstoqueAtual" prefWidth="150.0" style="-fx-alignment: CENTER;" text="Estoque atual" />
+                  <TableColumn fx:id="tableColumnObservacoes" style="-fx-alignment: CENTER;" text="Observações" />
+                  <TableColumn fx:id="tableColumnDataDaMovimentacao" prefWidth="150.0" style="-fx-alignment: CENTER;" text="Data do movimentação" />
               </columns>
             </TableView>
             <ToolBar prefHeight="40.0" prefWidth="200.0">

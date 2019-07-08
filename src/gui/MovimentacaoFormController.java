@@ -169,13 +169,14 @@ public class MovimentacaoFormController implements Initializable, DataChangeList
 			// DateFormat formatBR = new SimpleDateFormat("dd/MM/YYYY");
 			// String dataBr = formatBR.format(data);
 
-			mov.getProduto().setIdProduto(PrincipalFormController.getProduto().getIdProduto());
-			mov.getUsuario().setIdUsuario(LoginFormController.getLogado().getIdUsuario());
+			mov.setProduto(PrincipalFormController.getProduto());
+			mov.setUsuario(LoginFormController.getLogado());
 			mov.setTipo(String.valueOf(comboBoxTipoDeSaida.getSelectionModel().getSelectedItem()));
 			mov.setValorMovimento(Integer.valueOf(txtQuantidade.getText()));
 			mov.setObservacoesMovimentacao(txtAreaObservacoes.getText());
 			mov.setQuantidadeAnterior(Integer.valueOf(labelEstoqueAtual.getText()));
 			mov.setDataDaTransacao(data);
+
 		}
 
 		return mov;

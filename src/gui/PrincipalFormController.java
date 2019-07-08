@@ -2,7 +2,6 @@ package gui;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -165,8 +164,8 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		if (service == null) {
 			throw new IllegalStateException("Service está nulo");
 		}
-		List<Produto> listaProduto = service.findAll();
-		listaProdutos = FXCollections.observableArrayList(listaProduto);
+	
+		listaProdutos = FXCollections.observableArrayList(service.findAll());
 		tableViewProduto.setItems(listaProdutos);
 		initMovimentacaoButton();
 		initEditButton();
@@ -194,7 +193,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Movimentação");
 			produtoStage.setScene(Main.getMainScene());
-			produtoStage.setResizable(false);
+			produtoStage.setResizable(true);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
 			produtoStage.showAndWait();

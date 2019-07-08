@@ -1,11 +1,10 @@
 package model.entities;
 
-
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 
-public class Movimentacao implements Serializable{
+public class Movimentacao implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private int idMovimentacao;
@@ -16,12 +15,12 @@ public class Movimentacao implements Serializable{
 	private String observacoesMovimentacao;
 	private int quantidadeAnterior;
 	private Date dataDaTransacao;
-	
-	public Movimentacao() {}
+
+	public Movimentacao() {
+	}
 
 	public Movimentacao(int idMovimentacao, Produto produto, Usuario usuario, String tipo, int valorMovimento,
 			String observacoesMovimentacao, int quantidadeAnterior, Date dataDaTransacao) {
-		
 		this.idMovimentacao = idMovimentacao;
 		this.produto = produto;
 		this.usuario = usuario;
@@ -96,6 +95,10 @@ public class Movimentacao implements Serializable{
 		this.dataDaTransacao = dataDaTransacao;
 	}
 
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -161,6 +164,5 @@ public class Movimentacao implements Serializable{
 				+ observacoesMovimentacao + ", quantidadeAnterior=" + quantidadeAnterior + ", dataDaTransacao="
 				+ dataDaTransacao + "]";
 	}
-	
-}
 
+}

@@ -1,13 +1,14 @@
 package model.dao.impl;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import db.DB;
 import db.DbException;
@@ -34,32 +35,19 @@ public class MovimentacaoDaoJDBC implements MovimentacaoDao {
 					+ "movimentacao as mv inner join produto pr on mv.idProduto = pr.idProduto inner "
 					+ "join usuario as us on mv.idUsuario = us.idUsuario ORDER BY mv.idMovimentacao asc");
 
-			rs = st.executeQuery();
-
-			List<Movimentacao> listMovimentacao = new ArrayList<>();
-			Map<Integer, Produto> map1 = new HashMap<>();
-			Map<Integer, Usuario> map2 = new HashMap<>();
-
+			rs = st.executeQuery();		
+	
+			List<Movimentacao> listaMovimentacao = new ArrayList<>();
+			
 			while (rs.next()) {
-
-				Produto prod = map1.get(rs.getInt("idProduto"));
-				Usuario user = map2.get(rs.getInt("idUsuario"));
-
-				if (prod == null) {
-					prod = instantiateProduto(rs);
-					map1.put(rs.getInt("idProduto"), prod);
-				}
-
-				if (user == null) {
-					user = instantiateUsuario(rs);
-					map2.put(rs.getInt("iUsuario"), user);
-				}
-
+				Produto	prod = instantiateProduto(rs);
+				Usuario	user = instantiateUsuario(rs);
 				Movimentacao mov = instantiateMovimentacao(rs, prod, user);
-				listMovimentacao.add(mov);
-
+				listaMovimentacao.add(mov);	
 			}
-			return listMovimentacao;
+			
+			return listaMovimentacao;
+			
 		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
 		} finally {
@@ -181,24 +169,26 @@ public class MovimentacaoDaoJDBC implements MovimentacaoDao {
 	 * DbException(e.getMessage()); } finally { DB.closeStatement(st); } }
 	 */
 
-	private Movimentacao instantiateMovimentacao(ResultSet rs, Produto prod, Usuario user) throws SQLException {
-		Movimentacao obj = new Movimentacao();
-		obj.setIdMovimentacao(rs.getInt("IdMovimento"));
-		obj.setProduto(prod);
-		obj.setUsuario(user);
-		obj.setTipo(rs.getString("tipo"));
-		obj.setValorMovimento(rs.getInt("valorMovimento"));
-		obj.setObservacoesMovimentacao(rs.getString("observacoesMovimentacao"));
-		obj.setValorMovimento(rs.getInt("valorMovimento"));
-		obj.setQuantidadeAnterior(rs.getInt("quantidadeAnterior"));
-		obj.setDataDaTransacao(rs.getDate("dataDaTransacao"));
-		return obj;
+	private Movimentacao instantiateMovimentacao(ResultSet rs, Produto prod, Usuario user) throws SQLException {			
+		Movimentacao mov = new Movimentacao();
+		mov.setIdMovimentacao(rs.getInt("IdMovimentacao"));
+		mov.setTipo(rs.getString("tipo"));
+		mov.setValorMovimento(rs.getInt("valorMovimento"));
+		mov.setObservacoesMovimentacao(rs.getString("observacoesMovimentacao"));
+		mov.setQuantidadeAnterior(rs.getInt("quantidadeAnterior"));
+		mov.setDataDaTransacao(rs.getDate("dataDaTransacao"));
+		mov.setProduto(prod);
+		mov.setUsuario(user);
+		return mov;
 	}
 
 	private Produto instantiateProduto(ResultSet rs) throws SQLException {
 		Produto prod = new Produto();
 		prod.setIdProduto(rs.getInt("idProduto"));
 		prod.setNome(rs.getString("nome"));
+		prod.setDescricao(rs.getString("descricao"));
+		prod.setSetor(rs.getString("setor"));
+		prod.setCategoria(rs.getString("categoria"));
 		prod.setQuantidade(rs.getInt("quantidade"));
 		return prod;
 	}
@@ -207,6 +197,8 @@ public class MovimentacaoDaoJDBC implements MovimentacaoDao {
 		Usuario user = new Usuario();
 		user.setIdUsuario(rs.getInt("idUsuario"));
 		user.setNome(rs.getString("nome"));
+		user.setLogin(rs.getString("login"));
+		user.setSenha(rs.getString("senha"));
 		return user;
 	}
 

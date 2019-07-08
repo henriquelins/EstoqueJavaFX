@@ -29,7 +29,7 @@ public class Main extends Application {
 			// mainScene.getStylesheets().add(style);
 
 			setUserAgentStylesheet(STYLESHEET_CASPIAN);
-			// setUserAgentStylesheet(STYLESHEET_MODENA);
+			//setUserAgentStylesheet(STYLESHEET_MODENA);
 			// setUserAgentStylesheet(style);
 
 			primaryStage.setScene(mainScene);

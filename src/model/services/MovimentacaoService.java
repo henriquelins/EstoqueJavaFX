@@ -3,6 +3,7 @@ package model.services;
 import java.util.List;
 
 import gui.util.Alerts;
+import gui.util.Utils;
 import javafx.scene.control.Alert.AlertType;
 import model.dao.DaoFactory;
 import model.dao.MovimentacaoDao;
@@ -53,18 +54,17 @@ public class MovimentacaoService {
 			}
 
 			dao.insert(movimentacao);
-			Alerts.showAlert("Movimentação", null, movimentacao.getTipo().toString() , AlertType.INFORMATION);
-			//Utils.fecharDialogAction();
-			
+			Alerts.showAlert("Movimentação", "Movimentação de produtos", movimentacao.getTipo().toString(),
+					AlertType.INFORMATION);
+			Utils.fecharDialogAction();
+
 		} catch (Exception e) {
 			Alerts.showAlert("Movimentação", null, e.getLocalizedMessage(), AlertType.ERROR);
 		}
 	}
 
 	public List<Movimentacao> findAll() {
-		
 		return dao.findAll();
-
 	}
 
 }

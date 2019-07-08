@@ -31,7 +31,7 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 
 	@FXML
-	private  TextField txtIdProduto;
+	private TextField txtIdProduto;
 
 	@FXML
 	private TextField txtNome;
