@@ -179,7 +179,6 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 	private void createMovimentacaoListDialogForm(String absoluteName) {
 		try {
-			
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			ScrollPane scrollPane = loader.load();
 
@@ -191,13 +190,12 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 			Main.setMainScene(mainScene);
 			Stage produtoStage = new Stage();
-			produtoStage.setTitle("Movimentação");
+			produtoStage.setTitle("Movimetação");
 			produtoStage.setScene(Main.getMainScene());
-			produtoStage.setResizable(true);
+			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
-			produtoStage.initOwner(null);
+			//produtoStage.initOwner(null);
 			produtoStage.showAndWait();
-			
 		} catch (IOException e) {
 			Alerts.showAlert("IO Exception", "Erro ao carregar a tela Movimentação", e.getLocalizedMessage(), AlertType.ERROR);
 		}

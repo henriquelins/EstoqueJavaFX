@@ -100,11 +100,9 @@ public class MovimentacaoFormController implements Initializable, DataChangeList
 	private List<String> listaTipos() {
 
 		List<String> listaTipos = new ArrayList<>();
-		listaTipos.add("Entrada do produtos");
-		listaTipos.add("Ajuste de entrada");
-		listaTipos.add("Saída de produtos");
-		listaTipos.add("Ajuste de saída");
-
+		listaTipos.add("Entrada de produtos (+)");
+		listaTipos.add("Saída de produtos (-)");
+	
 		return listaTipos;
 
 	}

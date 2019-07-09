@@ -3,7 +3,6 @@ package model.entities;
 import java.io.Serializable;
 import java.util.Date;
 
-
 public class Movimentacao implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -15,12 +14,13 @@ public class Movimentacao implements Serializable {
 	private String observacoesMovimentacao;
 	private int quantidadeAnterior;
 	private Date dataDaTransacao;
+	private int estoqueAtual;
 
 	public Movimentacao() {
 	}
 
 	public Movimentacao(int idMovimentacao, Produto produto, Usuario usuario, String tipo, int valorMovimento,
-			String observacoesMovimentacao, int quantidadeAnterior, Date dataDaTransacao) {
+			String observacoesMovimentacao, int quantidadeAnterior, Date dataDaTransacao, int estoqueAtual) {
 		this.idMovimentacao = idMovimentacao;
 		this.produto = produto;
 		this.usuario = usuario;
@@ -29,6 +29,7 @@ public class Movimentacao implements Serializable {
 		this.observacoesMovimentacao = observacoesMovimentacao;
 		this.quantidadeAnterior = quantidadeAnterior;
 		this.dataDaTransacao = dataDaTransacao;
+		this.estoqueAtual = estoqueAtual;
 	}
 
 	public int getIdMovimentacao() {
@@ -95,8 +96,12 @@ public class Movimentacao implements Serializable {
 		this.dataDaTransacao = dataDaTransacao;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public int getEstoqueAtual() {
+		return estoqueAtual;
+	}
+
+	public void setEstoqueAtual(int estoqueAtual) {
+		this.estoqueAtual = estoqueAtual;
 	}
 
 	@Override
@@ -104,6 +109,7 @@ public class Movimentacao implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((dataDaTransacao == null) ? 0 : dataDaTransacao.hashCode());
+		result = prime * result + estoqueAtual;
 		result = prime * result + idMovimentacao;
 		result = prime * result + ((observacoesMovimentacao == null) ? 0 : observacoesMovimentacao.hashCode());
 		result = prime * result + ((produto == null) ? 0 : produto.hashCode());
@@ -127,6 +133,8 @@ public class Movimentacao implements Serializable {
 			if (other.dataDaTransacao != null)
 				return false;
 		} else if (!dataDaTransacao.equals(other.dataDaTransacao))
+			return false;
+		if (estoqueAtual != other.estoqueAtual)
 			return false;
 		if (idMovimentacao != other.idMovimentacao)
 			return false;
@@ -162,7 +170,7 @@ public class Movimentacao implements Serializable {
 		return "Movimentacao [idMovimentacao=" + idMovimentacao + ", produto=" + produto + ", usuario=" + usuario
 				+ ", tipo=" + tipo + ", valorMovimento=" + valorMovimento + ", observacoesMovimentacao="
 				+ observacoesMovimentacao + ", quantidadeAnterior=" + quantidadeAnterior + ", dataDaTransacao="
-				+ dataDaTransacao + "]";
+				+ dataDaTransacao + ", estoqueAtual=" + estoqueAtual + "]";
 	}
 
 }

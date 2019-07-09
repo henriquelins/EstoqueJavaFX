@@ -16,37 +16,22 @@ public class MovimentacaoService {
 	private ProdutoDao daoProd = DaoFactory.createProdutoDao();
 
 	public void movimentacaoSaidaOuEntrada(Movimentacao movimentacao) {
-
 		int estoqueAtual = 0;
 
 		try {
 
 			switch (movimentacao.getTipo()) {
 
-			case ("Entrada do produtos"):
+			case ("Entrada de produtos (+)"):
 
 				estoqueAtual = movimentacao.getQuantidadeAnterior() + movimentacao.getValorMovimento();
 				daoProd.updateEstoqueAtual(estoqueAtual, movimentacao.getProduto().getIdProduto());
 
 				break;
 
-			case ("Ajuste de entrada"):
+			case ("Saída de produtos (-)"):
 
 				estoqueAtual = movimentacao.getQuantidadeAnterior() - movimentacao.getValorMovimento();
-				daoProd.updateEstoqueAtual(estoqueAtual, movimentacao.getProduto().getIdProduto());
-
-				break;
-
-			case ("Saída de produtos"):
-
-				estoqueAtual = movimentacao.getQuantidadeAnterior() - movimentacao.getValorMovimento();
-				daoProd.updateEstoqueAtual(estoqueAtual, movimentacao.getProduto().getIdProduto());
-
-				break;
-
-			case ("Ajuste de saída"):
-
-				estoqueAtual = movimentacao.getQuantidadeAnterior() + movimentacao.getValorMovimento();
 				daoProd.updateEstoqueAtual(estoqueAtual, movimentacao.getProduto().getIdProduto());
 
 				break;
@@ -57,7 +42,6 @@ public class MovimentacaoService {
 			Alerts.showAlert("Movimentação", "Movimentação de produtos", movimentacao.getTipo().toString(),
 					AlertType.INFORMATION);
 			Utils.fecharDialogAction();
-
 		} catch (Exception e) {
 			Alerts.showAlert("Movimentação", null, e.getLocalizedMessage(), AlertType.ERROR);
 		}

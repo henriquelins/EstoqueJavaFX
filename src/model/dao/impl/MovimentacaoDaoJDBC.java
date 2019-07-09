@@ -1,12 +1,9 @@
 package model.dao.impl;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -177,6 +174,16 @@ public class MovimentacaoDaoJDBC implements MovimentacaoDao {
 		mov.setObservacoesMovimentacao(rs.getString("observacoesMovimentacao"));
 		mov.setQuantidadeAnterior(rs.getInt("quantidadeAnterior"));
 		mov.setDataDaTransacao(rs.getDate("dataDaTransacao"));
+		
+		if (mov.getTipo().equalsIgnoreCase("Entrada de produtos (+)")) {
+			
+			mov.setEstoqueAtual(mov.getQuantidadeAnterior()+mov.getValorMovimento());		
+		
+		} else {
+			mov.setEstoqueAtual(mov.getQuantidadeAnterior()-mov.getValorMovimento());	
+			
+		}
+		
 		mov.setProduto(prod);
 		mov.setUsuario(user);
 		return mov;
