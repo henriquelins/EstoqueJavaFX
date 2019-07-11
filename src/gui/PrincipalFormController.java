@@ -42,7 +42,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	private static ObservableList<Produto> listaProdutos;
 
 	private ProdutoService service;
-	
+
 	private Movimentacao movimentacao;
 
 	@FXML
@@ -52,8 +52,14 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	private MenuItem menuItemProduto;
 
 	@FXML
+	private MenuItem menuItemSetor;
+
+	@FXML
+	private MenuItem menuItemCategoria;
+
+	@FXML
 	private MenuItem menuItemSobre;
-	
+
 	@FXML
 	private MenuItem menuItemMovimentacao;
 
@@ -112,6 +118,16 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	}
 
 	@FXML
+	public void onMenuItemSetor(ActionEvent event) {
+		createSetorNovoDialogForm("/gui/SetorNovoView.fxml");
+	}
+
+	@FXML
+	public void onMenuItemCategoria(ActionEvent event) {
+		createCategoriaNovoDialogForm("/gui/CategoriaNovoView.fxml");
+	}
+
+	@FXML
 	public void onMenuItemSobre(ActionEvent event) {
 		createSobreDialogForm("/gui/SobreView.fxml");
 	}
@@ -164,7 +180,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		if (service == null) {
 			throw new IllegalStateException("Service está nulo");
 		}
-	
+
 		listaProdutos = FXCollections.observableArrayList(service.findAll());
 		tableViewProduto.setItems(listaProdutos);
 		initMovimentacaoButton();
@@ -175,6 +191,57 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	@Override
 	public void onDataChanged() {
 		updateTableView();
+	}
+
+	private void createSetorNovoDialogForm(String absoluteName) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			ScrollPane scrollPane = loader.load();
+
+			scrollPane.setFitToHeight(true);
+			scrollPane.setFitToWidth(true);
+
+			Scene mainScene = new Scene(scrollPane);
+			// mainScene.getStylesheets().add(Main.style);
+
+			Main.setMainScene(mainScene);
+			Stage produtoStage = new Stage();
+			produtoStage.setTitle("Setor");
+			produtoStage.setScene(Main.getMainScene());
+			produtoStage.setResizable(false);
+			produtoStage.initModality(Modality.APPLICATION_MODAL);
+			// produtoStage.initOwner(null);
+			produtoStage.showAndWait();
+		} catch (IOException e) {
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela Setor", e.getLocalizedMessage(), AlertType.ERROR);
+		}
+
+	}
+
+	private void createCategoriaNovoDialogForm(String absoluteName) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			ScrollPane scrollPane = loader.load();
+
+			scrollPane.setFitToHeight(true);
+			scrollPane.setFitToWidth(true);
+
+			Scene mainScene = new Scene(scrollPane);
+			// mainScene.getStylesheets().add(Main.style);
+
+			Main.setMainScene(mainScene);
+			Stage produtoStage = new Stage();
+			produtoStage.setTitle("Categoria");
+			produtoStage.setScene(Main.getMainScene());
+			produtoStage.setResizable(false);
+			produtoStage.initModality(Modality.APPLICATION_MODAL);
+			// produtoStage.initOwner(null);
+			produtoStage.showAndWait();
+		} catch (IOException e) {
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela Categoria", e.getLocalizedMessage(),
+					AlertType.ERROR);
+		}
+
 	}
 
 	private void createMovimentacaoListDialogForm(String absoluteName) {
@@ -194,10 +261,11 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			produtoStage.setScene(Main.getMainScene());
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
-			//produtoStage.initOwner(null);
+			// produtoStage.initOwner(null);
 			produtoStage.showAndWait();
 		} catch (IOException e) {
-			Alerts.showAlert("IO Exception", "Erro ao carregar a tela Movimentação", e.getLocalizedMessage(), AlertType.ERROR);
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela Movimentação", e.getLocalizedMessage(),
+					AlertType.ERROR);
 		}
 
 	}

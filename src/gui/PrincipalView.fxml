@@ -24,9 +24,8 @@
                   <items>
                         <MenuItem fx:id="menuItemUsuario" mnemonicParsing="false" onAction="#onMenuItemUsuario" text="Usuários" />
                     <MenuItem fx:id="menuItemProduto" mnemonicParsing="false" onAction="#onMenuItemProduto" text="Produtos" />
-                        <MenuItem fx:id="menuItemProduto1" mnemonicParsing="false" onAction="#onMenuItemProduto" text="Setor" />
-                        <MenuItem fx:id="menuItemProduto11" mnemonicParsing="false" onAction="#onMenuItemProduto" text="Categoria" />
-                        <MenuItem fx:id="menuItemProduto111" mnemonicParsing="false" onAction="#onMenuItemProduto" text="Tipos de saída" />
+                        <MenuItem fx:id="menuItemSetor" mnemonicParsing="false" onAction="#onMenuItemProduto" text="Setor" />
+                        <MenuItem fx:id="menuItemCategoria" mnemonicParsing="false" onAction="#onMenuItemProduto" text="Categoria" />
                   </items>
                 </Menu>
                   <Menu mnemonicParsing="false" text="Movimentação">
