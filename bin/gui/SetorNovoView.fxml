@@ -10,27 +10,26 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ProdutoNovoFormController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.SetorNovoFormController">
    <children>
       <AnchorPane prefHeight="300.0" prefWidth="600.0">
          <children>
             <Label layoutX="153.0" layoutY="72.0" text="Setor" />
             <TextField fx:id="txtNome" layoutX="153.0" layoutY="93.0" prefHeight="25.0" prefWidth="361.0" />
             <Label layoutX="73.0" layoutY="72.0" text="Id" />
-            <TextField fx:id="txtIdProduto" editable="false" layoutX="73.0" layoutY="93.0" prefHeight="25.0" prefWidth="63.0" />
+            <TextField fx:id="txtId" editable="false" layoutX="73.0" layoutY="93.0" prefHeight="25.0" prefWidth="63.0" />
             <ToolBar prefHeight="40.0" prefWidth="600.0">
               <items>
-                  <Button layoutX="10.0" layoutY="13.0" mnemonicParsing="false" text="Salvar" />
-                <Button mnemonicParsing="false" text="Editar" />
-                  <Button mnemonicParsing="false" text="Excluir" />
+                  <Button fx:id="btSalvar" layoutX="10.0" layoutY="13.0" mnemonicParsing="false" text="Salvar" />
+                  <Button fx:id="btExcluir" mnemonicParsing="false" text="Excluir" />
               </items>
             </ToolBar>
             <ScrollPane layoutX="72.0" layoutY="134.0" prefHeight="109.0" prefWidth="442.0">
                <content>
-                  <TableView prefHeight="107.0" prefWidth="440.0">
+                  <TableView fx:id="tableViewSetor" prefHeight="107.0" prefWidth="440.0">
                     <columns>
-                      <TableColumn prefWidth="54.0" text="Id" />
-                      <TableColumn prefWidth="385.0" text="Setor" />
+                      <TableColumn fx:id="tableColumnId" prefWidth="54.0" text="Id" />
+                      <TableColumn fx:id="tableColumnNome" prefWidth="385.0" text="Setor" />
                     </columns>
                   </TableView>
                </content>

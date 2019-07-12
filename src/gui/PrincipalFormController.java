@@ -178,7 +178,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 	public void updateTableView() {
 		if (service == null) {
-			throw new IllegalStateException("Service está nulo");
+			throw new IllegalStateException("Serviço nulo");
 		}
 
 		listaProdutos = FXCollections.observableArrayList(service.findAll());
@@ -196,46 +196,31 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	private void createSetorNovoDialogForm(String absoluteName) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-			ScrollPane scrollPane = loader.load();
-
-			scrollPane.setFitToHeight(true);
-			scrollPane.setFitToWidth(true);
-
-			Scene mainScene = new Scene(scrollPane);
-			// mainScene.getStylesheets().add(Main.style);
-
-			Main.setMainScene(mainScene);
+			Pane pane = loader.load();
+					
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Setor");
-			produtoStage.setScene(Main.getMainScene());
+			produtoStage.setScene(new Scene(pane));
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
-			// produtoStage.initOwner(null);
+			produtoStage.initOwner(null);
 			produtoStage.showAndWait();
 		} catch (IOException e) {
 			Alerts.showAlert("IO Exception", "Erro ao carregar a tela Setor", e.getLocalizedMessage(), AlertType.ERROR);
 		}
-
 	}
 
 	private void createCategoriaNovoDialogForm(String absoluteName) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-			ScrollPane scrollPane = loader.load();
-
-			scrollPane.setFitToHeight(true);
-			scrollPane.setFitToWidth(true);
-
-			Scene mainScene = new Scene(scrollPane);
-			// mainScene.getStylesheets().add(Main.style);
-
-			Main.setMainScene(mainScene);
+			Pane pane = loader.load();
+					
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Categoria");
-			produtoStage.setScene(Main.getMainScene());
+			produtoStage.setScene(new Scene(pane));
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
-			// produtoStage.initOwner(null);
+			produtoStage.initOwner(null);
 			produtoStage.showAndWait();
 		} catch (IOException e) {
 			Alerts.showAlert("IO Exception", "Erro ao carregar a tela Categoria", e.getLocalizedMessage(),
