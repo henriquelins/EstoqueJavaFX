@@ -16,14 +16,16 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.entities.Categoria;
+import model.entities.Setor;
 import model.services.CategoriaService;
+import model.services.SetorService;
 
-public class CadastroNovoFormController implements Initializable {
+public class CategoriaNovoFormController implements Initializable {
 
 	private Categoria categoria;
 
 	private CategoriaService service;
-
+	
 	private static ObservableList<Categoria> listaCategoria;
 
 	@FXML
@@ -59,6 +61,13 @@ public class CadastroNovoFormController implements Initializable {
 		}
 
 	}
+	
+	@FXML
+	public void onBtExcluirCategoriaAction(ActionEvent event) {
+
+		service.remove(categoria);
+
+	}
 
 	public void setService(CategoriaService service) {
 		this.service = service;
@@ -76,15 +85,15 @@ public class CadastroNovoFormController implements Initializable {
 	}
 
 	private void initializeNodes() {
-
-		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("idCategoria"));
+		
+		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("idSetor"));
 		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("Nome"));
-
+		
 		service = new CategoriaService();
 		categoria = new Categoria();
-
+		
 	}
-
+	
 	public void updateTableView() {
 		if (service == null) {
 			throw new IllegalStateException("Service está nulo");
@@ -92,8 +101,9 @@ public class CadastroNovoFormController implements Initializable {
 
 		listaCategoria = FXCollections.observableArrayList(service.findAll());
 		tableViewCategoria.setItems(listaCategoria);
-
+		
 	}
+
 
 	private Categoria getFormData() {
 
@@ -101,14 +111,14 @@ public class CadastroNovoFormController implements Initializable {
 
 		if (txtNome.getText() == null || txtNome.getText().trim().equals("")) {
 
-			Alerts.showAlert("Categoria", null, "Digite o nome da Categoria", AlertType.INFORMATION);
+			Alerts.showAlert("Setor", null, "Digite o nome setor", AlertType.INFORMATION);
 
 			txtNome.requestFocus();
 
 			categoria = null;
 
 		} else {
-
+			
 			categoria.setIdCategoria(Integer.valueOf(txtId.getText()));
 			categoria.setNome(txtNome.getText());
 

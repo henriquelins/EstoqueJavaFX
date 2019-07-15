@@ -61,7 +61,7 @@ public class SetorNovoFormController implements Initializable {
 	}
 	
 	@FXML
-	public void onBtExcluirSetoroAction(ActionEvent event) {
+	public void onBtExcluirSetorAction(ActionEvent event) {
 
 		service.remove(setor);
 
