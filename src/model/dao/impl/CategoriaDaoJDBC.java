@@ -24,7 +24,7 @@ public class CategoriaDaoJDBC implements CategoriaDao {
 	public void insert(Categoria categoria) {
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("INSERT INTO categoria " + "(Nome) " + "VALUES " + "(?)",
+			st = conn.prepareStatement("INSERT INTO categoria " + "(nome) " + "VALUES " + "(?)",
 					java.sql.Statement.RETURN_GENERATED_KEYS);
 
 			st.setString(1, categoria.getNome());

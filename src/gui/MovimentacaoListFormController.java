@@ -47,8 +47,6 @@ public class MovimentacaoListFormController implements Initializable {
 
 	@FXML
 	private TableColumn<Movimentacao, String> tableColumnEstoqueAtual;
-	
-	
 
 	@FXML
 	private TableColumn<Movimentacao, String> tableColumnObservacoes;

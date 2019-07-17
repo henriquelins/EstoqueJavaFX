@@ -1,8 +1,10 @@
 package gui;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
+import db.DbIntegrityException;
 import gui.util.Alerts;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,22 +13,26 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.entities.Categoria;
-import model.entities.Setor;
 import model.services.CategoriaService;
-import model.services.SetorService;
 
 public class CategoriaNovoFormController implements Initializable {
 
 	private Categoria categoria;
 
+	private Categoria categoriaComparar;
+
 	private CategoriaService service;
-	
+
 	private static ObservableList<Categoria> listaCategoria;
+
+	@FXML
+	private Button btNovo;
 
 	@FXML
 	private Button btSalvar;
@@ -50,26 +56,78 @@ public class CategoriaNovoFormController implements Initializable {
 	private TableColumn<Categoria, String> tableColumnNome;
 
 	@FXML
-	public void onBtSalvarCategoriaAction(ActionEvent event) {
+	public void onBtNovoAction(ActionEvent event) {
+
+		txtNome.setText("");
+		txtId.setText("");
+		txtNome.requestFocus();
+
+		Categoria categoriaNova = new Categoria(null, "");
+
+		setCategoria(categoriaNova);
+
+	}
+
+	@FXML
+	public void onBtSalvarAction(ActionEvent event) {
 
 		setCategoria(getFormData());
 
-		if (categoria != null) {
+		if (this.categoria != null) {
 
-			service.categoriaNovoOuEditar(categoria);
+			boolean ok = false;
+
+			ok = compararCampos();
+
+			if (ok == false) {
+
+				service.categoriaNovoOuEditar(this.categoria);
+				limparCampos();
+				updateTableView();
+
+			} else {
+
+				Alerts.showAlert("Categoria", "Salvar / Editar", "Não houve alteração no registro", AlertType.INFORMATION);
+
+			}
 
 		}
 
 	}
-	
-	@FXML
-	public void onBtExcluirCategoriaAction(ActionEvent event) {
 
-		service.remove(categoria);
+	@FXML
+	public void onBtExcluirAction(ActionEvent event) {
+
+		if (service == null) {
+			throw new IllegalThreadStateException("Service está nulo");
+		}
+		try {
+
+			if (categoria.getIdCategoria() != null) {
+
+				Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você quer deletar o setor?");
+
+				if (result.get() == ButtonType.OK) {
+
+					service.remove(categoria);
+					updateTableView();
+
+				}
+
+			} else {
+
+				Alerts.showAlert("Categoria", "Excluir", "Selecione um registro", AlertType.INFORMATION);
+
+			}
+
+		} catch (DbIntegrityException e) {
+			Alerts.showAlert("Categoria", "Excluir", "Erro ao excluir a categoria", AlertType.INFORMATION);
+			limparCampos();
+		}
 
 	}
 
-	public void setService(CategoriaService service) {
+	public void setCategoria(CategoriaService service) {
 		this.service = service;
 	}
 
@@ -86,24 +144,31 @@ public class CategoriaNovoFormController implements Initializable {
 
 	private void initializeNodes() {
 		
-		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("idSetor"));
+		showDetails(null);
+
+		tableViewCategoria.getSelectionModel().selectedItemProperty()
+				.addListener((observable, oldValue, newValue) -> showDetails(newValue));
+
+		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("idCategoria"));
 		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("Nome"));
-		
+	
 		service = new CategoriaService();
 		categoria = new Categoria();
+
+		updateTableView();
 		
 	}
-	
+
 	public void updateTableView() {
+
 		if (service == null) {
-			throw new IllegalStateException("Service está nulo");
+			throw new IllegalStateException("Service nulo");
 		}
 
 		listaCategoria = FXCollections.observableArrayList(service.findAll());
 		tableViewCategoria.setItems(listaCategoria);
-		
-	}
 
+	}
 
 	private Categoria getFormData() {
 
@@ -111,15 +176,24 @@ public class CategoriaNovoFormController implements Initializable {
 
 		if (txtNome.getText() == null || txtNome.getText().trim().equals("")) {
 
-			Alerts.showAlert("Setor", null, "Digite o nome setor", AlertType.INFORMATION);
+			Alerts.showAlert("Categoria", null, "Digite o nome da categoria", AlertType.INFORMATION);
 
 			txtNome.requestFocus();
 
 			categoria = null;
 
 		} else {
-			
-			categoria.setIdCategoria(Integer.valueOf(txtId.getText()));
+
+			if (txtId.getText().equals("")) {
+
+				categoria.setIdCategoria(null);
+
+			} else {
+
+				categoria.setIdCategoria(Integer.valueOf(txtId.getText()));
+
+			}
+
 			categoria.setNome(txtNome.getText());
 
 		}
@@ -127,5 +201,48 @@ public class CategoriaNovoFormController implements Initializable {
 		return categoria;
 
 	}
+
+	public void showDetails(Categoria categoria) {
+
+		if (categoria != null) {
+
+			txtId.setText(String.valueOf(categoria.getIdCategoria()));
+			txtNome.setText(categoria.getNome());
+			setCategoria(categoria);
+			categoriaComparar = this.categoria;
+
+		} else {
+
+			limparCampos();
+
+		}
+
+	}
+
+	public void limparCampos() {
+		txtId.setText("");
+		txtNome.setText("");
+	};
+
+	public boolean compararCampos() {
+
+		boolean ok = false;
+
+		if (categoriaComparar == null) {
+
+			return ok;
+
+		} else if (this.categoria.getNome().equals(categoriaComparar.getNome())) {
+
+			ok = true;
+			return ok;
+
+		} else {
+
+			return ok;
+
+		}
+
+	};
 
 }

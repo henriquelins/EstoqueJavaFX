@@ -1,7 +1,6 @@
 package gui;
 
 import java.net.URL;
-import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -248,8 +247,7 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 			throw new IllegalStateException("Serviço está nulo");
 		}
 
-		List<Usuario> listaUsuario = service.findAll();
-		listaUsuarios = FXCollections.observableArrayList(listaUsuario);
+		listaUsuarios = FXCollections.observableArrayList(service.findAll());
 		tableViewUsuario.setItems(listaUsuarios);
 
 		tableViewUsuario.setDisable(false);

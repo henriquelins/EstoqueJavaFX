@@ -1,9 +1,12 @@
 package model.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import gui.PrincipalFormController;
+import gui.util.Alerts;
 import gui.util.Utils;
+import javafx.scene.control.ButtonType;
 import model.dao.DaoFactory;
 import model.dao.ProdutoDao;
 import model.entities.Produto;
@@ -17,22 +20,38 @@ public class ProdutoService {
 	}
 
 	public void produtoNovoOuEditar(Produto produto) {
-		if (produto.getIdProduto() == null) {	
-			dao.insert(produto);
-			Utils.fecharDialogAction();
-		} else {		
-			dao.update(produto);
-			Utils.fecharDialogAction();
+		if (produto.getIdProduto() == null) {
+
+			Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você salvar o produto?");
+
+			if (result.get() == ButtonType.OK) {
+
+				dao.insert(produto);
+				Utils.fecharDialogAction();
+
+			}
+
+		} else {
+
+			Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você salvar o setor?");
+
+			if (result.get() == ButtonType.OK) {
+
+				dao.update(produto);
+				Utils.fecharDialogAction();
+
+			}
+
 		}
 	}
 
 	public void remove(Produto produto) {
 		dao.deleteById(produto.getIdProduto());
 	}
-	
+
 	public Produto findById(Integer id) {
 		PrincipalFormController.setProduto(dao.findById(id));
 		return PrincipalFormController.getProduto();
 	}
-	
+
 }

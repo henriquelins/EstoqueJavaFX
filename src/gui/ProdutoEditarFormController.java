@@ -17,8 +17,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import model.entities.Categoria;
 import model.entities.Produto;
+import model.entities.Setor;
+import model.services.CategoriaService;
 import model.services.ProdutoService;
+import model.services.SetorService;
 
 public class ProdutoEditarFormController implements Initializable, DataChangeListener {
 
@@ -85,26 +89,32 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 	private List<String> listaSetor() {
 
+		SetorService setorService = new SetorService();
 		List<String> listaSetor = new ArrayList<>();
-		listaSetor.add("Crachás");
-		listaSetor.add("Suporte");
+
+		for (Setor setor : setorService.findAll()) {
+
+			listaSetor.add(setor.getNome());
+		}
+
 		return listaSetor;
 
 	}
 
 	private List<String> listaCategoria() {
 
+		CategoriaService categoriaService = new CategoriaService();
 		List<String> listaCategoria = new ArrayList<>();
-		listaCategoria.add("Tintas crachás");
-		listaCategoria.add("Insumos crachás");
-		listaCategoria.add("Insumos Laminação");
-		listaCategoria.add("Equipamentos Suporte");
-		listaCategoria.add("Insumos suporte");
-		listaCategoria.add("Material escritório");
+
+		for (Categoria categoria : categoriaService.findAll()) {
+
+			listaCategoria.add(categoria.getNome());
+		}
 
 		return listaCategoria;
 
 	}
+
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {

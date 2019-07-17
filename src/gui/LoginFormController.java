@@ -109,15 +109,10 @@ public class LoginFormController implements Initializable {
 			scrollPane.setFitToWidth(true);
 
 			Stage principalStage = new Stage();
-			principalStage.setTitle("Controle de Estoque");	
-			
-			Scene mainScene = new Scene(scrollPane);
-			//mainScene.getStylesheets().add(Main.style);
-			
-			Main.setMainScene(mainScene);
-	
-			principalStage.setScene(Main.getMainScene());
-					
+			principalStage.setTitle("Controle de Estoque");
+
+			principalStage.setScene(new Scene(scrollPane));
+
 			principalStage.setResizable(true);
 			principalStage.initOwner(parenteStage);
 			principalStage.show();

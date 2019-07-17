@@ -12,25 +12,23 @@ import db.DbException;
 import model.dao.SetorDao;
 import model.entities.Setor;
 
-public class SetorDaoJDBC implements SetorDao  {
-	
+public class SetorDaoJDBC implements SetorDao {
+
 	private Connection conn;
 
 	public SetorDaoJDBC(Connection conn) {
 		this.conn = conn;
 	}
-	
-	
 
 	@Override
 	public void insert(Setor setor) {
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("INSERT INTO setor " + "(Nome) " + "VALUES " + "(?)",
+			st = conn.prepareStatement("INSERT INTO setor " + "(nome) " + "VALUES " + "(?)",
 					java.sql.Statement.RETURN_GENERATED_KEYS);
 
 			st.setString(1, setor.getNome());
-			
+
 			int rowsAffected = st.executeUpdate();
 
 			if (rowsAffected > 0) {
@@ -54,8 +52,7 @@ public class SetorDaoJDBC implements SetorDao  {
 	public void update(Setor setor) {
 		PreparedStatement st = null;
 		try {
-			st = conn
-					.prepareStatement("UPDATE setor " + "SET nome = ?" + "WHERE id_setor = ?");
+			st = conn.prepareStatement("UPDATE setor " + "SET nome = ?" + "WHERE id_setor = ?");
 
 			st.setString(1, setor.getNome());
 			st.setInt(2, setor.getIdSetor());
@@ -85,7 +82,6 @@ public class SetorDaoJDBC implements SetorDao  {
 
 	}
 
-	
 	@Override
 	public List<Setor> findAll() {
 		PreparedStatement st = null;
@@ -110,8 +106,6 @@ public class SetorDaoJDBC implements SetorDao  {
 		}
 	}
 
-
-
 	private Setor instantiateSetor(ResultSet rs) throws SQLException {
 		Setor setor = new Setor();
 		setor.setIdSetor(rs.getInt("id_setor"));
@@ -119,5 +113,4 @@ public class SetorDaoJDBC implements SetorDao  {
 		return setor;
 	}
 
-	
 }

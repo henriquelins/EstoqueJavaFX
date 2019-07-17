@@ -1,7 +1,10 @@
 package model.services;
 
 import java.util.List;
+import java.util.Optional;
 
+import gui.util.Alerts;
+import javafx.scene.control.ButtonType;
 import model.dao.DaoFactory;
 import model.dao.SetorDao;
 import model.entities.Setor;
@@ -15,9 +18,25 @@ public class SetorService {
 	public void setorNovoOuEditar(Setor setor) {
 
 		if (setor.getIdSetor() == null) {
-			dao.insert(setor);
+
+			Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você salvar o setor?");
+
+			if (result.get() == ButtonType.OK) {
+
+				dao.insert(setor);
+
+			}
+
 		} else {
-			dao.update(setor);
+
+			Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você editar o setor?");
+
+			if (result.get() == ButtonType.OK) {
+
+				dao.update(setor);
+
+			}
+
 		}
 	}
 

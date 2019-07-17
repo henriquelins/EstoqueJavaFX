@@ -28,6 +28,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Movimentacao;
@@ -196,11 +197,11 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	private void createSetorNovoDialogForm(String absoluteName) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-			Pane pane = loader.load();
-					
+			VBox vbox = loader.load();
+		
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Setor");
-			produtoStage.setScene(new Scene(pane));
+			produtoStage.setScene(new Scene(vbox));
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
@@ -213,11 +214,11 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	private void createCategoriaNovoDialogForm(String absoluteName) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-			Pane pane = loader.load();
+			VBox vbox = loader.load();
 					
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Categoria");
-			produtoStage.setScene(new Scene(pane));
+			produtoStage.setScene(new Scene(vbox));
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
@@ -236,17 +237,13 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 			scrollPane.setFitToHeight(true);
 			scrollPane.setFitToWidth(true);
-
-			Scene mainScene = new Scene(scrollPane);
-			// mainScene.getStylesheets().add(Main.style);
-
-			Main.setMainScene(mainScene);
+			
+			Main.setMainScene(new Scene(scrollPane));
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Movimetação");
 			produtoStage.setScene(Main.getMainScene());
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
-			// produtoStage.initOwner(null);
 			produtoStage.showAndWait();
 		} catch (IOException e) {
 			Alerts.showAlert("IO Exception", "Erro ao carregar a tela Movimentação", e.getLocalizedMessage(),
@@ -266,11 +263,8 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			controller.setProduto(produto);
 			controller.setProdutoService(new ProdutoService());
 			controller.subscribeDataChangeListener(this);
-
-			Scene mainScene = new Scene(pane);
-			// mainScene.getStylesheets().add(Main.style);
-
-			Main.setDialogScene(mainScene);
+			
+			Main.setDialogScene(new Scene(pane));
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Editar Produto");
 			produtoStage.setScene(Main.getDialogScene());
@@ -294,13 +288,9 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			controller.setProdutoService(new ProdutoService());
 			controller.subscribeDataChangeListener(this);
 
-			Scene mainScene = new Scene(pane);
-			// mainScene.getStylesheets().add(Main.style);
-
-			Main.setDialogScene(mainScene);
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Novo Produto");
-			produtoStage.setScene(Main.getDialogScene());
+			produtoStage.setScene(new Scene(pane));
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
@@ -325,13 +315,9 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			controller.setMovimentacaoService(new MovimentacaoService());
 			controller.subscribeDataChangeListener(this);
 
-			Scene mainScene = new Scene(pane);
-			// mainScene.getStylesheets().add(Main.style);
-
-			Main.setDialogScene(mainScene);
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Movimentação de Produtos");
-			produtoStage.setScene(Main.getDialogScene());
+			produtoStage.setScene(new Scene(pane));
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
@@ -350,13 +336,9 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			scrollPane.setFitToHeight(true);
 			scrollPane.setFitToWidth(true);
 
-			Scene mainScene = new Scene(scrollPane);
-			// mainScene.getStylesheets().add(Main.style);
-
-			Main.setMainScene(mainScene);
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Usuários");
-			produtoStage.setScene(Main.getMainScene());
+			produtoStage.setScene(new Scene(scrollPane));
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
@@ -371,13 +353,9 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 
-			Scene mainScene = new Scene(pane);
-			// mainScene.getStylesheets().add(Main.style);
-
-			Main.setDialogScene(mainScene);
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Sobre o aplicativo");
-			produtoStage.setScene(Main.getDialogScene());
+			produtoStage.setScene(new Scene(pane));
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
