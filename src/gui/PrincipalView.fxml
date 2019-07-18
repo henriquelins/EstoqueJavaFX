@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -18,12 +19,12 @@
    <content>
       <VBox alignment="CENTER" prefHeight="600.0" prefWidth="1000.0">
          <children>
-            <MenuBar>
+            <MenuBar fx:id="menuBarPrincipal">
               <menus>
                 <Menu mnemonicParsing="false" text="Cadastro">
                   <items>
                         <MenuItem fx:id="menuItemUsuario" mnemonicParsing="false" onAction="#onMenuItemUsuario" text="Usuários" />
-                    <MenuItem fx:id="menuItemProduto" mnemonicParsing="false" onAction="#onMenuItemProduto" text="Produtos" />
+                    <MenuItem fx:id="menuItemProduto" mnemonicParsing="false" onAction="#onMenuItemProduto" text="Novo Produto" />
                         <MenuItem fx:id="menuItemSetor" mnemonicParsing="false" onAction="#onMenuItemSetor" text="Setor" />
                         <MenuItem fx:id="menuItemCategoria" mnemonicParsing="false" onAction="#onMenuItemCategoria" text="Categoria" />
                   </items>
@@ -43,13 +44,14 @@
               <items>
                   <AnchorPane prefHeight="31.0" prefWidth="766.0">
                      <children>
-                        <Button fx:id="btNovo" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="428.0" layoutY="4.0" mnemonicParsing="false" onAction="#onBtNovoAction" prefHeight="25.0" prefWidth="62.0" text="Novo" />
                       <Button fx:id="btPesquisar" alignment="TOP_CENTER" contentDisplay="CENTER" defaultButton="true" layoutX="280.0" layoutY="4.0" mnemonicParsing="false" onAction="#onBtPesquisarAction" prefHeight="25.0" prefWidth="90.0" text="Pesquisar" />
-                        <TextField accessibleRole="IMAGE_VIEW" layoutX="9.0" layoutY="3.0" prefHeight="27.0" prefWidth="263.0" promptText="Pesquisar produtos...">
+                        <TextField fx:id="txtPesquisar" accessibleRole="IMAGE_VIEW" layoutX="9.0" layoutY="3.0" prefHeight="27.0" prefWidth="263.0" promptText="Pesquisar produtos...">
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets>
                         </TextField>
+                        <ComboBox fx:id="cbPesquisa" layoutX="412.0" layoutY="7.0" onAction="#onCbPesquisarAction" prefWidth="150.0" promptText="Selecione o setor..." />
+                        <Button fx:id="btNovo" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="603.0" layoutY="5.0" mnemonicParsing="false" onAction="#onBtNovoAction" prefHeight="25.0" prefWidth="99.0" text="Novo Produto" />
                      </children>
                   </AnchorPane>
               </items>

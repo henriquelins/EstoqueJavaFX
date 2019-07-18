@@ -36,7 +36,7 @@ public class MovimentacaoFormController implements Initializable, DataChangeList
 	Movimentacao movimentacao;
 
 	Produto produto;
-	
+
 	@FXML
 	private Label labelNome;
 
@@ -73,8 +73,7 @@ public class MovimentacaoFormController implements Initializable, DataChangeList
 
 	// Adiciona a lista um ouvinte, quando há uma modificação
 	public void subscribeDataChangeListener(DataChangeListener listener) {
-		
-		
+
 		dataChangeListeners.add(listener);
 	}
 
@@ -82,29 +81,29 @@ public class MovimentacaoFormController implements Initializable, DataChangeList
 	private void notifyDataChangeListeners() {
 
 		for (DataChangeListener listener : dataChangeListeners) {
-			
+
 			listener.onDataChanged();
-			
+
 		}
 
 	}
 
 	public void setMovimentacaoService(MovimentacaoService movimentacaoService) {
-		
+
 		this.movimentacaoService = movimentacaoService;
-		
+
 	}
 
 	public void setMovimentacao(Movimentacao movimentacao) {
-		
+
 		this.movimentacao = movimentacao;
-		
+
 	}
 
 	public void setProduto(Produto produto) {
-		
+
 		this.produto = produto;
-		
+
 	}
 
 	private List<String> listaTipos() {
@@ -112,7 +111,7 @@ public class MovimentacaoFormController implements Initializable, DataChangeList
 		List<String> listaTipos = new ArrayList<>();
 		listaTipos.add("Entrada de produtos (+)");
 		listaTipos.add("Saída de produtos (-)");
-	
+
 		return listaTipos;
 
 	}
@@ -163,7 +162,7 @@ public class MovimentacaoFormController implements Initializable, DataChangeList
 
 		} else if (txtAreaObservacoes.getText() == null || txtAreaObservacoes.getText().trim().equals("")) {
 
-			Alerts.showAlert("Saída Produto", null, "Digite um observação sobre o produto", AlertType.INFORMATION);
+			Alerts.showAlert("Saída Produto", null, "Digite uma observação sobre o produto", AlertType.INFORMATION);
 
 			txtAreaObservacoes.requestFocus();
 
@@ -212,7 +211,5 @@ public class MovimentacaoFormController implements Initializable, DataChangeList
 		principalController.updateTableView();
 
 	}
-	
-	
 
 }

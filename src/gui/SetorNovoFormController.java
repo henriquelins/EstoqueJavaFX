@@ -84,10 +84,12 @@ public class SetorNovoFormController implements Initializable {
 				service.setorNovoOuEditar(this.setor);
 				limparCampos();
 				updateTableView();
+				
+				
 
 			} else {
 
-				Alerts.showAlert("Setor", "Salvar / Editar", "Não houve alteração no registro", AlertType.INFORMATION);
+				Alerts.showAlert("Setor", "Editar Setor", "Não houve alteração no registro", AlertType.INFORMATION);
 
 			}
 
@@ -99,13 +101,15 @@ public class SetorNovoFormController implements Initializable {
 	public void onBtExcluirAction(ActionEvent event) {
 
 		if (service == null) {
+			
 			throw new IllegalThreadStateException("Service está nulo");
+			
 		}
 		try {
 
 			if (setor.getIdSetor() != null) {
 
-				Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você quer deletar o setor?");
+				Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você deseja deletar o setor "+ setor.getNome() +" ?");
 
 				if (result.get() == ButtonType.OK) {
 
@@ -121,8 +125,10 @@ public class SetorNovoFormController implements Initializable {
 			}
 
 		} catch (DbIntegrityException e) {
+			
 			Alerts.showAlert("Setor", "Excluir", "Erro ao excluir o setor", AlertType.INFORMATION);
 			limparCampos();
+			
 		}
 
 	}
@@ -166,7 +172,7 @@ public class SetorNovoFormController implements Initializable {
 			throw new IllegalStateException("Service nulo");
 		}
 
-		listaSetor = FXCollections.observableArrayList(service.findAll());
+		listaSetor = FXCollections.observableArrayList(service.findAllId());
 		tableViewSetor.setItems(listaSetor);
 
 	}
@@ -177,7 +183,7 @@ public class SetorNovoFormController implements Initializable {
 
 		if (txtNome.getText() == null || txtNome.getText().trim().equals("")) {
 
-			Alerts.showAlert("Setor", null, "Digite o nome setor", AlertType.INFORMATION);
+			Alerts.showAlert("Setor","Campo obrigatório", "Digite o nome setor", AlertType.INFORMATION);
 
 			txtNome.requestFocus();
 
@@ -221,8 +227,12 @@ public class SetorNovoFormController implements Initializable {
 	}
 
 	public void limparCampos() {
+		
 		txtId.setText("");
-		txtNome.setText("");
+		txtNome.setText("");	
+		
+		setSetor(new Setor());
+		
 	};
 
 	public boolean compararCampos() {

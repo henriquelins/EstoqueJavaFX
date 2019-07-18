@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import application.Main;
 import gui.util.Alerts;
 import gui.util.Utils;
 import javafx.event.ActionEvent;
@@ -51,9 +50,8 @@ public class LoginFormController implements Initializable {
 				if (logado != null) {
 
 					Utils.currentStage(event).close();
-
-					Stage parentStage = Utils.currentStage(event);
-					createPrincipalForm("/gui/PrincipalView.fxml", parentStage);
+					
+					createPrincipalForm("/gui/PrincipalView.fxml");
 
 				} else {
 
@@ -68,6 +66,7 @@ public class LoginFormController implements Initializable {
 			} catch (NullPointerException e) {
 
 				Alerts.showAlert("Login", null, e.getLocalizedMessage(), AlertType.ERROR);
+				
 			}
 
 		}
@@ -75,15 +74,21 @@ public class LoginFormController implements Initializable {
 	}
 
 	public static void setLogado(Usuario logado) {
+		
 		LoginFormController.logado = logado;
+		
 	}
 
 	public static Usuario getLogado() {
+		
 		return logado;
+		
 	}
 
 	public static String usuarioLogado() {
+		
 		return logado.usuarioLogado();
+		
 	}
 
 	@Override
@@ -94,11 +99,13 @@ public class LoginFormController implements Initializable {
 	}
 
 	private void initializeNodes() {
+		
 		logado = new Usuario();
 		usuarioService = new UsuarioService();
+		
 	}
 
-	private void createPrincipalForm(String absoluteName, Stage parenteStage) {
+	private void createPrincipalForm(String absoluteName) {
 
 		try {
 
@@ -114,7 +121,7 @@ public class LoginFormController implements Initializable {
 			principalStage.setScene(new Scene(scrollPane));
 
 			principalStage.setResizable(true);
-			principalStage.initOwner(parenteStage);
+			principalStage.initOwner(null);
 			principalStage.show();
 
 		} catch (IOException e) {

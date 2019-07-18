@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ProdutoEditarFormController">
    <children>
+      <ToolBar prefHeight="40.0" prefWidth="200.0">
+        <items>
+          <Button fx:id="btSalvarProduto" mnemonicParsing="false" onAction="#onBtSalvarProdutoAction" text="Salvar" />
+        </items>
+      </ToolBar>
       <AnchorPane prefHeight="300.0" prefWidth="600.0">
          <children>
             <Label layoutX="112.0" layoutY="31.0" text="Nome" />
@@ -22,12 +26,6 @@
             <Label layoutX="278.0" layoutY="87.0" text="Descrição" />
             <Label layoutX="34.0" layoutY="31.0" text="Id" />
             <TextField fx:id="txtIdProduto" editable="false" layoutX="34.0" layoutY="56.0" prefHeight="25.0" prefWidth="63.0" />
-            <Button fx:id="btSalvarProduto" accessibleRole="IMAGE_VIEW" defaultButton="true" layoutX="485.0" layoutY="255.0" mnemonicParsing="false" onAction="#onBtSalvarProdutoAction" prefHeight="25.0" prefWidth="82.0" text="Salvar">
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </Button>
-            <Separator layoutX="2.0" layoutY="234.0" prefHeight="0.0" prefWidth="600.0" />
             <ComboBox fx:id="comboBoxSetor" layoutX="34.0" layoutY="109.0" prefHeight="25.0" prefWidth="196.0" promptText="Selecione o setor..." />
             <ComboBox fx:id="comboBoxCategoria" layoutX="34.0" layoutY="177.0" prefHeight="25.0" prefWidth="196.0" promptText="Selecione a categoria..." />
             <Label layoutX="34.0" layoutY="87.0" text="Setor" />

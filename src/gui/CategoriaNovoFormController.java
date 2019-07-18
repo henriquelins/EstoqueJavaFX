@@ -87,7 +87,7 @@ public class CategoriaNovoFormController implements Initializable {
 
 			} else {
 
-				Alerts.showAlert("Categoria", "Salvar / Editar", "Não houve alteração no registro", AlertType.INFORMATION);
+				Alerts.showAlert("Categoria", "Editar Categoria", "Não houve alteração no registro", AlertType.INFORMATION);
 
 			}
 
@@ -99,13 +99,15 @@ public class CategoriaNovoFormController implements Initializable {
 	public void onBtExcluirAction(ActionEvent event) {
 
 		if (service == null) {
+			
 			throw new IllegalThreadStateException("Service está nulo");
+			
 		}
 		try {
 
 			if (categoria.getIdCategoria() != null) {
 
-				Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você quer deletar o setor?");
+				Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você deseja deletar a categoria " + categoria.getNome() + " ?");
 
 				if (result.get() == ButtonType.OK) {
 
@@ -121,18 +123,24 @@ public class CategoriaNovoFormController implements Initializable {
 			}
 
 		} catch (DbIntegrityException e) {
+			
 			Alerts.showAlert("Categoria", "Excluir", "Erro ao excluir a categoria", AlertType.INFORMATION);
 			limparCampos();
+			
 		}
 
 	}
 
 	public void setCategoria(CategoriaService service) {
+		
 		this.service = service;
+		
 	}
 
 	public void setCategoria(Categoria categoria) {
+		
 		this.categoria = categoria;
+		
 	}
 
 	@Override
@@ -165,7 +173,7 @@ public class CategoriaNovoFormController implements Initializable {
 			throw new IllegalStateException("Service nulo");
 		}
 
-		listaCategoria = FXCollections.observableArrayList(service.findAll());
+		listaCategoria = FXCollections.observableArrayList(service.findAllId());
 		tableViewCategoria.setItems(listaCategoria);
 
 	}
@@ -220,8 +228,12 @@ public class CategoriaNovoFormController implements Initializable {
 	}
 
 	public void limparCampos() {
+		
 		txtId.setText("");
 		txtNome.setText("");
+		
+		setCategoria(new Categoria());
+		
 	};
 
 	public boolean compararCampos() {

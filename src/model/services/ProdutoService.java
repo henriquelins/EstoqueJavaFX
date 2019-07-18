@@ -22,7 +22,7 @@ public class ProdutoService {
 	public void produtoNovoOuEditar(Produto produto) {
 		if (produto.getIdProduto() == null) {
 
-			Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você deseja salvar um novo produto?");
+			Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você deseja salvar " + produto.getNome() + " como um novo produto?");
 
 			if (result.get() == ButtonType.OK) {
 
@@ -33,7 +33,7 @@ public class ProdutoService {
 
 		} else {
 
-			Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você deseja salvar a edição do produto?");
+			Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você deseja salvar a edição do produto " + produto.getNome() + " ?");
 
 			if (result.get() == ButtonType.OK) {
 

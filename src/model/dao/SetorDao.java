@@ -8,5 +8,6 @@ public interface SetorDao {
 	void insert(Setor setor);
 	void update(Setor setor);
 	void deleteById(Integer id);
-	List<Setor> findAll();
+	List<Setor> findAllId();
+	List<Setor> findAllNome();
 }

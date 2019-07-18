@@ -24,7 +24,7 @@ public class UsuarioDaoJDBC implements UsuarioDao {
 	public void insert(Usuario usuario) {
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("INSERT INTO usuario " + "(Nome, login, senha) " + "VALUES " + "(?, ?, ?)",
+			st = conn.prepareStatement("INSERT INTO usuario " + "(nome_usuario, login, senha) " + "VALUES " + "(?, ?, ?)",
 					java.sql.Statement.RETURN_GENERATED_KEYS);
 
 			st.setString(1, usuario.getNome());
@@ -55,7 +55,7 @@ public class UsuarioDaoJDBC implements UsuarioDao {
 		PreparedStatement st = null;
 		try {
 			st = conn
-					.prepareStatement("UPDATE usuario " + "SET nome = ?, login = ?, senha = ?" + "WHERE idUsuario = ?");
+					.prepareStatement("UPDATE usuario " + "SET nome_usuario = ?, login = ?, senha = ?" + "WHERE idUsuario = ?");
 
 			st.setString(1, usuario.getNome());
 			st.setString(2, usuario.getLogin());
@@ -111,7 +111,7 @@ public class UsuarioDaoJDBC implements UsuarioDao {
 	private Usuario instantiateUsuario(ResultSet rs) throws SQLException {
 		Usuario usuario = new Usuario();
 		usuario.setIdUsuario(rs.getInt("idUsuario"));
-		usuario.setNome(rs.getString("nome"));
+		usuario.setNome(rs.getString("nome_usuario"));
 		usuario.setLogin(rs.getString("login"));
 		usuario.setSenha(rs.getString("senha"));
 		return usuario;
@@ -122,7 +122,7 @@ public class UsuarioDaoJDBC implements UsuarioDao {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM usuario ORDER BY nome");
+			st = conn.prepareStatement("SELECT * FROM usuario ORDER BY nome_usuario");
 
 			rs = st.executeQuery();
 

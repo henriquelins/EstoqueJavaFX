@@ -19,7 +19,7 @@ public class CategoriaService {
 
 		if (categoria.getIdCategoria() == null) {
 
-			Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você quer salvar a categoria?");
+			Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você deseja salvar a categoria " + categoria.getNome() + " ?");
 
 			if (result.get() == ButtonType.OK) {
 
@@ -29,7 +29,7 @@ public class CategoriaService {
 
 		} else {
 
-			Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você quer editar a categoria?");
+			Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você deseja editar a categoria " + categoria.getNome() + " ?");
 
 			if (result.get() == ButtonType.OK) {
 
@@ -44,8 +44,12 @@ public class CategoriaService {
 		dao.deleteById(categoria.getIdCategoria());
 	}
 
-	public List<Categoria> findAll() {
-		return dao.findAll();
+	public List<Categoria> findAllId() {
+		return dao.findAllId();
+	}
+	
+	public List<Categoria> findAllNome() {
+		return dao.findAllNome();
 	}
 
 }

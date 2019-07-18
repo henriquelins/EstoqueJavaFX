@@ -18,6 +18,7 @@ public class MovimentacaoService {
 	private ProdutoDao daoProd = DaoFactory.createProdutoDao();
 
 	public void movimentacaoSaidaOuEntrada(Movimentacao movimentacao) {
+		
 		int estoqueAtual = 0;
 
 		try {
@@ -27,14 +28,14 @@ public class MovimentacaoService {
 			case ("Entrada de produtos (+)"):
 
 				Optional<ButtonType> result1 = Alerts.showConfirmation("Confirmação",
-						"Você deseja dar entrada no produto?");
+						"Você deseja dar entrada no estoque do produto " + movimentacao.getProduto().getNome() + " ?");
 
 				if (result1.get() == ButtonType.OK) {
 
 					estoqueAtual = movimentacao.getQuantidadeAnterior() + movimentacao.getValorMovimento();
 					daoProd.updateEstoqueAtual(estoqueAtual, movimentacao.getProduto().getIdProduto());
 					dao.insert(movimentacao);
-				
+
 				}
 
 				break;
@@ -42,14 +43,13 @@ public class MovimentacaoService {
 			case ("Saída de produtos (-)"):
 
 				Optional<ButtonType> result2 = Alerts.showConfirmation("Confirmação",
-						"Você deseja dar saída no produto?");
+						"Você deseja dar saída no estoque do produto " + movimentacao.getProduto().getNome() + " ?");
 
 				if (result2.get() == ButtonType.OK) {
 
 					estoqueAtual = movimentacao.getQuantidadeAnterior() - movimentacao.getValorMovimento();
 					daoProd.updateEstoqueAtual(estoqueAtual, movimentacao.getProduto().getIdProduto());
 					dao.insert(movimentacao);
-				
 
 				}
 
@@ -67,9 +67,9 @@ public class MovimentacaoService {
 	}
 
 	public List<Movimentacao> findAll() {
-		
+
 		return dao.findAll();
-		
+
 	}
 
 }

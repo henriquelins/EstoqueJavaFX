@@ -83,11 +83,35 @@ public class SetorDaoJDBC implements SetorDao {
 	}
 
 	@Override
-	public List<Setor> findAll() {
+	public List<Setor> findAllNome() {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement("SELECT * FROM setor ORDER BY nome");
+
+			rs = st.executeQuery();
+
+			List<Setor> list = new ArrayList<>();
+
+			while (rs.next()) {
+				Setor setor = instantiateSetor(rs);
+				list.add(setor);
+			}
+			return list;
+		} catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		} finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
+	}
+
+	@Override
+	public List<Setor> findAllId() {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement("SELECT * FROM setor ORDER BY id_setor");
 
 			rs = st.executeQuery();
 

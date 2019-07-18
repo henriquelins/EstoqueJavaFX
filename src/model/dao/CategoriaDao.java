@@ -8,5 +8,6 @@ public interface CategoriaDao {
 	void insert(Categoria categoria);
 	void update(Categoria categoria);
 	void deleteById(Integer id);
-	List<Categoria> findAll();
+	List<Categoria> findAllId();
+	List<Categoria> findAllNome();
 }

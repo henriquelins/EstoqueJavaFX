@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
@@ -29,6 +30,12 @@
                         <Button fx:id="btNovoUsuario" layoutX="10.0" layoutY="33.0" mnemonicParsing="false" onAction="#onBtNovoUsuarioAction" text="Novo" />
                         <Button fx:id="btSalvarUsuario" layoutX="65.0" layoutY="33.0" mnemonicParsing="false" onAction="#onBtSalvarUsuarioAction" text="Salvar" />
                         <Button fx:id="btCancelarEditarUsuario" cancelButton="true" layoutX="123.0" layoutY="33.0" mnemonicParsing="false" onAction="#onBtCancelarEditarUsuarioAction" text="Cancelar" />
+                        <Button fx:id="btPesquisar" alignment="TOP_CENTER" contentDisplay="CENTER" defaultButton="true" layoutX="572.0" layoutY="32.0" mnemonicParsing="false" onAction="#onBtPesquisarAction" prefHeight="25.0" prefWidth="90.0" text="Pesquisar" />
+                        <TextField fx:id="txtPesquisar" accessibleRole="IMAGE_VIEW" layoutX="286.0" layoutY="31.0" prefHeight="27.0" prefWidth="263.0" promptText="Pesquisar usuários...">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </TextField>
                      </children>
                   </AnchorPane>
               </items>
@@ -48,7 +55,7 @@
                         <PasswordField fx:id="pswRepetirSenha" editable="false" layoutX="14.0" layoutY="286.0" />
                         <Label layoutX="14.0" layoutY="260.0" text="Confirmar Senha" />
                      </children></AnchorPane>
-                  <TableView fx:id="tableViewUsuario" prefHeight="335.0" prefWidth="642.0">
+                  <TableView fx:id="tableViewUsuario" prefHeight="335.0" prefWidth="641.0" HBox.hgrow="SOMETIMES">
                     <columns>
                       <TableColumn fx:id="tableColumnId" prefWidth="43.0" style="-fx-alignment: CENTER;" text="Id" />
                       <TableColumn fx:id="tableColumnNome" prefWidth="171.0" style="-fx-alignment: CENTER;" text="Nome" />

@@ -97,7 +97,7 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 		SetorService setorService = new SetorService();
 		List<String> listaSetor = new ArrayList<>();
 
-		for (Setor setor : setorService.findAll()) {
+		for (Setor setor : setorService.findAllNome()) {
 
 			listaSetor.add(setor.getNome());
 		}
@@ -111,7 +111,7 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 		CategoriaService categoriaService = new CategoriaService();
 		List<String> listaCategoria = new ArrayList<>();
 
-		for (Categoria categoria : categoriaService.findAll()) {
+		for (Categoria categoria : categoriaService.findAllNome()) {
 
 			listaCategoria.add(categoria.getNome());
 		}

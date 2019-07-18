@@ -36,6 +36,8 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 
 	private Usuario usuarioTabela;
 
+	private Usuario usuarioComparar;
+
 	private static ObservableList<Usuario> listaUsuarios;
 
 	@FXML
@@ -61,7 +63,13 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 
 	@FXML
 	private Button btCancelarEditarUsuario;
-
+	
+	@FXML
+	private TextField txtPesquisar;
+	
+	@FXML
+	private Button btPesquisarUsuario;
+	
 	@FXML
 	private HBox hbox;
 
@@ -85,14 +93,17 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 
 	@FXML
 	public void onBtNovoUsuarioAction(ActionEvent event) {
+
 		limparCampos();
 		editarCamposFalso();
 		novoCamposDoUsuario();
 		tableViewUsuario.setDisable(true);
+
 	}
 
 	@FXML
 	public void onBtSalvarUsuarioAction(ActionEvent event) {
+
 		setUsuario(getFormData());
 		editarCamposFalso();
 		botoesFalso();
@@ -100,14 +111,27 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 
 		if (usuario != null) {
 
-			service.usuarioNovoOuEditar(usuario);
-			onDataChanged();
+			boolean ok = false;
+
+			ok = compararCampos();
+
+			if (ok == false) {
+
+				service.usuarioNovoOuEditar(usuario);
+				onDataChanged();
+
+			} else {
+
+				Alerts.showAlert("Usuário", "Editar Usuário", "Não houve alteração no registro", AlertType.INFORMATION);
+
+			}
 
 		}
 	}
 
 	@FXML
 	public void onBtCancelarEditarUsuarioAction(ActionEvent event) {
+
 		limparCampos();
 		botoesFalso();
 		editarCamposFalso();
@@ -124,8 +148,17 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 		}
 
 	}
+	
+	
+	@FXML
+	public void onBtPesquisarAction(ActionEvent event) {
+		
+		Alerts.showAlert("Button Pesquisar", "Não implementado", "onBtPesquisarAction", AlertType.ERROR);
+		
+	}
 
 	protected void editarCamposDoUsuario() {
+
 		if (usuarioTabela.getIdUsuario() != null) {
 
 			txtNome.setEditable(true);
@@ -148,6 +181,7 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 	}
 
 	protected void novoCamposDoUsuario() {
+
 		txtNome.setEditable(true);
 		txtLogin.setEditable(true);
 		pswSenha.setEditable(true);
@@ -158,32 +192,43 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 		btSalvarUsuario.setVisible(true);
 
 		tableViewUsuario.setDisable(true);
+
 	}
 
 	protected void limparCampos() {
+
 		txtIdUsuario.setText("");
 		txtNome.setText("");
 		txtLogin.setText("");
 		pswSenha.setText("");
 		pswRepetirSenha.setText("");
+
+		setUsuario(new Usuario());
+
 	}
 
 	protected void editarCamposFalso() {
+
 		txtIdUsuario.setEditable(false);
 		txtNome.setEditable(false);
 		txtLogin.setEditable(false);
 		pswSenha.setEditable(false);
 		pswRepetirSenha.setEditable(false);
+
 	}
 
 	protected void botoesFalso() {
+
 		btCancelarEditarUsuario.setVisible(false);
 		btSalvarUsuario.setVisible(false);
 		btNovoUsuario.setDisable(false);
+
 	}
 
 	public void showUsuarioDetails(Usuario usuario) {
+
 		if (btCancelarEditarUsuario.isVisible() != true) {
+
 			if (usuario != null) {
 				txtIdUsuario.setText(String.valueOf(usuario.getIdUsuario()));
 				txtNome.setText(usuario.getNome());
@@ -191,35 +236,52 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 				pswSenha.setText(usuario.getSenha());
 				pswRepetirSenha.setText(usuario.getSenha());
 				setUsuarioTabela(usuario);
+
+				setUsuario(usuario);
+				usuarioComparar = usuario;
+
 			} else {
+
 				setUsuarioTabela(null);
 				limparCampos();
+
 			}
 		}
 	}
 
 	public void setUsuarioService(UsuarioService service) {
+
 		this.service = service;
+
 	}
 
 	public void setUsuario(Usuario usuario) {
+
 		UsuarioFormController.usuario = usuario;
+
 	}
 
 	public static Usuario getUsuario() {
+
 		return usuario;
+
 	}
 
 	public void setUsuarioTabela(Usuario usuario) {
+
 		this.usuarioTabela = usuario;
+
 	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+
 		initializeNodes();
+
 	}
 
 	private void initializeNodes() {
+
 		showUsuarioDetails(null);
 
 		tableViewUsuario.getSelectionModel().selectedItemProperty()
@@ -240,9 +302,11 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 		usuarioTabela = new Usuario();
 
 		updateTableView();
+
 	}
 
 	public void updateTableView() {
+
 		if (service == null) {
 			throw new IllegalStateException("Serviço está nulo");
 		}
@@ -255,99 +319,175 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 
 		initEditButton();
 		initRemoveButton();
+
 	}
 
 	private Usuario getFormData() {
+
 		Usuario usuario = new Usuario();
+
 		if (txtNome.getText() == null || txtNome.getText().trim().equals("")) {
-			Alerts.showAlert("Novo Usuário", null, "Digite seu nome", AlertType.INFORMATION);
+
+			Alerts.showAlert("Novo Usuário", "Campo obrigatório", "Digite seu nome!", AlertType.INFORMATION);
 			txtNome.requestFocus();
 			usuario = null;
+
 		} else if (txtLogin.getText() == null || txtLogin.getText().trim().equals("")) {
-			Alerts.showAlert("Novo Usuário", null, "Digite seu login", AlertType.INFORMATION);
+
+			Alerts.showAlert("Novo Usuário", "Campo obrigatório", "Digite seu login!", AlertType.INFORMATION);
 			txtLogin.requestFocus();
 			usuario = null;
+
 		} else if (pswSenha.getText() == null || pswSenha.getText().trim().equals("")) {
-			Alerts.showAlert("Novo Usuário", null, "Digite sua senha", AlertType.INFORMATION);
+
+			Alerts.showAlert("Novo Usuário", "Campo obrigatório", "Digite sua senha!", AlertType.INFORMATION);
+
 			pswSenha.requestFocus();
 			usuario = null;
+
 		} else if (pswRepetirSenha.getText() == null || pswRepetirSenha.getText().trim().equals("")) {
-			Alerts.showAlert("Novo Usuário", null, "Digite a confirmação da senha", AlertType.INFORMATION);
+
+			Alerts.showAlert("Novo Usuário", "Campo obrigatório", "Digite a confirmação da senha!",
+					AlertType.INFORMATION);
+
 			pswRepetirSenha.requestFocus();
 			usuario = null;
+
 		} else if (!pswSenha.getText().equals(pswRepetirSenha.getText())
 				|| !pswRepetirSenha.getText().equals(pswSenha.getText())) {
-			Alerts.showAlert("Novo Usuário", null, "A confirmação da senha não está igual a senha!",
+
+			Alerts.showAlert("Novo Usuário", "Campo obrigatório", "A confirmação da senha não está igual a senha!",
 					AlertType.INFORMATION);
+
 			pswRepetirSenha.requestFocus();
 			usuario = null;
+
 		} else {
+
 			if (txtIdUsuario.getText().equals("")) {
+
 				usuario.setIdUsuario(null);
+
 			} else {
+
 				usuario.setIdUsuario(Integer.valueOf(txtIdUsuario.getText()));
+
 			}
+
 			usuario.setNome(txtNome.getText());
 			usuario.setLogin(txtLogin.getText());
 			usuario.setSenha(pswSenha.getText());
+
 		}
+
 		return usuario;
+
 	}
 
 	private void initEditButton() {
+
 		tableColumnEDIT.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
 		tableColumnEDIT.setCellFactory(param -> new TableCell<Usuario, Usuario>() {
 			private final Button btEditar = new Button("Editar");
 
 			@Override
 			protected void updateItem(Usuario usuario, boolean empty) {
+
 				super.updateItem(usuario, empty);
+
 				if (usuario == null) {
+
 					setGraphic(null);
 					return;
+
 				}
+
 				setGraphic(btEditar);
 				btEditar.setOnAction(event -> editarCamposDoUsuario());
+
 			}
 		});
 	}
 
 	private void initRemoveButton() {
+
 		tableColumnREMOVE.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
 		tableColumnREMOVE.setCellFactory(param -> new TableCell<Usuario, Usuario>() {
 			private final Button btExcluir = new Button("Excluir");
 
 			@Override
 			protected void updateItem(Usuario usuario, boolean empty) {
+
 				super.updateItem(usuario, empty);
+
 				if (usuario == null) {
+
 					setGraphic(null);
 					return;
+
 				}
+
 				setGraphic(btExcluir);
 				btExcluir.setOnAction(event -> removeEntity(usuario));
+
 			}
 		});
 	}
 
 	private void removeEntity(Usuario usuario) {
-		Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você quer deletar o usuário?");
+		Optional<ButtonType> result = Alerts.showConfirmation("Confirmação",
+				"Você deseja deletar o usuário " + usuario.getNome() + " ?");
+
 		if (result.get() == ButtonType.OK) {
+
 			if (service == null) {
-				throw new IllegalThreadStateException("O serviço está nulo");
+
+				throw new IllegalThreadStateException("Service está nulo");
+
 			}
+
 			try {
+
 				service.remove(usuario);
 				onDataChanged();
+
 			} catch (DbIntegrityException e) {
-				Alerts.showAlert("Erro ao remover ", null, e.getMessage(), AlertType.ERROR);
+
+				Alerts.showAlert("Erro ao remover o usuário " + usuario.getNome() + " !", null, e.getMessage(),
+						AlertType.ERROR);
+
 			}
 		}
 	}
 
 	@Override
 	public void onDataChanged() {
+
 		this.updateTableView();
+
 	}
+
+	public boolean compararCampos() {
+
+		boolean ok = false;
+
+		if (usuarioComparar == null) {
+
+			return ok;
+
+		} else if (usuario.getNome().equals(usuarioComparar.getNome())
+				&& usuario.getLogin().equals(usuarioComparar.getLogin())
+				&& usuario.getSenha().equals(usuarioComparar.getSenha())) {
+
+			ok = true;
+			return ok;
+
+		} else {
+
+			return ok;
+
+		}
+
+	};
 
 }

@@ -116,7 +116,7 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 		SetorService setorService = new SetorService();
 		List<String> listaSetor = new ArrayList<>();
 
-		for (Setor setor : setorService.findAll()) {
+		for (Setor setor : setorService.findAllNome()) {
 
 			listaSetor.add(setor.getNome());
 		}
@@ -130,7 +130,7 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 		CategoriaService categoriaService = new CategoriaService();
 		List<String> listaCategoria = new ArrayList<>();
 
-		for (Categoria categoria : categoriaService.findAll()) {
+		for (Categoria categoria : categoriaService.findAllNome()) {
 
 			listaCategoria.add(categoria.getNome());
 		}
@@ -160,7 +160,7 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 		txtQuantidade.setText(String.valueOf(produto.getQuantidade()));
 		txtAreaDescricao.setText(produto.getDescricao());
 
-		//startFields();
+		// startFields();
 
 		updateFormData();
 
@@ -233,9 +233,9 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 		comboBoxSetor.setValue(PrincipalFormController.getProduto().getSetor());
 		comboBoxCategoria.setValue(PrincipalFormController.getProduto().getCategoria());
 		txtAreaDescricao.setText(PrincipalFormController.getProduto().getDescricao());
-		
+
 		setProduto(PrincipalFormController.getProduto());
-				
+
 		produtoComparar = this.produto;
 
 	}
@@ -247,16 +247,6 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 	}
 
-	public void startFields() {
-
-		txtNome.setText(produto.getNome());
-		txtQuantidade.setText(String.valueOf(produto.getQuantidade()));
-		txtAreaDescricao.setText(produto.getDescricao());
-		
-	
-
-	}
-
 	public boolean compararCampos() {
 
 		boolean ok = false;
@@ -265,7 +255,10 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 			return ok;
 
-		} else if (this.produto.getNome().equals(produtoComparar.getNome())) {
+		} else if (this.produto.getNome().equals(produtoComparar.getNome())
+				&& this.produto.getSetor().equals(produtoComparar.getSetor())
+				&& this.produto.getCategoria().equals(produtoComparar.getCategoria())
+				&& this.produto.getDescricao().equals(produtoComparar.getDescricao())) {
 
 			ok = true;
 			return ok;

@@ -85,11 +85,35 @@ public class CategoriaDaoJDBC implements CategoriaDao {
 
 	
 	@Override
-	public List<Categoria> findAll() {
+	public List<Categoria> findAllNome() {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement("SELECT * FROM categoria ORDER BY nome");
+
+			rs = st.executeQuery();
+
+			List<Categoria> list = new ArrayList<>();
+
+			while (rs.next()) {
+				Categoria categoria = instantiateCategoria(rs);
+				list.add(categoria);
+			}
+			return list;
+		} catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		} finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
+	}
+	
+	@Override
+	public List<Categoria> findAllId() {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement("SELECT * FROM categoria ORDER BY id_categoria");
 
 			rs = st.executeQuery();
 

@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
@@ -13,20 +16,26 @@
    <content>
       <VBox prefHeight="500.0" prefWidth="800.0">
          <children>
-            <ToolBar prefHeight="19.0" prefWidth="800.0">
+            <ToolBar prefHeight="66.0" prefWidth="800.0">
               <items>
-                  <AnchorPane prefHeight="65.0" prefWidth="774.0">
+                  <AnchorPane prefHeight="60.0" prefWidth="774.0">
                      <children>
-                        <Label layoutX="10.0" layoutY="1.0" text="Movimentação">
+                        <Label text="Movimentação">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
+                        <Button fx:id="btPesquisar" alignment="TOP_CENTER" contentDisplay="CENTER" defaultButton="true" layoutX="271.0" layoutY="26.0" mnemonicParsing="false" onAction="#onBtPesquisarAction" prefHeight="25.0" prefWidth="90.0" text="Pesquisar" />
+                        <TextField fx:id="txtPesquisar" accessibleRole="IMAGE_VIEW" layoutY="25.0" prefHeight="27.0" prefWidth="263.0" promptText="Pesquisar produtos...">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </TextField>
                      </children>
                   </AnchorPane>
               </items>
             </ToolBar>
-            <TableView fx:id="tableViewMovimentacao" prefHeight="335.0" prefWidth="642.0">
+            <TableView fx:id="tableViewMovimentacao" prefHeight="432.0" prefWidth="800.0" VBox.vgrow="SOMETIMES">
               <columns>
                 <TableColumn fx:id="tableColumnId" prefWidth="40.0" style="-fx-alignment: CENTER;" text="Id" />
                 <TableColumn fx:id="tableColumnProduto" prefWidth="180.0" style="-fx-alignment: CENTER;" text="Produto" />
