@@ -21,7 +21,7 @@
       </ToolBar>
       <AnchorPane prefHeight="300.0" prefWidth="600.0">
          <children>
-            <Label layoutX="154.0" layoutY="20.0" text="Setor" />
+            <Label layoutX="154.0" layoutY="20.0" text="Categoria" />
             <TextField fx:id="txtNome" layoutX="154.0" layoutY="41.0" prefHeight="25.0" prefWidth="366.0" />
             <Label layoutX="74.0" layoutY="20.0" text="Id" />
             <TextField fx:id="txtId" editable="false" layoutX="74.0" layoutY="41.0" prefHeight="25.0" prefWidth="63.0" />

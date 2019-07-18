@@ -30,6 +30,8 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 	private Produto produto;
 
+	private Produto produtoComparar;
+
 	private PrincipalFormController principalController;
 
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
@@ -57,34 +59,56 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 	@FXML
 	public void onBtSalvarProdutoAction(ActionEvent event) {
+
 		setProduto(getFormData());
 
-		if (produto != null) {
+		if (this.produto != null) {
 
-			produtoService.produtoNovoOuEditar(produto);
-			notifyDataChangeListeners();
+			boolean ok = false;
+
+			ok = compararCampos();
+
+			if (ok == false) {
+
+				produtoService.produtoNovoOuEditar(this.produto);
+				notifyDataChangeListeners();
+
+			} else {
+
+				Alerts.showAlert("Produto", "Editar", "Não houve alteração no registro", AlertType.INFORMATION);
+
+			}
+
 		}
 
 	}
 
 	public void subscribeDataChangeListener(DataChangeListener listener) {
+
 		dataChangeListeners.add(listener);
+
 	}
 
 	private void notifyDataChangeListeners() {
 
 		for (DataChangeListener listener : dataChangeListeners) {
+
 			listener.onDataChanged();
+
 		}
 
 	}
 
 	public void setProdutoService(ProdutoService produtoService) {
+
 		this.produtoService = produtoService;
+
 	}
 
 	public void setProduto(Produto produto) {
+
 		this.produto = produto;
+
 	}
 
 	private List<String> listaSetor() {
@@ -115,7 +139,6 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 	}
 
-
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
@@ -137,7 +160,7 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 		txtQuantidade.setText(String.valueOf(produto.getQuantidade()));
 		txtAreaDescricao.setText(produto.getDescricao());
 
-		startFields();
+		//startFields();
 
 		updateFormData();
 
@@ -210,6 +233,10 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 		comboBoxSetor.setValue(PrincipalFormController.getProduto().getSetor());
 		comboBoxCategoria.setValue(PrincipalFormController.getProduto().getCategoria());
 		txtAreaDescricao.setText(PrincipalFormController.getProduto().getDescricao());
+		
+		setProduto(PrincipalFormController.getProduto());
+				
+		produtoComparar = this.produto;
 
 	}
 
@@ -221,9 +248,34 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 	}
 
 	public void startFields() {
+
 		txtNome.setText(produto.getNome());
 		txtQuantidade.setText(String.valueOf(produto.getQuantidade()));
 		txtAreaDescricao.setText(produto.getDescricao());
+		
+	
+
 	}
+
+	public boolean compararCampos() {
+
+		boolean ok = false;
+
+		if (produtoComparar == null) {
+
+			return ok;
+
+		} else if (this.produto.getNome().equals(produtoComparar.getNome())) {
+
+			ok = true;
+			return ok;
+
+		} else {
+
+			return ok;
+
+		}
+
+	};
 
 }

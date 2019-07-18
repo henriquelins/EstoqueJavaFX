@@ -36,7 +36,7 @@ public class MovimentacaoFormController implements Initializable, DataChangeList
 	Movimentacao movimentacao;
 
 	Produto produto;
-
+	
 	@FXML
 	private Label labelNome;
 
@@ -73,6 +73,8 @@ public class MovimentacaoFormController implements Initializable, DataChangeList
 
 	// Adiciona a lista um ouvinte, quando há uma modificação
 	public void subscribeDataChangeListener(DataChangeListener listener) {
+		
+		
 		dataChangeListeners.add(listener);
 	}
 
@@ -80,21 +82,29 @@ public class MovimentacaoFormController implements Initializable, DataChangeList
 	private void notifyDataChangeListeners() {
 
 		for (DataChangeListener listener : dataChangeListeners) {
+			
 			listener.onDataChanged();
+			
 		}
 
 	}
 
 	public void setMovimentacaoService(MovimentacaoService movimentacaoService) {
+		
 		this.movimentacaoService = movimentacaoService;
+		
 	}
 
 	public void setMovimentacao(Movimentacao movimentacao) {
+		
 		this.movimentacao = movimentacao;
+		
 	}
 
 	public void setProduto(Produto produto) {
+		
 		this.produto = produto;
+		
 	}
 
 	private List<String> listaTipos() {
@@ -164,9 +174,6 @@ public class MovimentacaoFormController implements Initializable, DataChangeList
 			Date hoje = new Date(System.currentTimeMillis());
 			java.sql.Date data = new java.sql.Date(hoje.getTime());
 
-			// DateFormat formatBR = new SimpleDateFormat("dd/MM/YYYY");
-			// String dataBr = formatBR.format(data);
-
 			mov.setProduto(PrincipalFormController.getProduto());
 			mov.setUsuario(LoginFormController.getLogado());
 			mov.setTipo(String.valueOf(comboBoxTipoDeSaida.getSelectionModel().getSelectedItem()));
@@ -205,5 +212,7 @@ public class MovimentacaoFormController implements Initializable, DataChangeList
 		principalController.updateTableView();
 
 	}
+	
+	
 
 }

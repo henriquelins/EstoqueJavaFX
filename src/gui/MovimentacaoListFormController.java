@@ -55,7 +55,9 @@ public class MovimentacaoListFormController implements Initializable {
 	private TableColumn<Movimentacao, String> tableColumnDataDaMovimentacao;
 
 	public void setMovimentacaoService(MovimentacaoService service) {
+		
 		this.service = service;
+		
 	}
 
 	@Override
@@ -85,12 +87,13 @@ public class MovimentacaoListFormController implements Initializable {
 
 		service = new MovimentacaoService();
 		updateTableView();
+		
 	}
 
 	public void updateTableView() {
 
 		if (service == null) {
-			throw new IllegalStateException("Serviço está nulo");
+			throw new IllegalStateException("service está nulo");
 		}
 
 		listaMovimentações = FXCollections.observableArrayList(service.findAll());

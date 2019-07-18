@@ -254,6 +254,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 	private void createProdutoEditarDialogForm(Produto prod, String absoluteName) {
 		try {
+			
 			setProduto(prod);
 
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
@@ -272,14 +273,18 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
 			produtoStage.showAndWait();
+			
 		} catch (IOException e) {
+			
 			Alerts.showAlert("IO Exception", "Erro ao carregar a tela editar produtos", e.getMessage(),
 					AlertType.ERROR);
+			
 		}
 	}
 
 	private void createProdutoNovoDialogForm(String absoluteName) {
 		try {
+			
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 
@@ -288,13 +293,15 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			controller.setProdutoService(new ProdutoService());
 			controller.subscribeDataChangeListener(this);
 
+			Main.setDialogScene(new Scene(pane));
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Novo Produto");
-			produtoStage.setScene(new Scene(pane));
+			produtoStage.setScene(Main.getDialogScene());
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
 			produtoStage.showAndWait();
+			
 		} catch (IOException e) {
 
 			Alerts.showAlert("IO Exception", "Erro ao carregar a tela Produtos", e.getMessage(), AlertType.ERROR);
@@ -314,10 +321,11 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			controller.setMovimentacao(movimentacao);
 			controller.setMovimentacaoService(new MovimentacaoService());
 			controller.subscribeDataChangeListener(this);
-
+			
+			Main.setDialogScene(new Scene(pane));
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Movimentação de Produtos");
-			produtoStage.setScene(new Scene(pane));
+			produtoStage.setScene(Main.getDialogScene());
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);

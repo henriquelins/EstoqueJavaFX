@@ -143,6 +143,7 @@ public class SetorNovoFormController implements Initializable {
 	}
 
 	private void initializeNodes() {
+		
 		showDetails(null);
 
 		tableViewSetor.getSelectionModel().selectedItemProperty()
@@ -151,18 +152,17 @@ public class SetorNovoFormController implements Initializable {
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("idSetor"));
 		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("Nome"));
 
-		// Stage stage = (Stage) Main.getMainScene().getWindow();
-		// tableViewSetor.prefHeightProperty().bind(stage.heightProperty());
-
 		service = new SetorService();
 		setor = new Setor();
 
 		updateTableView();
+		
 	}
 
 	public void updateTableView() {
 
 		if (service == null) {
+			
 			throw new IllegalStateException("Service nulo");
 		}
 

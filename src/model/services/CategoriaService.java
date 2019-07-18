@@ -19,7 +19,7 @@ public class CategoriaService {
 
 		if (categoria.getIdCategoria() == null) {
 
-			Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você quer salva a categoria?");
+			Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você quer salvar a categoria?");
 
 			if (result.get() == ButtonType.OK) {
 

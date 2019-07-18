@@ -1,9 +1,11 @@
 package model.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import gui.util.Alerts;
 import gui.util.Utils;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
 import model.dao.DaoFactory;
 import model.dao.MovimentacaoDao;
@@ -24,31 +26,50 @@ public class MovimentacaoService {
 
 			case ("Entrada de produtos (+)"):
 
-				estoqueAtual = movimentacao.getQuantidadeAnterior() + movimentacao.getValorMovimento();
-				daoProd.updateEstoqueAtual(estoqueAtual, movimentacao.getProduto().getIdProduto());
+				Optional<ButtonType> result1 = Alerts.showConfirmation("Confirmação",
+						"Você deseja dar entrada no produto?");
+
+				if (result1.get() == ButtonType.OK) {
+
+					estoqueAtual = movimentacao.getQuantidadeAnterior() + movimentacao.getValorMovimento();
+					daoProd.updateEstoqueAtual(estoqueAtual, movimentacao.getProduto().getIdProduto());
+					dao.insert(movimentacao);
+				
+				}
 
 				break;
 
 			case ("Saída de produtos (-)"):
 
-				estoqueAtual = movimentacao.getQuantidadeAnterior() - movimentacao.getValorMovimento();
-				daoProd.updateEstoqueAtual(estoqueAtual, movimentacao.getProduto().getIdProduto());
+				Optional<ButtonType> result2 = Alerts.showConfirmation("Confirmação",
+						"Você deseja dar saída no produto?");
+
+				if (result2.get() == ButtonType.OK) {
+
+					estoqueAtual = movimentacao.getQuantidadeAnterior() - movimentacao.getValorMovimento();
+					daoProd.updateEstoqueAtual(estoqueAtual, movimentacao.getProduto().getIdProduto());
+					dao.insert(movimentacao);
+				
+
+				}
 
 				break;
 
 			}
 
-			dao.insert(movimentacao);
-			Alerts.showAlert("Movimentação", "Movimentação de produtos", movimentacao.getTipo().toString(),
-					AlertType.INFORMATION);
 			Utils.fecharDialogAction();
+
 		} catch (Exception e) {
+
 			Alerts.showAlert("Movimentação", null, e.getLocalizedMessage(), AlertType.ERROR);
+
 		}
 	}
 
 	public List<Movimentacao> findAll() {
+		
 		return dao.findAll();
+		
 	}
 
 }
