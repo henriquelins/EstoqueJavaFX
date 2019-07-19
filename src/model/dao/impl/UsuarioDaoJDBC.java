@@ -55,7 +55,7 @@ public class UsuarioDaoJDBC implements UsuarioDao {
 		PreparedStatement st = null;
 		try {
 			st = conn
-					.prepareStatement("UPDATE usuario " + "SET nome_usuario = ?, login = ?, senha = ?" + "WHERE idUsuario = ?");
+					.prepareStatement("UPDATE usuario " + "SET nome_usuario = ?, login = ?, senha = ?" + "WHERE id_usuario = ?");
 
 			st.setString(1, usuario.getNome());
 			st.setString(2, usuario.getLogin());
@@ -74,7 +74,7 @@ public class UsuarioDaoJDBC implements UsuarioDao {
 	public void deleteById(Integer id) {
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("DELETE FROM usuario WHERE idUsuario = ?");
+			st = conn.prepareStatement("DELETE FROM usuario WHERE id_usuario = ?");
 
 			st.setInt(1, id);
 
@@ -91,7 +91,7 @@ public class UsuarioDaoJDBC implements UsuarioDao {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM usuario WHERE idUsuario = ?");
+			st = conn.prepareStatement("SELECT * FROM usuario WHERE id_usuario = ?");
 
 			st.setInt(1, id);
 			rs = st.executeQuery();
@@ -110,7 +110,7 @@ public class UsuarioDaoJDBC implements UsuarioDao {
 
 	private Usuario instantiateUsuario(ResultSet rs) throws SQLException {
 		Usuario usuario = new Usuario();
-		usuario.setIdUsuario(rs.getInt("idUsuario"));
+		usuario.setIdUsuario(rs.getInt("id_usuario"));
 		usuario.setNome(rs.getString("nome_usuario"));
 		usuario.setLogin(rs.getString("login"));
 		usuario.setSenha(rs.getString("senha"));

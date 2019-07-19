@@ -26,13 +26,13 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM produto WHERE idProduto = ?");
+			st = conn.prepareStatement("SELECT * FROM produto WHERE id_produto = ?");
 			st.setInt(1, id);
 			rs = st.executeQuery();
 			if (rs.next()) {
 				Produto produto = new Produto();
-				produto.setIdProduto(rs.getInt("idProduto"));
-				produto.setNome(rs.getString("nome"));
+				produto.setIdProduto(rs.getInt("id_produto"));
+				produto.setNome(rs.getString("nome_produto"));
 				produto.setDescricao(rs.getString("descricao"));
 				produto.setSetor(rs.getString("setor"));
 				produto.setCategoria(rs.getString("categoria"));
@@ -53,15 +53,15 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM produto ORDER BY idProduto");
+			st = conn.prepareStatement("SELECT * FROM produto ORDER BY id_produto");
 			rs = st.executeQuery();
 
 			List<Produto> list = new ArrayList<>();
 
 			while (rs.next()) {
 				Produto produto = new Produto();
-				produto.setIdProduto(rs.getInt("idProduto"));
-				produto.setNome(rs.getString("nome"));
+				produto.setIdProduto(rs.getInt("id_produto"));
+				produto.setNome(rs.getString("nome_produto"));
 				produto.setDescricao(rs.getString("descricao"));
 				produto.setSetor(rs.getString("setor"));
 				produto.setCategoria(rs.getString("categoria"));
@@ -82,7 +82,7 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
-					"INSERT INTO produto (nome, descricao, setor, categoria, quantidade)" + " VALUES (?, ?, ? ,?, ?)",
+					"INSERT INTO produto (nome_produto, descricao, setor, categoria, quantidade)" + " VALUES (?, ?, ? ,?, ?)",
 					java.sql.Statement.RETURN_GENERATED_KEYS);
 
 			st.setString(1, produto.getNome());
@@ -117,7 +117,7 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 		try {
 
 			st = conn.prepareStatement(
-					"UPDATE produto SET nome = ?, descricao = ?, setor = ?, categoria = ?, quantidade = ? WHERE IdProduto = ?");
+					"UPDATE produto SET nome_produto = ?, descricao = ?, setor = ?, categoria = ?, quantidade = ? WHERE id_produto = ?");
 
 			st.setString(1, produto.getNome());
 			st.setString(2, produto.getDescricao());
@@ -139,7 +139,7 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 	public void deleteById(Integer id) {
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("DELETE FROM produto WHERE idProduto = ?");
+			st = conn.prepareStatement("DELETE FROM produto WHERE id_produto = ?");
 
 			st.setInt(1, id);
 
@@ -158,7 +158,7 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 		try {
 
 			st = conn.prepareStatement(
-					"UPDATE produto SET quantidade = ? WHERE IdProduto = ?");
+					"UPDATE produto SET quantidade = ? WHERE id_produto = ?");
 
 			st.setInt(1, estoqueAtual);
 			st.setInt(2, idProduto);

@@ -30,8 +30,8 @@ public class MovimentacaoDaoJDBC implements MovimentacaoDao {
 		
 		try {
 			st = conn.prepareStatement("select mv.*,  pr.*, us.* from "
-					+ "movimentacao as mv inner join produto pr on mv.idProduto = pr.idProduto inner "
-					+ "join usuario as us on mv.idUsuario = us.idUsuario ORDER BY mv.idMovimentacao asc");
+					+ "movimentacao as mv inner join produto pr on mv.id_produto = pr.id_produto inner "
+					+ "join usuario as us on mv.id_usuario = us.id_usuario ORDER BY mv.id_movimentacao asc");
 
 			rs = st.executeQuery();
 
@@ -68,7 +68,7 @@ public class MovimentacaoDaoJDBC implements MovimentacaoDao {
 		
 		try {
 			st = conn.prepareStatement("INSERT INTO movimentacao "
-					+ "(idProduto, idUsuario, tipo, valorMovimento, observacoesMovimentacao, quantidadeAnterior, dataDaTransacao) "
+					+ "(id_produto, id_usuario, tipo, valor_movimento, observacoes_movimentacao, quantidade_anterior, data_da_transacao) "
 					+ "VALUES (?, ?, ?, ?, ?, ?, ?)", java.sql.Statement.RETURN_GENERATED_KEYS);
 
 			st.setInt(1, movimentacao.getProduto().getIdProduto());
@@ -111,12 +111,12 @@ public class MovimentacaoDaoJDBC implements MovimentacaoDao {
 	private Movimentacao instantiateMovimentacao(ResultSet rs, Produto prod, Usuario user) throws SQLException {
 		
 		Movimentacao mov = new Movimentacao();
-		mov.setIdMovimentacao(rs.getInt("IdMovimentacao"));
+		mov.setIdMovimentacao(rs.getInt("Id_movimentacao"));
 		mov.setTipo(rs.getString("tipo"));
-		mov.setValorMovimento(rs.getInt("valorMovimento"));
-		mov.setObservacoesMovimentacao(rs.getString("observacoesMovimentacao"));
-		mov.setQuantidadeAnterior(rs.getInt("quantidadeAnterior"));
-		mov.setDataDaTransacao(rs.getDate("dataDaTransacao"));
+		mov.setValorMovimento(rs.getInt("valor_movimento"));
+		mov.setObservacoesMovimentacao(rs.getString("observacoes_movimentacao"));
+		mov.setQuantidadeAnterior(rs.getInt("quantidade_anterior"));
+		mov.setDataDaTransacao(rs.getDate("data_da_transacao"));
 
 		if (mov.getTipo().equalsIgnoreCase("Entrada de produtos (+)")) {
 
@@ -137,8 +137,8 @@ public class MovimentacaoDaoJDBC implements MovimentacaoDao {
 	private Produto instantiateProduto(ResultSet rs) throws SQLException {
 		
 		Produto prod = new Produto();
-		prod.setIdProduto(rs.getInt("idProduto"));
-		prod.setNome(rs.getString("nome"));
+		prod.setIdProduto(rs.getInt("id_produto"));
+		prod.setNome(rs.getString("nome_produto"));
 		prod.setDescricao(rs.getString("descricao"));
 		prod.setSetor(rs.getString("setor"));
 		prod.setCategoria(rs.getString("categoria"));
@@ -150,7 +150,7 @@ public class MovimentacaoDaoJDBC implements MovimentacaoDao {
 	private Usuario instantiateUsuario(ResultSet rs) throws SQLException {
 		
 		Usuario user = new Usuario();
-		user.setIdUsuario(rs.getInt("idUsuario"));
+		user.setIdUsuario(rs.getInt("id_usuario"));
 		user.setNome(rs.getString("nome_usuario"));
 		user.setLogin(rs.getString("login"));
 		user.setSenha(rs.getString("senha"));
