@@ -1,5 +1,6 @@
 package gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -13,8 +14,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
@@ -23,7 +26,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Usuario;
 import model.services.UsuarioService;
@@ -69,6 +75,9 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 	
 	@FXML
 	private Button btPesquisarUsuario;
+	
+	@FXML
+	private Button btAcesso;
 	
 	@FXML
 	private HBox hbox;
@@ -156,6 +165,42 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 		Alerts.showAlert("Button Pesquisar", "Não implementado", "onBtPesquisarAction", AlertType.ERROR);
 		
 	}
+	
+	@FXML
+	public void onBtAcessoAction(ActionEvent event) {
+		
+		createAcessoDialogForm("/gui/AcessoView.fxml");
+		
+	}
+
+	private void createAcessoDialogForm(String absoluteName) {
+		
+		try {
+
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			Pane pane = loader.load();
+
+			Stage produtoStage = new Stage();
+			produtoStage.setTitle("Acesso");
+			produtoStage.setScene(new Scene(pane));
+			produtoStage.setResizable(false);
+			produtoStage.initModality(Modality.APPLICATION_MODAL);
+			produtoStage.initOwner(null);
+
+			Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
+			produtoStage.getIcons().add(applicationIcon);
+
+			produtoStage.showAndWait();
+
+		} catch (IOException e) {
+
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela Acesso", e.getMessage(),
+					AlertType.ERROR);
+
+		}
+
+		
+	}
 
 	protected void editarCamposDoUsuario() {
 
@@ -179,6 +224,8 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 		}
 
 	}
+	
+	
 
 	protected void novoCamposDoUsuario() {
 

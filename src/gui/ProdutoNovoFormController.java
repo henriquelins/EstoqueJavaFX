@@ -1,5 +1,7 @@
 package gui;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,12 +13,19 @@ import gui.util.Constraints;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import model.entities.Categoria;
 import model.entities.Produto;
 import model.entities.Setor;
@@ -43,7 +52,10 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 	@FXML
 	private TextField txtQuantidade;
-
+	
+	@FXML
+	private TextField txtEnderecoDaFoto;
+	
 	@FXML
 	private ComboBox<String> comboBoxSetor;
 
@@ -57,6 +69,12 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 	private Button btSalvarProduto;
 
 	@FXML
+	private Button btFotoProduto;
+	
+	@FXML
+	private Button btVisualizarFoto;
+	
+	@FXML
 	public void onBtSalvarProdutoAction(ActionEvent event) {
 
 		setProduto(getFormData());
@@ -68,6 +86,52 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 		}
 
+	}
+
+	@FXML
+	public void onBtFotoProdutoAction(ActionEvent event) {
+
+		FileChooser chooser = new FileChooser();
+		chooser.setTitle("Escolher foto do produto");
+		File file = chooser.showOpenDialog(new Stage());
+
+	}
+	
+	@FXML
+	public void onBtVisualizarFotoAction(ActionEvent event) {
+
+		createVisualizarFotoDialogForm("/gui/VisualizarFotoView.fxml");
+
+	}
+
+
+	private void createVisualizarFotoDialogForm(String absoluteName) {
+		
+		try {
+
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			Pane pane = loader.load();
+
+			Stage produtoStage = new Stage();
+			produtoStage.setTitle("Visualizar a foto do Produto");
+			produtoStage.setScene(new Scene(pane));
+			produtoStage.setResizable(false);
+			produtoStage.initModality(Modality.APPLICATION_MODAL);
+			produtoStage.initOwner(null);
+
+			Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
+			produtoStage.getIcons().add(applicationIcon);
+
+			produtoStage.showAndWait();
+
+		} catch (IOException e) {
+
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela Sobre o aplicativo", e.getMessage(),
+					AlertType.ERROR);
+
+		}
+
+		
 	}
 
 	// Adiciona a lista um ouvinte, quando há uma modificação

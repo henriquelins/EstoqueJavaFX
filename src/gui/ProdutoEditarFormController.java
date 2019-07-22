@@ -160,8 +160,6 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 		txtQuantidade.setText(String.valueOf(produto.getQuantidade()));
 		txtAreaDescricao.setText(produto.getDescricao());
 
-		// startFields();
-
 		updateFormData();
 
 	}

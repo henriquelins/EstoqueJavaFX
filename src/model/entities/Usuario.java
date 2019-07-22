@@ -9,14 +9,19 @@ public class Usuario implements Serializable {
 	private String nome;
 	private String login;
 	private String senha;
-	
-	public Usuario() {}
+	private Acesso acesso;
 
-	public Usuario(Integer idUsuario, String nome, String login, String senha) {
+	public Usuario() {
+	}
+
+	public Usuario(Integer idUsuario, String nome, String login, String senha, Acesso acesso) {
+
 		this.idUsuario = idUsuario;
 		this.nome = nome;
 		this.login = login;
 		this.senha = senha;
+		this.acesso = acesso;
+
 	}
 
 	public Integer getIdUsuario() {
@@ -50,13 +55,20 @@ public class Usuario implements Serializable {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-	
-	
+
+	public Acesso getAcesso() {
+		return acesso;
+	}
+
+	public void setAcesso(Acesso acesso) {
+		this.acesso = acesso;
+	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((acesso == null) ? 0 : acesso.hashCode());
 		result = prime * result + ((idUsuario == null) ? 0 : idUsuario.hashCode());
 		result = prime * result + ((login == null) ? 0 : login.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
@@ -73,6 +85,11 @@ public class Usuario implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Usuario other = (Usuario) obj;
+		if (acesso == null) {
+			if (other.acesso != null)
+				return false;
+		} else if (!acesso.equals(other.acesso))
+			return false;
 		if (idUsuario == null) {
 			if (other.idUsuario != null)
 				return false;
@@ -96,17 +113,14 @@ public class Usuario implements Serializable {
 		return true;
 	}
 
-	
-	
 	@Override
 	public String toString() {
-		return "Usuario [idUsuario=" + idUsuario + ", name=" + nome + ", login=" + login + ", senha=" + senha + "]";
+		return "Usuario [idUsuario=" + idUsuario + ", nome=" + nome + ", login=" + login + ", senha=" + senha
+				+ ", acesso=" + acesso + "]";
 	}
 
 	public String usuarioLogado() {
-		return "Usuário logado: " + login + "";
+		return "Logado: " + nome + " ";
 	}
 
-
-	
 }

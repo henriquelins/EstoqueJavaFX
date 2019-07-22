@@ -2,7 +2,6 @@ package model.entities;
 
 import java.io.Serializable;
 
-
 public class Produto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -12,20 +11,25 @@ public class Produto implements Serializable {
 	private String setor;
 	private String categoria;
 	private int quantidade;
-
+	private int estoqueMinimo;
+	private Foto foto;
+	
 	public Produto() {
 	}
 
-	public Produto(Integer idProduto, String nome, String descricao, String setor, String categoria, int quantidade) {
+	public Produto(Integer idProduto, String nome, String descricao, String setor, String categoria, int quantidade,
+			int estoqueMinimo, Foto foto) {
+		
 		this.idProduto = idProduto;
 		this.nome = nome;
 		this.descricao = descricao;
 		this.setor = setor;
 		this.categoria = categoria;
 		this.quantidade = quantidade;
+		this.estoqueMinimo = estoqueMinimo;
+		this.foto = foto;
+		
 	}
-	
-	
 
 	public Integer getIdProduto() {
 		return idProduto;
@@ -75,8 +79,20 @@ public class Produto implements Serializable {
 		this.quantidade = quantidade;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public int getEstoqueMinimo() {
+		return estoqueMinimo;
+	}
+
+	public void setEstoqueMinimo(int estoqueMinimo) {
+		this.estoqueMinimo = estoqueMinimo;
+	}
+
+	public Foto getFoto() {
+		return foto;
+	}
+
+	public void setFoto(Foto foto) {
+		this.foto = foto;
 	}
 
 	@Override
@@ -85,6 +101,8 @@ public class Produto implements Serializable {
 		int result = 1;
 		result = prime * result + ((categoria == null) ? 0 : categoria.hashCode());
 		result = prime * result + ((descricao == null) ? 0 : descricao.hashCode());
+		result = prime * result + estoqueMinimo;
+		result = prime * result + ((foto == null) ? 0 : foto.hashCode());
 		result = prime * result + ((idProduto == null) ? 0 : idProduto.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		result = prime * result + quantidade;
@@ -111,6 +129,13 @@ public class Produto implements Serializable {
 				return false;
 		} else if (!descricao.equals(other.descricao))
 			return false;
+		if (estoqueMinimo != other.estoqueMinimo)
+			return false;
+		if (foto == null) {
+			if (other.foto != null)
+				return false;
+		} else if (!foto.equals(other.foto))
+			return false;
 		if (idProduto == null) {
 			if (other.idProduto != null)
 				return false;
@@ -134,9 +159,9 @@ public class Produto implements Serializable {
 	@Override
 	public String toString() {
 		return "Produto [idProduto=" + idProduto + ", nome=" + nome + ", descricao=" + descricao + ", setor=" + setor
-				+ ", categoria=" + categoria + ", quantidade=" + quantidade + "]";
+				+ ", categoria=" + categoria + ", quantidade=" + quantidade + ", estoqueMinimo=" + estoqueMinimo
+				+ ", foto=" + foto + "]";
 	}
-	
-	
+
 	
 }
