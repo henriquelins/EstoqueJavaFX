@@ -5,6 +5,7 @@ import model.dao.impl.CategoriaDaoJDBC;
 import model.dao.impl.MovimentacaoDaoJDBC;
 import model.dao.impl.ProdutoDaoJDBC;
 import model.dao.impl.SetorDaoJDBC;
+import model.dao.impl.TesteDaoJDBC;
 import model.dao.impl.UsuarioDaoJDBC;
 
 public class DaoFactory {
@@ -28,4 +29,10 @@ public class DaoFactory {
 	public static CategoriaDao createCategoriaDao() {
 		return new CategoriaDaoJDBC(DB.getConnection());
 	}
+	
+	public static TesteDao createTesteDao() {
+		return new TesteDaoJDBC(DB.getConnection());
+	}
+	
+	
 }

@@ -1,12 +1,22 @@
 package application;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.sql.Connection;
+import java.sql.SQLException;
 
+import db.DB;
+import gui.util.Alerts;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import properties.PropertiesFile;
 
 public class Main extends Application {
 
@@ -14,34 +24,92 @@ public class Main extends Application {
 
 	private static Scene dialogScene;
 
-	// public static String style = "/application/app2.css" ;
-	// public static String style = "" ;
+	private static Socket socket;
+
+	private static ServerSocket serverSocket;
+
+	private static int portSocket = 10050;
 
 	@Override
-	public void start(Stage primaryStage) {
-		try {
+	public void start(Stage primaryStage) throws SQLException {
 
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LoginView.fxml"));
-			Pane pane = loader.load();
+		Connection conn = null;
+		conn = DB.getConnection();
 
-			mainScene = new Scene(pane);
+		if (conn != null) {
+			
+			try {
 
-			// mainScene.getStylesheets().add(style);
+				// impede que seja criada uma nova instância do programa
+				portSocket = Integer.parseInt(PropertiesFile.loadPropertiesSocket().getProperty("socketPort"));
+				setServerSocket(new ServerSocket(portSocket));
+				setSocket(new Socket(InetAddress.getLocalHost().getHostAddress(), portSocket));
 
-			setUserAgentStylesheet(STYLESHEET_CASPIAN);
-			//setUserAgentStylesheet(STYLESHEET_MODENA);
-			// setUserAgentStylesheet(style);
+				try {
 
-			primaryStage.setScene(mainScene);
-			primaryStage.setResizable(false);
-			primaryStage.setTitle("Estoque Crachás");
-			primaryStage.show();
+					FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LoginView.fxml"));
+					Pane pane = loader.load();
 
-		} catch (IOException e) {
+					mainScene = new Scene(pane);
 
-			e.printStackTrace();
+					// Define o Style
+					setUserAgentStylesheet(STYLESHEET_CASPIAN);
+					// setUserAgentStylesheet(STYLESHEET_MODENA);
+
+					primaryStage.setScene(mainScene);
+					primaryStage.setResizable(false);
+					primaryStage.setTitle("Controle de Estoque");
+
+					Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
+					primaryStage.getIcons().add(applicationIcon);
+
+					primaryStage.show();
+
+				} catch (Exception e) {
+
+					Alerts.showAlert("Controle de Estoque", "Erro ao abrir a tela", e.getLocalizedMessage(),
+							AlertType.ERROR);
+
+				}
+
+			} catch (IOException e) {
+
+				Alerts.showAlert("Controle de Estoque", "Erro ao abrir o programa",
+						"Já existe uma instância do programa aberta!", AlertType.ERROR);
+
+			}
+
+		} else {
+			
+			try {
+
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ConfigurarPerpetiesDB.fxml"));
+				Pane pane = loader.load();
+
+				mainScene = new Scene(pane);
+
+				// Define o Style
+				setUserAgentStylesheet(STYLESHEET_CASPIAN);
+				// setUserAgentStylesheet(STYLESHEET_MODENA);
+
+				primaryStage.setScene(mainScene);
+				primaryStage.setResizable(false);
+				primaryStage.setTitle("Configuarar banco de dados");
+
+				Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
+				primaryStage.getIcons().add(applicationIcon);
+
+				primaryStage.show();
+
+			} catch (Exception e) {
+
+				Alerts.showAlert("Controle de Estoque", "Erro ao abrir a tela", e.getLocalizedMessage(),
+						AlertType.ERROR);
+
+			}
 
 		}
+
 	}
 
 	public static Scene getMainScene() {
@@ -60,7 +128,30 @@ public class Main extends Application {
 		Main.dialogScene = dialogScene;
 	}
 
-	public static void main(String[] args) {
-		launch(args);
+	public static Socket getSocket() {
+		return socket;
 	}
+
+	public static void setSocket(Socket socket) {
+
+		Main.socket = socket;
+
+	}
+
+	public static ServerSocket getServerSocket() {
+		return serverSocket;
+	}
+
+	public static void setServerSocket(ServerSocket serverSocket) {
+
+		Main.serverSocket = serverSocket;
+
+	}
+
+	public static void main(String[] args) {
+
+		launch(args);
+
+	}
+
 }

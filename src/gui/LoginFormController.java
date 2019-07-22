@@ -12,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.ScrollPane;
@@ -122,6 +123,10 @@ public class LoginFormController implements Initializable {
 
 			principalStage.setResizable(true);
 			principalStage.initOwner(null);
+			
+			Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
+			principalStage.getIcons().add(applicationIcon);
+			
 			principalStage.show();
 
 		} catch (IOException e) {

@@ -30,6 +30,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -256,6 +257,10 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
+			
+			Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
+			produtoStage.getIcons().add(applicationIcon);
+			
 			produtoStage.showAndWait();
 
 		} catch (IOException e) {
@@ -278,6 +283,10 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
+			
+			Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
+			produtoStage.getIcons().add(applicationIcon);
+			
 			produtoStage.showAndWait();
 
 		} catch (IOException e) {
@@ -301,11 +310,13 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 			Stage principalStage = new Stage();
 			principalStage.setTitle("Movimentação");
-
 			principalStage.setScene(new Scene(scrollPane));
-
 			principalStage.setResizable(true);
 			principalStage.initOwner(null);
+			
+			Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
+			principalStage.getIcons().add(applicationIcon);
+			
 			principalStage.showAndWait();
 			
 
@@ -339,6 +350,10 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
+			
+			Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
+			produtoStage.getIcons().add(applicationIcon);
+			
 			produtoStage.showAndWait();
 
 		} catch (IOException e) {
@@ -368,6 +383,10 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
+			
+			Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
+			produtoStage.getIcons().add(applicationIcon);
+			
 			produtoStage.showAndWait();
 
 		} catch (IOException e) {
@@ -399,6 +418,10 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
+			
+			Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
+			produtoStage.getIcons().add(applicationIcon);
+			
 			produtoStage.showAndWait();
 
 		} catch (IOException e) {
@@ -423,6 +446,10 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
+			
+			Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
+			produtoStage.getIcons().add(applicationIcon);
+			
 			produtoStage.showAndWait();
 
 		} catch (IOException e) {
@@ -445,6 +472,10 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
+			
+			Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
+			produtoStage.getIcons().add(applicationIcon);
+			
 			produtoStage.showAndWait();
 
 		} catch (IOException e) {

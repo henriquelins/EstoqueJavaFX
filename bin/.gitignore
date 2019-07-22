@@ -1,4 +1,8 @@
 /application/
+/db.properties
 /db/
 /gui/
+/imagens/
 /model/
+/properties/
+/socket.properties
