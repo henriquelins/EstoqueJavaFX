@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.VisualizarFotoFormController">
    <children>
-      <ImageView fx:id="imageView" fitHeight="200.0" fitWidth="210.0" layoutX="184.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="imageView" fitHeight="173.0" fitWidth="260.0" layoutX="86.0" layoutY="39.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../Pictures/1.jpg" />
+         </image></ImageView>
+      <TextField fx:id="txtEndereco" layoutX="87.0" layoutY="238.0" prefHeight="25.0" prefWidth="416.0" />
    </children>
 </AnchorPane>

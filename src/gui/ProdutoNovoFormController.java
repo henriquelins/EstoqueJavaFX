@@ -1,12 +1,16 @@
 package gui;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import application.Main;
 import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
@@ -35,11 +39,17 @@ import model.services.SetorService;
 
 public class ProdutoNovoFormController implements Initializable, DataChangeListener {
 
-	ProdutoService produtoService;
+	private ProdutoService produtoService;
 
-	Produto produto;
+	private Produto produto;
 
 	private PrincipalFormController principalController;
+	
+	private String local;
+	
+	private Image imageProduto;
+	
+	private File arquivo;
 
 	// Lista de ouvintes para receber alguma modificação
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
@@ -55,6 +65,18 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 	@FXML
 	private TextField txtEnderecoDaFoto;
+
+	public TextField getTxtEnderecoDaFoto() {
+
+		return txtEnderecoDaFoto;
+
+	}
+
+	public void setTxtEnderecoDaFoto(TextField txtEnderecoDaFoto) {
+
+		this.txtEnderecoDaFoto = txtEnderecoDaFoto;
+
+	}
 
 	@FXML
 	private ComboBox<String> comboBoxSetor;
@@ -90,9 +112,9 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 	@FXML
 	public void onBtFotoProdutoAction(ActionEvent event) {
-		
+
 		FileChooser chooser = new FileChooser();
-		File file = null;
+		arquivo = null;
 
 		chooser.getExtensionFilters().addAll(//
 				new FileChooser.ExtensionFilter("All Files", "*.*"), new FileChooser.ExtensionFilter("JPG", "*.jpg"),
@@ -100,16 +122,49 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 		chooser.setTitle("Escolher foto do produto");
 		
-		file = chooser.showOpenDialog(new Stage());
+		arquivo = chooser.showOpenDialog(new Stage());
+		local = arquivo.getPath();
+		imageProduto = new Image(arquivo.toURI().toString());
+		
+		InputStream converter = null;
+		byte[] bytes = new byte[(int) local.length()];
+		
+		txtEnderecoDaFoto.setText(local);
+				
+		System.out.println(byte.class.toGenericString());
+		System.out.println(arquivo);
+		System.out.println(txtEnderecoDaFoto);
+		System.out.println(local);
+		String teste = local.replace('\\', '/');
+		String teste2 = teste.replace(":/", "://");
+		
+		System.out.println(teste);
+		
+		System.out.println(teste2);		
+		
+		try {
 
-		if (file != null) {
+			converter = new FileInputStream(local);
 
-			txtEnderecoDaFoto.setText(file.getAbsolutePath());
+		} catch (FileNotFoundException e) {
 
-		} else {
+			e.printStackTrace();
+		}
+
+		int offset = 0;
+		int numRead = 0;
+		
+		try {
+
+			while (offset < bytes.length
+					&& (numRead = converter.read(bytes, offset, bytes.length - offset)) >= 0) {
+				offset += numRead;
+			}
 			
-			txtEnderecoDaFoto.setText("");
+		} catch (IOException e) {
 
+			e.printStackTrace();
+			
 		}
 
 	}
@@ -124,16 +179,17 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 	private void createVisualizarFotoDialogForm(String absoluteName) {
 
 		try {
-
+				
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
-			
+
 			VisualizarFotoFormController controller = loader.getController();
-			controller.setEndereco(txtEnderecoDaFoto.getText());
-		
+			controller.setArquivo(arquivo);
+	
+			Main.setDialogScene(new Scene(pane));
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Visualizar a foto do Produto");
-			produtoStage.setScene(new Scene(pane));
+			produtoStage.setScene(Main.getDialogScene());
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
@@ -145,7 +201,7 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 		} catch (IOException e) {
 
-			Alerts.showAlert("IO Exception", "Erro ao carregar a tela Sobre o aplicativo", e.getMessage(),
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela foto do produto", e.getMessage(),
 					AlertType.ERROR);
 
 		}
