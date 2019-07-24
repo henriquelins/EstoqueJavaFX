@@ -52,10 +52,10 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 	@FXML
 	private TextField txtQuantidade;
-	
+
 	@FXML
 	private TextField txtEnderecoDaFoto;
-	
+
 	@FXML
 	private ComboBox<String> comboBoxSetor;
 
@@ -70,10 +70,10 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 	@FXML
 	private Button btFotoProduto;
-	
+
 	@FXML
 	private Button btVisualizarFoto;
-	
+
 	@FXML
 	public void onBtSalvarProdutoAction(ActionEvent event) {
 
@@ -90,13 +90,30 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 	@FXML
 	public void onBtFotoProdutoAction(ActionEvent event) {
-
+		
 		FileChooser chooser = new FileChooser();
+		File file = null;
+
+		chooser.getExtensionFilters().addAll(//
+				new FileChooser.ExtensionFilter("All Files", "*.*"), new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+				new FileChooser.ExtensionFilter("PNG", "*.png"));
+
 		chooser.setTitle("Escolher foto do produto");
-		File file = chooser.showOpenDialog(new Stage());
+		
+		file = chooser.showOpenDialog(new Stage());
+
+		if (file != null) {
+
+			txtEnderecoDaFoto.setText(file.getAbsolutePath());
+
+		} else {
+			
+			txtEnderecoDaFoto.setText("");
+
+		}
 
 	}
-	
+
 	@FXML
 	public void onBtVisualizarFotoAction(ActionEvent event) {
 
@@ -104,14 +121,16 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 	}
 
-
 	private void createVisualizarFotoDialogForm(String absoluteName) {
-		
+
 		try {
 
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
-
+			
+			VisualizarFotoFormController controller = loader.getController();
+			controller.setEndereco(txtEnderecoDaFoto.getText());
+		
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Visualizar a foto do Produto");
 			produtoStage.setScene(new Scene(pane));
@@ -131,7 +150,6 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 		}
 
-		
 	}
 
 	// Adiciona a lista um ouvinte, quando há uma modificação
