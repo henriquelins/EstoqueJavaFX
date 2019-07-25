@@ -31,6 +31,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Categoria;
+import model.entities.Foto;
 import model.entities.Produto;
 import model.entities.Setor;
 import model.services.CategoriaService;
@@ -44,12 +45,10 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 	private Produto produto;
 
 	private PrincipalFormController principalController;
-	
-	private String local;
-	
-	private Image imageProduto;
-	
-	private File arquivo;
+
+	private static File arquivo;
+
+	private static String local;
 
 	// Lista de ouvintes para receber alguma modificação
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
@@ -121,27 +120,15 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 				new FileChooser.ExtensionFilter("PNG", "*.png"));
 
 		chooser.setTitle("Escolher foto do produto");
-		
+
 		arquivo = chooser.showOpenDialog(new Stage());
 		local = arquivo.getPath();
-		imageProduto = new Image(arquivo.toURI().toString());
-		
+
 		InputStream converter = null;
 		byte[] bytes = new byte[(int) local.length()];
-		
+
 		txtEnderecoDaFoto.setText(local);
-				
-		System.out.println(byte.class.toGenericString());
-		System.out.println(arquivo);
-		System.out.println(txtEnderecoDaFoto);
-		System.out.println(local);
-		String teste = local.replace('\\', '/');
-		String teste2 = teste.replace(":/", "://");
-		
-		System.out.println(teste);
-		
-		System.out.println(teste2);		
-		
+
 		try {
 
 			converter = new FileInputStream(local);
@@ -149,43 +136,71 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 		} catch (FileNotFoundException e) {
 
 			e.printStackTrace();
+
 		}
 
 		int offset = 0;
 		int numRead = 0;
-		
+
 		try {
 
-			while (offset < bytes.length
-					&& (numRead = converter.read(bytes, offset, bytes.length - offset)) >= 0) {
+			while (offset < bytes.length && (numRead = converter.read(bytes, offset, bytes.length - offset)) >= 0) {
 				offset += numRead;
 			}
 			
+			Foto foto = new Foto();
+			foto.setLocal(local);
+			foto.setFoto(bytes);
+			
+			produto.setFoto(foto);
+
 		} catch (IOException e) {
 
 			e.printStackTrace();
-			
+
 		}
 
+	}
+
+	public static String getLocal() {
+		return local;
+	}
+
+	public static void setLocal(String local) {
+		ProdutoNovoFormController.local = local;
+	}
+
+	public static File getArquivo() {
+		return arquivo;
+	}
+
+	public static void setArquivo(File arquivo) {
+		ProdutoNovoFormController.arquivo = arquivo;
 	}
 
 	@FXML
 	public void onBtVisualizarFotoAction(ActionEvent event) {
 
-		createVisualizarFotoDialogForm("/gui/VisualizarFotoView.fxml");
+		if (!txtEnderecoDaFoto.getText().equals("")) {
+
+			createVisualizarFotoDialogForm("/gui/VisualizarFotoView.fxml");
+
+		} else {
+
+			Alerts.showAlert("Visualizar foto", "Selecionar a foto do produto", "Primeiro selecione um imagem",
+					AlertType.ERROR);
+
+		}
 
 	}
 
 	private void createVisualizarFotoDialogForm(String absoluteName) {
 
 		try {
-				
+
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 
-			VisualizarFotoFormController controller = loader.getController();
-			controller.setArquivo(arquivo);
-	
 			Main.setDialogScene(new Scene(pane));
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle("Visualizar a foto do Produto");
@@ -267,6 +282,8 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 	private void initializeNodes() {
 
+		local = new String();
+
 		comboBoxSetor.setItems(FXCollections.observableArrayList(listaSetor()));
 		comboBoxCategoria.setItems(FXCollections.observableArrayList(listaCategoria()));
 
@@ -321,6 +338,13 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 			txtAreaDescricao.requestFocus();
 
 			produto = null;
+
+		} else if (txtEnderecoDaFoto.getText() == null || txtEnderecoDaFoto.getText().trim().equals("")) {
+
+			Alerts.showAlert("Novo Produto", null, "Escolha a foto do produto", AlertType.INFORMATION);
+
+			produto = null;
+			
 
 		} else {
 
