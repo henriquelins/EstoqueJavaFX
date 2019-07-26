@@ -20,22 +20,22 @@
       <AnchorPane prefHeight="300.0" prefWidth="600.0">
          <children>
             <Label layoutX="112.0" layoutY="20.0" text="Nome" />
+            <TextField fx:id="txtIdProduto" editable="false" layoutX="34.0" layoutY="45.0" prefHeight="25.0" prefWidth="63.0" />
             <TextField fx:id="txtNome" layoutX="112.0" layoutY="45.0" prefHeight="25.0" prefWidth="268.0" />
             <Label layoutX="486.0" layoutY="20.0" text="Estoq. mínimo" />
             <TextField fx:id="txtQuantidade" layoutX="393.0" layoutY="45.0" prefHeight="25.0" prefWidth="80.0" />
-            <TextArea fx:id="txtAreaDescricao" layoutX="256.0" layoutY="106.0" prefHeight="87.0" prefWidth="311.0" />
-            <Label layoutX="256.0" layoutY="83.0" text="Descrição" />
-            <Label layoutX="34.0" layoutY="20.0" text="Id" />
-            <TextField fx:id="txtIdProduto" editable="false" layoutX="34.0" layoutY="45.0" prefHeight="25.0" prefWidth="63.0" />
+            <TextField fx:id="txtEstoqueMinimo" layoutX="486.0" layoutY="45.0" prefHeight="25.0" prefWidth="80.0" />
             <ComboBox fx:id="comboBoxSetor" layoutX="34.0" layoutY="105.0" prefHeight="25.0" prefWidth="196.0" promptText="Selecione o setor..." />
             <ComboBox fx:id="comboBoxCategoria" layoutX="34.0" layoutY="166.0" prefHeight="25.0" prefWidth="196.0" promptText="Selecione a categoria..." />
-            <Label layoutX="34.0" layoutY="83.0" text="Setor" />
-            <Label layoutX="34.0" layoutY="142.0" text="Categoria" />
-            <TextField fx:id="txtQuantidade1" layoutX="486.0" layoutY="45.0" prefHeight="25.0" prefWidth="80.0" />
-            <Label layoutX="391.0" layoutY="20.0" text="Quantidade" />
-            <Label layoutX="34.0" layoutY="207.0" text="Endereço da foto" />
+            <TextArea fx:id="txtAreaDescricao" layoutX="256.0" layoutY="106.0" prefHeight="87.0" prefWidth="311.0" />
             <TextField fx:id="txtEnderecoDaFoto" editable="false" layoutX="34.0" layoutY="232.0" prefHeight="25.0" prefWidth="409.0" promptText="c:\temp\arquivo.jpg" />
             <Button fx:id="btVisualizarFoto" layoutX="456.0" layoutY="232.0" mnemonicParsing="false" onAction="#onBtVisualizarFotoAction" prefHeight="25.0" prefWidth="111.0" text="Visualizar foto" />
+            <Label layoutX="256.0" layoutY="83.0" text="Descrição" />
+            <Label layoutX="34.0" layoutY="20.0" text="Id" />
+            <Label layoutX="34.0" layoutY="83.0" text="Setor" />
+            <Label layoutX="34.0" layoutY="142.0" text="Categoria" />
+            <Label layoutX="391.0" layoutY="20.0" text="Quantidade" />
+            <Label layoutX="34.0" layoutY="207.0" text="Endereço da foto" />
          </children>
       </AnchorPane>
    </children>

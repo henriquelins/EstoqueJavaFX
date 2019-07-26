@@ -29,7 +29,7 @@ public class DaoFactory {
 	public static CategoriaDao createCategoriaDao() {
 		return new CategoriaDaoJDBC(DB.getConnection());
 	}
-	
+		
 	public static TesteDao createTesteDao() {
 		return new TesteDaoJDBC(DB.getConnection());
 	}

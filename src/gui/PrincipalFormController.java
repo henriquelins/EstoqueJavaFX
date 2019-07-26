@@ -104,7 +104,10 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 	@FXML
 	private TableColumn<Produto, Produto> tableColumnREMOVE;
-
+	
+	@FXML
+	private TableColumn<Produto, Produto> tableColumnSHOW;
+	
 	@FXML
 	private Button btNovo;
 
@@ -254,8 +257,11 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		initMovimentacaoButton();
 		initEditButton();
 		initRemoveButton();
+		initShowButton();
 
 	}
+
+	
 
 	@Override
 	public void onDataChanged() {
@@ -346,6 +352,39 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 		}
 
+	}
+	
+	private void createProdutoShowDialogForm(Produto prod, String absoluteName) {
+
+		try {
+
+			setProduto(prod);
+
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			Pane pane = loader.load();
+
+			ProdutoShowFormController controller = loader.getController();
+			controller.setProduto(produto);
+			
+			Main.setDialogScene(new Scene(pane));
+			Stage produtoStage = new Stage();
+			produtoStage.setTitle("Detalhes do produto");
+			produtoStage.setScene(Main.getDialogScene());
+			produtoStage.setResizable(false);
+			produtoStage.initModality(Modality.APPLICATION_MODAL);
+			produtoStage.initOwner(null);
+
+			Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
+			produtoStage.getIcons().add(applicationIcon);
+
+			produtoStage.showAndWait();
+
+		} catch (IOException e) {
+
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela detelhes do produto", e.getMessage(),
+					AlertType.ERROR);
+
+		}
 	}
 
 	private void createProdutoEditarDialogForm(Produto prod, String absoluteName) {
@@ -602,6 +641,31 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 			}
 		}
+	}
+	
+private void initShowButton() {
+	
+	tableColumnSHOW.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+	tableColumnSHOW.setCellFactory(param -> new TableCell<Produto, Produto>() {
+
+		private final Button button = new Button("Detalhes");
+
+		@Override
+		protected void updateItem(Produto prod, boolean empty) {
+
+			super.updateItem(prod, empty);
+
+			if (prod == null) {
+				setGraphic(null);
+				return;
+			}
+
+			setGraphic(button);
+			button.setOnAction(event -> createProdutoShowDialogForm(prod, "/gui/ProdutoShowView.fxml"));
+
+		}
+	});
+		
 	}
 
 }

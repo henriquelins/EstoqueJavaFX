@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.PrincipalFormController">
+<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1021.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.PrincipalFormController">
    <content>
       <VBox alignment="CENTER" prefHeight="600.0" prefWidth="1000.0">
          <children>
@@ -56,17 +56,18 @@
                   </AnchorPane>
               </items>
             </ToolBar>
-            <TableView fx:id="tableViewProduto" VBox.vgrow="SOMETIMES">
+            <TableView fx:id="tableViewProduto" prefHeight="492.0" prefWidth="1019.0" VBox.vgrow="SOMETIMES">
               <columns>
                 <TableColumn fx:id="tableColumnId" editable="false" prefWidth="30.0" style="-fx-alignment: CENTER;" text="Id" />
                   <TableColumn fx:id="tableColumnNome" editable="false" prefWidth="160.0" style="-fx-alignment: CENTER;" text="Nome" />
                   <TableColumn fx:id="tableColumnDescricao" editable="false" prefWidth="200.0" style="-fx-alignment: CENTER;" text="Descrição" />
                   <TableColumn fx:id="tableColumnSetor" prefWidth="120.0" style="-fx-alignment: CENTER;" text="Setor" />
                   <TableColumn fx:id="tableColumnCategoria" prefWidth="120.0" style="-fx-alignment: CENTER;" text="Categoria" />
-                  <TableColumn fx:id="tableColumnQuantidade" editable="false" style="-fx-alignment: CENTER;" text="Quantidade" />
-                  <TableColumn fx:id="tableColumnMOVIMENTACAO" prefWidth="120.0" style="-fx-alignment: CENTER;" />
+                  <TableColumn fx:id="tableColumnQuantidade" editable="false" style="-fx-alignment: CENTER;" text="Saldo Atual" />
+                  <TableColumn fx:id="tableColumnMOVIMENTACAO" prefWidth="114.0" style="-fx-alignment: CENTER;" />
                   <TableColumn fx:id="tableColumnEDIT" prefWidth="60.0" style="-fx-alignment: CENTER;" />
                   <TableColumn fx:id="tableColumnREMOVE" prefWidth="60.0" style="-fx-alignment: CENTER;" />
+                  <TableColumn fx:id="tableColumnSHOW" prefWidth="74.0" style="-fx-alignment: CENTER;" />
               </columns>
             </TableView>
             <ToolBar prefHeight="40.0" prefWidth="200.0">

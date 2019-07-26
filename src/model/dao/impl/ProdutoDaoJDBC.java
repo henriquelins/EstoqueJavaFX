@@ -10,6 +10,8 @@ import java.util.List;
 import db.DB;
 import db.DbException;
 import db.DbIntegrityException;
+import gui.util.Alerts;
+import javafx.scene.control.Alert.AlertType;
 import model.dao.ProdutoDao;
 import model.entities.Produto;
 
@@ -26,6 +28,9 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
+
+			st = conn.prepareStatement("SELECT * FROM foto WHERE id_foto = ?");
+
 			st = conn.prepareStatement("SELECT * FROM produto WHERE id_produto = ?");
 			st.setInt(1, id);
 			rs = st.executeQuery();
@@ -44,7 +49,7 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			throw new DbException(e.getMessage());
 		} finally {
 			DB.closeStatement(st);
-			
+
 		}
 	}
 
@@ -73,16 +78,22 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			throw new DbException(e.getMessage());
 		} finally {
 			DB.closeStatement(st);
-			
+
 		}
 	}
 
 	@Override
 	public void insert(Produto produto) {
+
 		PreparedStatement st = null;
+		ResultSet rs = null;
+		int id = 0;
+
 		try {
+
 			st = conn.prepareStatement(
-					"INSERT INTO produto (nome_produto, descricao, setor, categoria, quantidade)" + " VALUES (?, ?, ? ,?, ?)",
+					"INSERT INTO produto (nome_produto, descricao, setor, categoria, quantidade, estoque_minimo)"
+							+ " VALUES (?, ?, ? ,?, ?, ?)",
 					java.sql.Statement.RETURN_GENERATED_KEYS);
 
 			st.setString(1, produto.getNome());
@@ -90,24 +101,38 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			st.setString(3, produto.getSetor());
 			st.setString(4, produto.getCategoria());
 			st.setInt(5, produto.getQuantidade());
+			st.setInt(6, produto.getEstoqueMinimo());
 
 			int rowsAffected = st.executeUpdate();
 
 			if (rowsAffected > 0) {
-				ResultSet rs = st.getGeneratedKeys();
+
+				rs = st.getGeneratedKeys();
+
 				if (rs.next()) {
-					int id = rs.getInt(1);
+
+					id = rs.getInt(1);
 					produto.setIdProduto(id);
+
 				}
-				DB.closeResultSet(rs);
+
+				insertFoto(produto);
+
 			} else {
-				throw new DbException("Unexpected error! No rows affected!");
+
+				new DbException("Unexpected error! No rows affected!");
+
 			}
+
 		} catch (SQLException e) {
+
 			throw new DbException(e.getMessage());
+
 		} finally {
+
 			DB.closeStatement(st);
-			
+			DB.closeResultSet(rs);
+
 		}
 	}
 
@@ -131,7 +156,7 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			throw new DbException(e.getMessage());
 		} finally {
 			DB.closeStatement(st);
-			
+
 		}
 	}
 
@@ -143,12 +168,12 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 
 			st.setInt(1, id);
 
-			st.executeUpdate();	
+			st.executeUpdate();
 		} catch (SQLException e) {
 			throw new DbIntegrityException(e.getMessage());
 		} finally {
 			DB.closeStatement(st);
-			
+
 		}
 	}
 
@@ -157,20 +182,58 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 		PreparedStatement st = null;
 		try {
 
-			st = conn.prepareStatement(
-					"UPDATE produto SET quantidade = ? WHERE id_produto = ?");
+			st = conn.prepareStatement("UPDATE produto SET quantidade = ? WHERE id_produto = ?");
 
 			st.setInt(1, estoqueAtual);
 			st.setInt(2, idProduto);
-			
 
 			st.executeUpdate();
 		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
 		} finally {
 			DB.closeStatement(st);
-			
+
 		}
-		
+
+	}
+
+	@Override
+	public void insertFoto(Produto produto) {
+
+		PreparedStatement st = null;
+
+		try {
+			st = conn.prepareStatement("INSERT INTO foto (id_produto, foto, local)" + " VALUES (?, ?, ?)");
+
+			st.setInt(1, produto.getIdProduto());
+			st.setBytes(2, produto.getFoto().getFoto());
+			st.setString(3, produto.getFoto().getLocal());
+
+			int rowsAffected = st.executeUpdate();
+
+			if (rowsAffected > 0) {
+
+				Alerts.showAlert("Inserir foto", null, "ok", AlertType.ERROR);
+
+			}
+
+		} catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		} finally {
+			DB.closeStatement(st);
+		}
+
+	}
+
+	@Override
+	public void updateFoto(Produto foto) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void deleteByIdFoto(Integer id) {
+		// TODO Auto-generated method stub
+
 	}
 }

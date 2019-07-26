@@ -42,9 +42,13 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 	private ProdutoService produtoService;
 
-	private Produto produto;
+	private static Produto produto;
+
+	private static Foto foto;
 
 	private PrincipalFormController principalController;
+
+	private byte[] bytes;
 
 	private static File arquivo;
 
@@ -63,19 +67,10 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 	private TextField txtQuantidade;
 
 	@FXML
+	private TextField txtEstoqueMinimo;
+
+	@FXML
 	private TextField txtEnderecoDaFoto;
-
-	public TextField getTxtEnderecoDaFoto() {
-
-		return txtEnderecoDaFoto;
-
-	}
-
-	public void setTxtEnderecoDaFoto(TextField txtEnderecoDaFoto) {
-
-		this.txtEnderecoDaFoto = txtEnderecoDaFoto;
-
-	}
 
 	@FXML
 	private ComboBox<String> comboBoxSetor;
@@ -122,44 +117,62 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 		chooser.setTitle("Escolher foto do produto");
 
 		arquivo = chooser.showOpenDialog(new Stage());
-		local = arquivo.getPath();
 
-		InputStream converter = null;
-		byte[] bytes = new byte[(int) local.length()];
+		if (arquivo.getAbsolutePath() != null) {
 
-		txtEnderecoDaFoto.setText(local);
+			local = arquivo.getPath();
 
-		try {
+			InputStream converter = null;
+			bytes = new byte[(int) local.length()];
 
-			converter = new FileInputStream(local);
+			txtEnderecoDaFoto.setText(local);
 
-		} catch (FileNotFoundException e) {
+			try {
 
-			e.printStackTrace();
+				converter = new FileInputStream(local);
 
-		}
+			} catch (FileNotFoundException e) {
 
-		int offset = 0;
-		int numRead = 0;
+				e.printStackTrace();
 
-		try {
-
-			while (offset < bytes.length && (numRead = converter.read(bytes, offset, bytes.length - offset)) >= 0) {
-				offset += numRead;
 			}
-			
-			Foto foto = new Foto();
-			foto.setLocal(local);
-			foto.setFoto(bytes);
-			
-			produto.setFoto(foto);
 
-		} catch (IOException e) {
+			int offset = 0;
+			int numRead = 0;
 
-			e.printStackTrace();
+			try {
+
+				while (offset < bytes.length && (numRead = converter.read(bytes, offset, bytes.length - offset)) >= 0) {
+					offset += numRead;
+				}
+
+			} catch (IOException e) {
+
+				e.printStackTrace();
+
+			}
+
+			Foto fot = new Foto();
+			fot.setLocal(local);
+			fot.setFoto(bytes);
+
+			setfoto(fot);
+
+			Produto prod = new Produto();
+			prod.setFoto(fot);
+
+			setProduto(prod);
 
 		}
 
+	}
+
+	public static Foto getFoto() {
+		return foto;
+	}
+
+	public static void setfoto(Foto foto) {
+		ProdutoNovoFormController.foto = foto;
 	}
 
 	public static String getLocal() {
@@ -225,7 +238,9 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 	// Adiciona a lista um ouvinte, quando há uma modificação
 	public void subscribeDataChangeListener(DataChangeListener listener) {
+
 		dataChangeListeners.add(listener);
+
 	}
 
 	// Função que faz a atualização da tabela
@@ -242,7 +257,9 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 	}
 
 	public void setProduto(Produto produto) {
-		this.produto = produto;
+
+		ProdutoNovoFormController.produto = produto;
+
 	}
 
 	private List<String> listaSetor() {
@@ -282,15 +299,16 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 	private void initializeNodes() {
 
-		local = new String();
-
 		comboBoxSetor.setItems(FXCollections.observableArrayList(listaSetor()));
 		comboBoxCategoria.setItems(FXCollections.observableArrayList(listaCategoria()));
 
 		produtoService = new ProdutoService();
 		produto = new Produto();
+		foto = new Foto();
+		local = new String();
 
 		Constraints.setTextFieldInteger(txtQuantidade);
+		Constraints.setTextFieldInteger(txtEstoqueMinimo);
 
 		principalController = new PrincipalFormController();
 	}
@@ -298,10 +316,11 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 	private Produto getFormData() {
 
 		Produto produto = new Produto();
+		Foto foto = new Foto();
 
 		if (txtNome.getText() == null || txtNome.getText().trim().equals("")) {
 
-			Alerts.showAlert("Novo Produto", null, "Digite o nome do Produto", AlertType.INFORMATION);
+			Alerts.showAlert("Novo Produto", "Campo obrigatório", "Digite o nome do Produto", AlertType.INFORMATION);
 
 			txtNome.requestFocus();
 
@@ -309,15 +328,24 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 		} else if (txtQuantidade.getText() == null || txtQuantidade.getText().trim().equals("")) {
 
-			Alerts.showAlert("Novo Produto", null, "Digite a quantidade inicial do produto", AlertType.INFORMATION);
+			Alerts.showAlert("Novo Produto", "Campo obrigatório", "Digite a quantidade inicial do produto",
+					AlertType.INFORMATION);
 
 			txtQuantidade.requestFocus();
 
 			produto = null;
 
+		} else if (txtEstoqueMinimo.getText() == null || txtEstoqueMinimo.getText().trim().equals("")) {
+
+			Alerts.showAlert("Novo Produto", "Campo obrigatório", "Digite o estoque mínimo", AlertType.INFORMATION);
+
+			txtAreaDescricao.requestFocus();
+
+			produto = null;
+
 		} else if (comboBoxSetor.getSelectionModel().getSelectedItem() == null) {
 
-			Alerts.showAlert("Novo Produto", null, "Selecione o setor", AlertType.INFORMATION);
+			Alerts.showAlert("Novo Produto", "Campos obrigatório", "Selecione o setor", AlertType.INFORMATION);
 
 			comboBoxSetor.requestFocus();
 
@@ -325,7 +353,7 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 		} else if (comboBoxCategoria.getSelectionModel().getSelectedItem() == null) {
 
-			Alerts.showAlert("Novo Produto", null, "Selecione a categoria", AlertType.INFORMATION);
+			Alerts.showAlert("Novo Produto", "Campo obrigatório", "Selecione a categoria", AlertType.INFORMATION);
 
 			comboBoxCategoria.requestFocus();
 
@@ -333,7 +361,8 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 		} else if (txtAreaDescricao.getText() == null || txtAreaDescricao.getText().trim().equals("")) {
 
-			Alerts.showAlert("Novo Produto", null, "Digite a descrição do produto", AlertType.INFORMATION);
+			Alerts.showAlert("Novo Produto", "Campo obrigatório", "Digite a descrição do produto",
+					AlertType.INFORMATION);
 
 			txtAreaDescricao.requestFocus();
 
@@ -341,18 +370,22 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 		} else if (txtEnderecoDaFoto.getText() == null || txtEnderecoDaFoto.getText().trim().equals("")) {
 
-			Alerts.showAlert("Novo Produto", null, "Escolha a foto do produto", AlertType.INFORMATION);
+			Alerts.showAlert("Novo Produto", "Campo obrigatório", "Escolha a foto do produto", AlertType.INFORMATION);
 
 			produto = null;
-			
 
 		} else {
 
+			foto.setLocal(txtEnderecoDaFoto.getText());
+			foto.setFoto(bytes);
+
 			produto.setNome(txtNome.getText());
 			produto.setQuantidade(Integer.valueOf(txtQuantidade.getText()));
+			produto.setEstoqueMinimo(Integer.valueOf(txtEstoqueMinimo.getText()));
 			produto.setSetor(String.valueOf(comboBoxSetor.getSelectionModel().getSelectedItem()));
 			produto.setCategoria(String.valueOf(comboBoxCategoria.getSelectionModel().getSelectedItem()));
 			produto.setDescricao(txtAreaDescricao.getText());
+			produto.setFoto(foto);
 
 		}
 
@@ -364,6 +397,18 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 	public void onDataChanged() {
 
 		principalController.updateTableView();
+
+	}
+
+	public TextField getTxtEnderecoDaFoto() {
+
+		return txtEnderecoDaFoto;
+
+	}
+
+	public void setTxtEnderecoDaFoto(TextField txtEnderecoDaFoto) {
+
+		this.txtEnderecoDaFoto = txtEnderecoDaFoto;
 
 	}
 
