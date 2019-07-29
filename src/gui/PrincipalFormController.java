@@ -53,6 +53,8 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	private ProdutoService service;
 
 	private Movimentacao movimentacao;
+	
+	private ProdutoShowFormController controllerShow;
 
 	@FXML
 	private MenuBar menuBarPrincipal;
@@ -104,10 +106,10 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 	@FXML
 	private TableColumn<Produto, Produto> tableColumnREMOVE;
-	
+
 	@FXML
 	private TableColumn<Produto, Produto> tableColumnSHOW;
-	
+
 	@FXML
 	private Button btNovo;
 
@@ -175,14 +177,75 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	@FXML
 	public void onBtPesquisarAction(ActionEvent event) {
 
-		Alerts.showAlert("Button Pesquisar", "Não implementado", "onBtPesquisarAction", AlertType.ERROR);
+		String nomeProduto = "";
+
+		if (txtPesquisar.getText() == null || txtPesquisar.getText().trim().equals("")) {
+
+			Alerts.showAlert("Pesquisar produto", "Campo obrigatório para pesquisar", "Digite o nome do produto",
+					AlertType.ERROR);
+
+		} else {
+
+			nomeProduto = txtPesquisar.getText();
+			listaProdutos = FXCollections.observableArrayList(service.PesquisarNomeProduto(nomeProduto));
+
+			if (listaProdutos.isEmpty() == true) {
+
+				Alerts.showAlert("Pesquisar produto", "Lista vazia", "O produto não foi encontrado", AlertType.ERROR);
+
+			}
+
+			updateTableView();
+			updatePesquisa();
+
+		}
 
 	}
 
 	@FXML
 	public void onCbPesquisarAction(ActionEvent event) {
 
-		Alerts.showAlert("Button Pesquisar", "Não implementado", "onBtPesquisarAction", AlertType.ERROR);
+		String nomeSetor = "";
+
+		if (cbPesquisaSetor.getSelectionModel().getSelectedItem() == null
+				|| cbPesquisaSetor.getSelectionModel().getSelectedItem().equals("Selecione o setor...")) {
+
+			Alerts.showAlert("Mostrar setor", "Campo obrigatório para pesquisar", "Selecione o setor", AlertType.ERROR);
+
+		} else {
+
+			if (cbPesquisaSetor.getSelectionModel().getSelectedItem().equals("Todos...")) {
+
+				listaProdutos = FXCollections.observableArrayList(service.findAll());
+
+				if (listaProdutos.isEmpty() == true) {
+
+					Alerts.showAlert("Pesquisar produto", "Lista vazia", "Produtos não encontrados", AlertType.ERROR);
+
+				}
+
+				updateTableView();
+				updatePesquisa();
+
+			} else {
+
+				nomeSetor = cbPesquisaSetor.getSelectionModel().getSelectedItem();
+				listaProdutos = FXCollections.observableArrayList(service.PesquisarNomeSetor(nomeSetor));
+
+				if (listaProdutos.isEmpty() == true) {
+
+					Alerts.showAlert("Pesquisar produto", "Lista vazia", "O setor não foi encontrado", AlertType.ERROR);
+
+				}
+
+				updateTableView();
+				updatePesquisa();
+
+			}
+
+		}
+
+		cbPesquisaSetor.setPromptText("Selecione o setor...");
 
 	}
 
@@ -203,11 +266,13 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		this.service = service;
 
 	}
-	
+
 	private List<String> listaSetor() {
 
 		SetorService setorService = new SetorService();
 		List<String> listaSetor = new ArrayList<>();
+
+		listaSetor.add("Todos...");
 
 		for (Setor setor : setorService.findAllNome()) {
 
@@ -226,8 +291,6 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	}
 
 	private void initializeNodes() {
-		
-		cbPesquisaSetor.setItems(FXCollections.observableArrayList(listaSetor()));
 
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("idProduto"));
 		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("Nome"));
@@ -242,6 +305,9 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		labelLogado.setText(LoginFormController.usuarioLogado());
 		service = new ProdutoService();
 		movimentacao = new Movimentacao();
+	
+		cbPesquisaSetor.setItems(FXCollections.observableArrayList(listaSetor()));
+
 		updateTableView();
 
 	}
@@ -252,7 +318,6 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			throw new IllegalStateException("Service está nulo");
 		}
 
-		listaProdutos = FXCollections.observableArrayList(service.findAll());
 		tableViewProduto.setItems(listaProdutos);
 		initMovimentacaoButton();
 		initEditButton();
@@ -261,7 +326,12 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 	}
 
-	
+	public void updatePesquisa() {
+
+		txtPesquisar.setText("");
+		txtPesquisar.requestFocus();
+
+	}
 
 	@Override
 	public void onDataChanged() {
@@ -353,7 +423,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		}
 
 	}
-	
+
 	private void createProdutoShowDialogForm(Produto prod, String absoluteName) {
 
 		try {
@@ -362,9 +432,6 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
-
-			ProdutoShowFormController controller = loader.getController();
-			controller.setProduto(produto);
 			
 			Main.setDialogScene(new Scene(pane));
 			Stage produtoStage = new Stage();
@@ -378,7 +445,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			produtoStage.getIcons().add(applicationIcon);
 
 			produtoStage.showAndWait();
-
+			
 		} catch (IOException e) {
 
 			Alerts.showAlert("IO Exception", "Erro ao carregar a tela detelhes do produto", e.getMessage(),
@@ -572,6 +639,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	}
 
 	private void initEditButton() {
+		
 		tableColumnEDIT.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
 		tableColumnEDIT.setCellFactory(param -> new TableCell<Produto, Produto>() {
 
@@ -632,6 +700,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			try {
 
 				service.remove(prod);
+				listaProdutos = FXCollections.observableArrayList(service.findAll());
 				updateTableView();
 
 			} catch (DbIntegrityException e) {
@@ -642,30 +711,30 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			}
 		}
 	}
-	
-private void initShowButton() {
-	
-	tableColumnSHOW.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-	tableColumnSHOW.setCellFactory(param -> new TableCell<Produto, Produto>() {
 
-		private final Button button = new Button("Detalhes");
+	private void initShowButton() {
 
-		@Override
-		protected void updateItem(Produto prod, boolean empty) {
+		tableColumnSHOW.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tableColumnSHOW.setCellFactory(param -> new TableCell<Produto, Produto>() {
 
-			super.updateItem(prod, empty);
+			private final Button button = new Button("Detalhes");
 
-			if (prod == null) {
-				setGraphic(null);
-				return;
+			@Override
+			protected void updateItem(Produto prod, boolean empty) {
+				
+				super.updateItem(prod, empty);
+				
+				if (prod == null) {
+					setGraphic(null);
+					return;
+				}
+
+				setGraphic(button);
+				button.setOnAction(event -> createProdutoShowDialogForm(prod, "/gui/ProdutoShowView.fxml"));
+
 			}
+		});
 
-			setGraphic(button);
-			button.setOnAction(event -> createProdutoShowDialogForm(prod, "/gui/ProdutoShowView.fxml"));
-
-		}
-	});
-		
 	}
 
 }

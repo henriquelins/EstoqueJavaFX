@@ -13,6 +13,7 @@ import db.DbIntegrityException;
 import gui.util.Alerts;
 import javafx.scene.control.Alert.AlertType;
 import model.dao.ProdutoDao;
+import model.entities.Foto;
 import model.entities.Produto;
 
 public class ProdutoDaoJDBC implements ProdutoDao {
@@ -35,6 +36,7 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			st.setInt(1, id);
 			rs = st.executeQuery();
 			if (rs.next()) {
+
 				Produto produto = new Produto();
 				produto.setIdProduto(rs.getInt("id_produto"));
 				produto.setNome(rs.getString("nome_produto"));
@@ -42,8 +44,11 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 				produto.setSetor(rs.getString("setor"));
 				produto.setCategoria(rs.getString("categoria"));
 				produto.setQuantidade(rs.getInt("quantidade"));
+
 				return produto;
+
 			}
+
 			return null;
 		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
@@ -55,31 +60,61 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 
 	@Override
 	public List<Produto> findAll() {
+
 		PreparedStatement st = null;
 		ResultSet rs = null;
+
 		try {
-			st = conn.prepareStatement("SELECT * FROM produto ORDER BY id_produto");
+
+			conn.setAutoCommit(false);
+
+			st = conn.prepareStatement("SELECT * FROM produto as pr inner join foto as ft on pr.id_produto = ft.id_produto order by pr.id_produto");
 			rs = st.executeQuery();
 
 			List<Produto> list = new ArrayList<>();
 
 			while (rs.next()) {
+
 				Produto produto = new Produto();
+				Foto foto = new Foto();
+
 				produto.setIdProduto(rs.getInt("id_produto"));
 				produto.setNome(rs.getString("nome_produto"));
 				produto.setDescricao(rs.getString("descricao"));
 				produto.setSetor(rs.getString("setor"));
 				produto.setCategoria(rs.getString("categoria"));
 				produto.setQuantidade(rs.getInt("quantidade"));
+
+				foto.setIdFoto(rs.getInt("id_foto"));
+				foto.setFoto(rs.getBytes("foto"));
+				foto.setLocal(rs.getString("local"));
+
+				produto.setFoto(foto);
 				list.add(produto);
 			}
+
+			conn.commit();
+
 			return list;
+
 		} catch (SQLException e) {
-			throw new DbException(e.getMessage());
+
+			try {
+
+				conn.rollback();
+				throw new DbException("Transaction rolled back. Cause by: " + e.getLocalizedMessage());
+
+			} catch (SQLException e1) {
+
+				throw new DbException("Error trying to rollback. Cause by: " + e.getLocalizedMessage());
+			}
+
 		} finally {
+
 			DB.closeStatement(st);
 
 		}
+
 	}
 
 	@Override
@@ -90,6 +125,8 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 		int id = 0;
 
 		try {
+
+			conn.setAutoCommit(false);
 
 			st = conn.prepareStatement(
 					"INSERT INTO produto (nome_produto, descricao, setor, categoria, quantidade, estoque_minimo)"
@@ -118,6 +155,8 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 
 				insertFoto(produto);
 
+				conn.commit();
+
 			} else {
 
 				new DbException("Unexpected error! No rows affected!");
@@ -126,7 +165,15 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 
 		} catch (SQLException e) {
 
-			throw new DbException(e.getMessage());
+			try {
+
+				conn.rollback();
+				throw new DbException("Transaction rolled back. Cause by: " + e.getLocalizedMessage());
+
+			} catch (SQLException e1) {
+
+				throw new DbException("Error trying to rollback. Cause by: " + e.getLocalizedMessage());
+			}
 
 		} finally {
 
@@ -235,5 +282,127 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 	public void deleteByIdFoto(Integer id) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public List<Produto> findNomeProduto(String nomeProduto) {
+
+		PreparedStatement st = null;
+		ResultSet rs = null;
+
+		try {
+
+			conn.setAutoCommit(false);
+
+			st = conn.prepareStatement(
+					"SELECT * FROM produto as pr inner join foto as ft on pr.id_produto = ft.id_produto where pr.nome_produto like ? order by pr.id_produto");
+			st.setString(1, "%" + nomeProduto + "%");
+			rs = st.executeQuery();
+
+			List<Produto> list = new ArrayList<>();
+
+			while (rs.next()) {
+
+				Produto produto = new Produto();
+				Foto foto = new Foto();
+
+				produto.setIdProduto(rs.getInt("id_produto"));
+				produto.setNome(rs.getString("nome_produto"));
+				produto.setDescricao(rs.getString("descricao"));
+				produto.setSetor(rs.getString("setor"));
+				produto.setCategoria(rs.getString("categoria"));
+				produto.setQuantidade(rs.getInt("quantidade"));
+
+				foto.setIdFoto(rs.getInt("id_foto"));
+				foto.setFoto(rs.getBytes("foto"));
+				foto.setLocal(rs.getString("local"));
+
+				produto.setFoto(foto);
+				list.add(produto);
+			}
+
+			conn.commit();
+
+			return list;
+
+		} catch (SQLException e) {
+
+			try {
+
+				conn.rollback();
+				throw new DbException("Transaction rolled back. Cause by: " + e.getLocalizedMessage());
+
+			} catch (SQLException e1) {
+
+				throw new DbException("Error trying to rollback. Cause by: " + e.getLocalizedMessage());
+			}
+
+		} finally {
+
+			DB.closeStatement(st);
+
+		}
+
+	}
+
+	@Override
+	public List<Produto> findNomeSetor(String nomeSetor) {
+		
+		PreparedStatement st = null;
+		ResultSet rs = null;
+
+		try {
+
+			conn.setAutoCommit(false);
+
+			st = conn.prepareStatement(
+					"SELECT * FROM produto as pr inner join foto as ft on pr.id_produto = ft.id_produto where pr.setor = ? order by pr.id_produto");
+			st.setString(1, nomeSetor );
+			rs = st.executeQuery();
+
+			List<Produto> list = new ArrayList<>();
+
+			while (rs.next()) {
+
+				Produto produto = new Produto();
+				Foto foto = new Foto();
+
+				produto.setIdProduto(rs.getInt("id_produto"));
+				produto.setNome(rs.getString("nome_produto"));
+				produto.setDescricao(rs.getString("descricao"));
+				produto.setSetor(rs.getString("setor"));
+				produto.setCategoria(rs.getString("categoria"));
+				produto.setQuantidade(rs.getInt("quantidade"));
+
+				foto.setIdFoto(rs.getInt("id_foto"));
+				foto.setFoto(rs.getBytes("foto"));
+				foto.setLocal(rs.getString("local"));
+
+				produto.setFoto(foto);
+				list.add(produto);
+			}
+
+			conn.commit();
+
+			return list;
+
+		} catch (SQLException e) {
+
+			try {
+
+				conn.rollback();
+				throw new DbException("Transaction rolled back. Cause by: " + e.getLocalizedMessage());
+
+			} catch (SQLException e1) {
+
+				throw new DbException("Error trying to rollback. Cause by: " + e.getLocalizedMessage());
+			}
+
+		} finally {
+
+			DB.closeStatement(st);
+
+		}
+		
 	}
 }

@@ -14,6 +14,7 @@ import application.Main;
 import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
+import gui.util.Utils;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -52,7 +53,7 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 	private static File arquivo;
 
-	private static String local;
+	private static String local = "";
 
 	// Lista de ouvintes para receber alguma modificação
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
@@ -99,6 +100,7 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 			produtoService.produtoNovoOuEditar(produto);
 			notifyDataChangeListeners();
+			Utils.fecharDialogAction();
 
 		}
 
@@ -118,39 +120,12 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 		arquivo = chooser.showOpenDialog(new Stage());
 
-		if (arquivo.getAbsolutePath() != null) {
+		if (arquivo != null) {
 
-			local = arquivo.getPath();
-
-			InputStream converter = null;
-			bytes = new byte[(int) local.length()];
-
+			local = arquivo.getAbsolutePath();
 			txtEnderecoDaFoto.setText(local);
 
-			try {
-
-				converter = new FileInputStream(local);
-
-			} catch (FileNotFoundException e) {
-
-				e.printStackTrace();
-
-			}
-
-			int offset = 0;
-			int numRead = 0;
-
-			try {
-
-				while (offset < bytes.length && (numRead = converter.read(bytes, offset, bytes.length - offset)) >= 0) {
-					offset += numRead;
-				}
-
-			} catch (IOException e) {
-
-				e.printStackTrace();
-
-			}
+			bytes = getByte();
 
 			Foto fot = new Foto();
 			fot.setLocal(local);
@@ -162,6 +137,12 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 			prod.setFoto(fot);
 
 			setProduto(prod);
+
+		} else {
+
+			local = "";
+			bytes = null;
+			txtEnderecoDaFoto.setText(local);
 
 		}
 
@@ -247,13 +228,17 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 	private void notifyDataChangeListeners() {
 
 		for (DataChangeListener listener : dataChangeListeners) {
+			
 			listener.onDataChanged();
+			
 		}
 
 	}
 
 	public void setProdutoService(ProdutoService produtoService) {
+		
 		this.produtoService = produtoService;
+		
 	}
 
 	public void setProduto(Produto produto) {
@@ -359,24 +344,9 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 			produto = null;
 
-		} else if (txtAreaDescricao.getText() == null || txtAreaDescricao.getText().trim().equals("")) {
-
-			Alerts.showAlert("Novo Produto", "Campo obrigatório", "Digite a descrição do produto",
-					AlertType.INFORMATION);
-
-			txtAreaDescricao.requestFocus();
-
-			produto = null;
-
-		} else if (txtEnderecoDaFoto.getText() == null || txtEnderecoDaFoto.getText().trim().equals("")) {
-
-			Alerts.showAlert("Novo Produto", "Campo obrigatório", "Escolha a foto do produto", AlertType.INFORMATION);
-
-			produto = null;
-
 		} else {
 
-			foto.setLocal(txtEnderecoDaFoto.getText());
+			foto.setLocal(local);
 			foto.setFoto(bytes);
 
 			produto.setNome(txtNome.getText());
@@ -410,6 +380,39 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 		this.txtEnderecoDaFoto = txtEnderecoDaFoto;
 
+	}
+
+	public byte[] getByte() {
+
+		InputStream converter = null;
+		bytes = new byte[(int) local.length()];
+
+		int offset = 0;
+		int numRead = 0;
+
+		try {
+
+			converter = new FileInputStream(ProdutoNovoFormController.local);
+
+		} catch (FileNotFoundException e) {
+
+			e.printStackTrace();
+
+		}
+
+		try {
+
+			while (offset < bytes.length && (numRead = converter.read(bytes, offset, bytes.length - offset)) >= 0) {
+				offset += numRead;
+			}
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		}
+
+		return bytes;
 	}
 
 }

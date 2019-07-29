@@ -1,34 +1,29 @@
 package gui;
 
+import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import application.Main;
-import gui.util.Alerts;
-import gui.util.Utils;
-import javafx.event.ActionEvent;
+import javax.imageio.ImageIO;
+
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import model.entities.Movimentacao;
 import model.entities.Produto;
-import model.services.MovimentacaoService;
 
 public class ProdutoShowFormController implements Initializable {
 
 	private Produto produto;
-	
-	private Movimentacao movimentacao;
 
 	@FXML
 	private Label labelNome;
@@ -53,55 +48,11 @@ public class ProdutoShowFormController implements Initializable {
 
 	@FXML
 	private Button btMovimentacao;
-	
-	@FXML
-	public void onBtMovimentacaoAction(ActionEvent event) {
-		
-		
-		Utils.fecharDialogAction();
-		createMovimentacaoDialogForm(produto,"/gui/MovimentacaoView.fxml");
-
-	}
-	
-
-	private void createMovimentacaoDialogForm(Produto prod, String absoluteName) {
-		
-
-		try {
-
-			setProduto(prod);
-
-			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-			Pane pane = loader.load();
-
-			MovimentacaoFormController controller = loader.getController();
-			controller.setProduto(produto);
-			controller.setMovimentacao(movimentacao);
-			controller.setMovimentacaoService(new MovimentacaoService());
-		
-			Main.setDialogScene(new Scene(pane));
-			Stage produtoStage = new Stage();
-			produtoStage.setTitle("Movimentação de Produtos");
-			produtoStage.setScene(Main.getDialogScene());
-			produtoStage.setResizable(false);
-			produtoStage.initModality(Modality.APPLICATION_MODAL);
-			produtoStage.initOwner(null);
-
-			Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
-			produtoStage.getIcons().add(applicationIcon);
-
-			produtoStage.showAndWait();
-
-		} catch (IOException e) {
-
-			Alerts.showAlert("IO Exception", "Erro ao carregar a tela movimentação de produtos", e.getMessage(), AlertType.ERROR);
-		}
-		
-	}
-
 
 	public void setProduto(Produto produto) {
+
 		this.produto = produto;
+
 	}
 
 	public Produto getProduto() {
@@ -118,18 +69,81 @@ public class ProdutoShowFormController implements Initializable {
 	private void initializeNodes() {
 
 		produto = new Produto();
-		movimentacao = new Movimentacao();
 
+		labelNome.setText(PrincipalFormController.getProduto().getNome());
+		labelSetor.setText(PrincipalFormController.getProduto().getSetor());
+		labelCategoria.setText(PrincipalFormController.getProduto().getCategoria());
+		labelSaldoAtual.setText(String.valueOf(PrincipalFormController.getProduto().getQuantidade()));
+		labelStatus.setText(String.valueOf(PrincipalFormController.getProduto().getEstoqueMinimo()));
+		labelDetalhes.setText(PrincipalFormController.getProduto().getDescricao());
 
-		labelNome.setText(produto.getNome());
-		labelSetor.setText(produto.getSetor());
-		labelCategoria.setText(produto.getCategoria());
-		labelSaldoAtual.setText(String.valueOf(produto.getQuantidade()));
-		labelStatus.setText(String.valueOf(produto.getEstoqueMinimo()));
-		labelDetalhes.setText(produto.getDescricao());
+		// imageViewProduto.setImage(new Image ("/imagens/bozo.jpg"));
+		// imageViewProduto.setImage(new Image ("/imagens/SEM-FOTO.png"));
 
-		// imageViewProduto.setImage(new Image(produto.getFoto().getFoto()));
+		// imageViewProduto.setImage(new Image (new
+		// ByteArrayInputStream(PrincipalFormController.getProduto().getFoto().getFoto())));
+
+		// Image imagem = new Image(new
+		// ByteArrayInputStream(PrincipalFormController.getProduto().getFoto().getFoto()));
+
+		// imageViewProduto .setImage(imagem);
+
+		// InputStream is = new ByteArrayInputStream(
+		// PrincipalFormController.getProduto().getFoto().getFoto());
+
+		// ImageIcon iconFrente = new
+		// ImageIcon(PrincipalFormController.getProduto().getFoto().getFoto());
+
+		/*
+		 * try { 
+		 * byte[] imageInbyte = PrincipalFormController.getProduto().getFoto().getFoto(); 
+		 * BufferedImage img1;
+		 * img1 = ImageIO.read(new ByteArrayInputStream(imageInbyte)); 
+		 * Image image = SwingFXUtils.toFXImage(img1, null); 
+		 * imageViewProduto.setImage(image);
+		 * imageViewProduto.setPreserveRatio(true);
+		 * 
+		 * } catch (IOException e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); }
+		 */
+		
+		
+		
+        /*Image image = null;
+		try {
+			
+			image = byteToImage(PrincipalFormController.getProduto().getFoto().getFoto());
+			
+		} catch (IOException e) {
+			
+			
+			e.printStackTrace();
+		}*/
+
+		if (PrincipalFormController.getProduto().getFoto().getFoto() == null) {
+
+			imageViewProduto.setImage(new Image("/imagens/SEM-FOTO.png"));
+
+		} else {
+
+			imageViewProduto.setImage(new Image(new File(PrincipalFormController.getProduto().getFoto().getLocal()).toURI().toString()));
+			//System.out.println();
+			
+
+			// imageViewProduto.setImage(new Image (new
+			// ByteArrayInputStream(PrincipalFormController.getProduto().getFoto().getFoto())));
+
+		}
 
 	}
+	
+	public static Image byteToImage(byte[] img) throws IOException {
+        
+	 	BufferedImage bi = ImageIO.read(new ByteArrayInputStream(img));
+        Image image = SwingFXUtils.toFXImage(bi, null);
+        
+        return image;
+  }
+
 
 }

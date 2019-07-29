@@ -12,9 +12,12 @@ public interface ProdutoDao {
 	void deleteById(Integer id);
 	Produto findById(Integer id);
 	List<Produto> findAll();
+	List<Produto> findNomeProduto(String nomeProduto);
+	List<Produto> findNomeSetor(String nomeSetor);
 	
 	void insertFoto(Produto produto);
 	void updateFoto(Produto foto);
 	void deleteByIdFoto(Integer id);
+	
 	
 }
