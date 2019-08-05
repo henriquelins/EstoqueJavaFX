@@ -11,7 +11,9 @@ import application.Main;
 import db.DbIntegrityException;
 import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
+import gui.util.Strings;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -53,8 +55,6 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	private ProdutoService service;
 
 	private Movimentacao movimentacao;
-	
-	private ProdutoShowFormController controllerShow;
 
 	@FXML
 	private MenuBar menuBarPrincipal;
@@ -99,6 +99,9 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	private TableColumn<Produto, Integer> tableColumnQuantidade;
 
 	@FXML
+	private TableColumn<Produto, String> tableColumnStatus;
+
+	@FXML
 	private TableColumn<Produto, Produto> tableColumnMOVIMENTACAO;
 
 	@FXML
@@ -121,6 +124,10 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 	@FXML
 	private Button btPesquisar;
+
+	static String pesquisarProduto;
+
+	static String pesquisarSetor;
 
 	@FXML
 	private ComboBox<String> cbPesquisaSetor;
@@ -177,7 +184,8 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	@FXML
 	public void onBtPesquisarAction(ActionEvent event) {
 
-		String nomeProduto = "";
+		setPesquisarProduto("");
+		setPesquisarSetor("");
 
 		if (txtPesquisar.getText() == null || txtPesquisar.getText().trim().equals("")) {
 
@@ -186,12 +194,16 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 		} else {
 
-			nomeProduto = txtPesquisar.getText();
-			listaProdutos = FXCollections.observableArrayList(service.PesquisarNomeProduto(nomeProduto));
+			setPesquisarProduto(txtPesquisar.getText());
+
+			listaPesquisa();
 
 			if (listaProdutos.isEmpty() == true) {
 
 				Alerts.showAlert("Pesquisar produto", "Lista vazia", "O produto não foi encontrado", AlertType.ERROR);
+
+				updateTableView();
+				updatePesquisa();
 
 			}
 
@@ -205,22 +217,29 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	@FXML
 	public void onCbPesquisarAction(ActionEvent event) {
 
-		String nomeSetor = "";
+		setPesquisarProduto("");
+		setPesquisarSetor("");
 
 		if (cbPesquisaSetor.getSelectionModel().getSelectedItem() == null
 				|| cbPesquisaSetor.getSelectionModel().getSelectedItem().equals("Selecione o setor...")) {
 
-			Alerts.showAlert("Mostrar setor", "Campo obrigatório para pesquisar", "Selecione o setor", AlertType.ERROR);
+			Alerts.showAlert("Pesquisar setor", "Campo obrigatório para pesquisar", "Selecione o setor",
+					AlertType.ERROR);
 
 		} else {
 
-			if (cbPesquisaSetor.getSelectionModel().getSelectedItem().equals("Todos...")) {
+			setPesquisarSetor(cbPesquisaSetor.getSelectionModel().getSelectedItem());
 
-				listaProdutos = FXCollections.observableArrayList(service.findAll());
+			if (getPesquisarSetor().equals("Todos")) {
+
+				listaTodos();
 
 				if (listaProdutos.isEmpty() == true) {
 
-					Alerts.showAlert("Pesquisar produto", "Lista vazia", "Produtos não encontrados", AlertType.ERROR);
+					Alerts.showAlert("Pesquisar setor", "Lista vazia", "Produtos não encontrados", AlertType.ERROR);
+
+					updateTableView();
+					updatePesquisa();
 
 				}
 
@@ -229,12 +248,14 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 			} else {
 
-				nomeSetor = cbPesquisaSetor.getSelectionModel().getSelectedItem();
-				listaProdutos = FXCollections.observableArrayList(service.PesquisarNomeSetor(nomeSetor));
+				listaCbSetor();
 
 				if (listaProdutos.isEmpty() == true) {
 
-					Alerts.showAlert("Pesquisar produto", "Lista vazia", "O setor não foi encontrado", AlertType.ERROR);
+					Alerts.showAlert("Pesquisar setor", "Lista vazia", "O setor não foi encontrado", AlertType.ERROR);
+
+					updateTableView();
+					updatePesquisa();
 
 				}
 
@@ -272,7 +293,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		SetorService setorService = new SetorService();
 		List<String> listaSetor = new ArrayList<>();
 
-		listaSetor.add("Todos...");
+		listaSetor.add("Todos");
 
 		for (Setor setor : setorService.findAllNome()) {
 
@@ -299,23 +320,52 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		tableColumnDescricao.setCellValueFactory(new PropertyValueFactory<>("Descricao"));
 		tableColumnQuantidade.setCellValueFactory(new PropertyValueFactory<>("Quantidade"));
 
+		tableColumnStatus.setCellValueFactory((param) -> new SimpleStringProperty(
+				status(param.getValue().getEstoqueMinimo(), param.getValue().getQuantidade())));
+
 		Stage stage = (Stage) Main.getMainScene().getWindow();
 		tableViewProduto.prefHeightProperty().bind(stage.heightProperty());
 
 		labelLogado.setText(LoginFormController.usuarioLogado());
 		service = new ProdutoService();
 		movimentacao = new Movimentacao();
-	
-		cbPesquisaSetor.setItems(FXCollections.observableArrayList(listaSetor()));
 
-		updateTableView();
+		cbPesquisaSetor.setItems(FXCollections.observableArrayList(listaSetor()));
 
 	}
 
 	public void updateTableView() {
 
 		if (service == null) {
+
 			throw new IllegalStateException("Service está nulo");
+
+		}
+
+		try {
+
+			if (!getPesquisarProduto().equals("")) {
+
+				listaPesquisa();
+
+			} else if (!getPesquisarSetor().equals("")) {
+
+				if (getPesquisarSetor().equals("Todos")) {
+
+					listaTodos();
+
+				} else {
+
+					listaCbSetor();
+
+				}
+
+			}
+
+		} catch (NullPointerException e) {
+
+			listaTodos();
+
 		}
 
 		tableViewProduto.setItems(listaProdutos);
@@ -348,13 +398,13 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			VBox vbox = loader.load();
 
 			Stage produtoStage = new Stage();
-			produtoStage.setTitle("Setor");
+			produtoStage.setTitle(Strings.getTitle());
 			produtoStage.setScene(new Scene(vbox));
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
 
-			Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
+			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
 			produtoStage.getIcons().add(applicationIcon);
 
 			produtoStage.showAndWait();
@@ -374,13 +424,13 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			VBox vbox = loader.load();
 
 			Stage produtoStage = new Stage();
-			produtoStage.setTitle("Categoria");
+			produtoStage.setTitle(Strings.getTitle());
 			produtoStage.setScene(new Scene(vbox));
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
 
-			Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
+			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
 			produtoStage.getIcons().add(applicationIcon);
 
 			produtoStage.showAndWait();
@@ -405,12 +455,14 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			scrollPane.setFitToWidth(true);
 
 			Stage principalStage = new Stage();
-			principalStage.setTitle("Movimentação");
-			principalStage.setScene(new Scene(scrollPane));
-			principalStage.setResizable(true);
-			principalStage.initOwner(null);
+			principalStage.setTitle(Strings.getTitle());
 
-			Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
+			principalStage.setScene(new Scene(scrollPane));
+
+			principalStage.setResizable(true);
+			principalStage.setMaximized(true);
+
+			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
 			principalStage.getIcons().add(applicationIcon);
 
 			principalStage.showAndWait();
@@ -432,20 +484,20 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
-			
+
 			Main.setDialogScene(new Scene(pane));
 			Stage produtoStage = new Stage();
-			produtoStage.setTitle("Detalhes do produto");
+			produtoStage.setTitle(Strings.getTitle());
 			produtoStage.setScene(Main.getDialogScene());
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
 
-			Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
+			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
 			produtoStage.getIcons().add(applicationIcon);
 
 			produtoStage.showAndWait();
-			
+
 		} catch (IOException e) {
 
 			Alerts.showAlert("IO Exception", "Erro ao carregar a tela detelhes do produto", e.getMessage(),
@@ -459,7 +511,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		try {
 
 			setProduto(prod);
-
+		
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 
@@ -470,13 +522,13 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 			Main.setDialogScene(new Scene(pane));
 			Stage produtoStage = new Stage();
-			produtoStage.setTitle("Editar Produto");
+			produtoStage.setTitle(Strings.getTitle());
 			produtoStage.setScene(Main.getDialogScene());
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
 
-			Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
+			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
 			produtoStage.getIcons().add(applicationIcon);
 
 			produtoStage.showAndWait();
@@ -503,13 +555,13 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 			Main.setDialogScene(new Scene(pane));
 			Stage produtoStage = new Stage();
-			produtoStage.setTitle("Novo Produto");
+			produtoStage.setTitle(Strings.getTitle());
 			produtoStage.setScene(Main.getDialogScene());
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
 
-			Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
+			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
 			produtoStage.getIcons().add(applicationIcon);
 
 			produtoStage.showAndWait();
@@ -538,13 +590,13 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 			Main.setDialogScene(new Scene(pane));
 			Stage produtoStage = new Stage();
-			produtoStage.setTitle("Movimentação de Produtos");
+			produtoStage.setTitle(Strings.getTitle());
 			produtoStage.setScene(Main.getDialogScene());
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
 
-			Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
+			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
 			produtoStage.getIcons().add(applicationIcon);
 
 			produtoStage.showAndWait();
@@ -566,13 +618,13 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			scrollPane.setFitToWidth(true);
 
 			Stage produtoStage = new Stage();
-			produtoStage.setTitle("Usuários");
+			produtoStage.setTitle(Strings.getTitle());
 			produtoStage.setScene(new Scene(scrollPane));
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
 
-			Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
+			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
 			produtoStage.getIcons().add(applicationIcon);
 
 			produtoStage.showAndWait();
@@ -592,13 +644,13 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			Pane pane = loader.load();
 
 			Stage produtoStage = new Stage();
-			produtoStage.setTitle("Sobre o aplicativo");
+			produtoStage.setTitle(Strings.getTitle());
 			produtoStage.setScene(new Scene(pane));
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
 
-			Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
+			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
 			produtoStage.getIcons().add(applicationIcon);
 
 			produtoStage.showAndWait();
@@ -639,7 +691,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	}
 
 	private void initEditButton() {
-		
+
 		tableColumnEDIT.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
 		tableColumnEDIT.setCellFactory(param -> new TableCell<Produto, Produto>() {
 
@@ -651,8 +703,10 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 				super.updateItem(prod, empty);
 
 				if (prod == null) {
+					
 					setGraphic(null);
 					return;
+					
 				}
 
 				setGraphic(button);
@@ -721,9 +775,9 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 			@Override
 			protected void updateItem(Produto prod, boolean empty) {
-				
+
 				super.updateItem(prod, empty);
-				
+
 				if (prod == null) {
 					setGraphic(null);
 					return;
@@ -734,6 +788,75 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 			}
 		});
+
+	}
+
+	private List<Produto> listaPesquisa() {
+
+		listaProdutos = FXCollections.observableArrayList(service.PesquisarNomeProduto(pesquisarProduto));
+
+		return listaProdutos;
+
+	}
+
+	private List<Produto> listaCbSetor() {
+
+		String nomeSetor = cbPesquisaSetor.getSelectionModel().getSelectedItem();
+		listaProdutos = FXCollections.observableArrayList(service.PesquisarNomeSetor(nomeSetor));
+
+		return listaProdutos;
+	}
+
+	private List<Produto> listaTodos() {
+
+		listaProdutos = FXCollections.observableArrayList(service.findAll());
+		return listaProdutos;
+
+	}
+
+	public String getPesquisarProduto() {
+
+		return pesquisarProduto;
+
+	}
+
+	public static void setPesquisarProduto(String pesquisarProduto) {
+
+		PrincipalFormController.pesquisarProduto = pesquisarProduto;
+
+	}
+
+	public static String getPesquisarSetor() {
+
+		return pesquisarSetor;
+
+	}
+
+	public static void setPesquisarSetor(String pesquisarSetor) {
+
+		PrincipalFormController.pesquisarSetor = pesquisarSetor;
+
+	}
+
+	public String status(Integer estoque_minimo, Integer quantidade) {
+
+		String status = "";
+
+		if (quantidade <= estoque_minimo) {
+
+			status = "Estoque baixo";
+
+		} else if ((quantidade >= estoque_minimo * 3) || (quantidade <= estoque_minimo * 6)) {
+
+			status = "Estoque normal";
+
+		} else {
+
+			status = "Estoque alto";
+
+		}
+
+		return status;
 
 	}
 

@@ -14,6 +14,7 @@ import application.Main;
 import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
+import gui.util.Strings;
 import gui.util.Utils;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -95,7 +96,7 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 	public void onBtSalvarProdutoAction(ActionEvent event) {
 
 		setProduto(getFormData());
-
+				
 		if (produto != null) {
 
 			produtoService.produtoNovoOuEditar(produto);
@@ -131,7 +132,7 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 			fot.setLocal(local);
 			fot.setFoto(bytes);
 
-			setfoto(fot);
+			setFoto(fot);
 
 			Produto prod = new Produto();
 			prod.setFoto(fot);
@@ -152,7 +153,7 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 		return foto;
 	}
 
-	public static void setfoto(Foto foto) {
+	public static void setFoto(Foto foto) {
 		ProdutoNovoFormController.foto = foto;
 	}
 
@@ -197,7 +198,7 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 			Main.setDialogScene(new Scene(pane));
 			Stage produtoStage = new Stage();
-			produtoStage.setTitle("Visualizar a foto do Produto");
+			produtoStage.setTitle(Strings.getTitle());
 			produtoStage.setScene(Main.getDialogScene());
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
@@ -341,6 +342,14 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 			Alerts.showAlert("Novo Produto", "Campo obrigatório", "Selecione a categoria", AlertType.INFORMATION);
 
 			comboBoxCategoria.requestFocus();
+
+			produto = null;
+
+		} else if (txtAreaDescricao.getText() == null || txtAreaDescricao.getText().trim().equals("")) {
+
+			Alerts.showAlert("Novo Produto", "Campo obrigatório", "Digite a descrição do produto", AlertType.INFORMATION);
+
+			txtAreaDescricao.requestFocus();
 
 			produto = null;
 

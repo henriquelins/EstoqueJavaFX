@@ -5,8 +5,8 @@ import java.util.Optional;
 
 import gui.util.Alerts;
 import gui.util.Utils;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import model.dao.DaoFactory;
 import model.dao.MovimentacaoDao;
 import model.dao.ProdutoDao;
@@ -18,7 +18,7 @@ public class MovimentacaoService {
 	private ProdutoDao daoProd = DaoFactory.createProdutoDao();
 
 	public void movimentacaoSaidaOuEntrada(Movimentacao movimentacao) {
-		
+
 		int estoqueAtual = 0;
 
 		try {
@@ -72,4 +72,15 @@ public class MovimentacaoService {
 
 	}
 
+	public List<Movimentacao> PesquisarNomeProduto(String pesquisarProduto) {
+
+		return dao.findNomeProduto(pesquisarProduto);
+
+	}
+
+	public List<Movimentacao> PesquisarNomeSetor(String pesquisarSetor) {
+		
+		return dao.findNomeSetor(pesquisarSetor);
+		
+	}
 }

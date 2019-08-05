@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import gui.util.Alerts;
+import gui.util.Strings;
 import gui.util.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -117,14 +118,14 @@ public class LoginFormController implements Initializable {
 			scrollPane.setFitToWidth(true);
 
 			Stage principalStage = new Stage();
-			principalStage.setTitle("Controle de Estoque");
+			principalStage.setTitle(Strings.getTitle());
 
 			principalStage.setScene(new Scene(scrollPane));
-
-			principalStage.setResizable(true);
-			principalStage.initOwner(null);
 			
-			Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
+			principalStage.setResizable(true);
+			principalStage.setMaximized(true);
+						
+			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
 			principalStage.getIcons().add(applicationIcon);
 			
 			principalStage.show();

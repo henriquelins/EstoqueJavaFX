@@ -1,23 +1,39 @@
 package gui;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import application.Main;
 import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
+import gui.util.Strings;
+import gui.util.Utils;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import model.entities.Categoria;
+import model.entities.Foto;
 import model.entities.Produto;
 import model.entities.Setor;
 import model.services.CategoriaService;
@@ -35,6 +51,14 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 	private PrincipalFormController principalController;
 
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
+	
+	private static Foto foto;
+
+	private byte[] bytes;
+
+	private static File arquivo;
+
+	private static String local = "";
 
 	@FXML
 	private TextField txtIdProduto;
@@ -44,6 +68,12 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 	@FXML
 	private TextField txtQuantidade;
+	
+	@FXML
+	private TextField txtEstoqueMinimo;
+	
+	@FXML
+	private TextField txtEnderecoDaFoto;
 
 	@FXML
 	private ComboBox<String> comboBoxSetor;
@@ -56,6 +86,12 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 	@FXML
 	private Button btSalvarProduto;
+	
+	@FXML
+	private Button btFotoProduto;
+
+	@FXML
+	private Button btVisualizarFoto;
 
 	@FXML
 	public void onBtSalvarProdutoAction(ActionEvent event) {
@@ -72,12 +108,55 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 				produtoService.produtoNovoOuEditar(this.produto);
 				notifyDataChangeListeners();
+				Utils.fecharDialogAction();
 
 			} else {
 
 				Alerts.showAlert("Produto", "Editar", "Não houve alteração no registro", AlertType.INFORMATION);
 
 			}
+
+		}
+
+	}
+	
+	@FXML
+	public void onBtFotoProdutoAction(ActionEvent event) {
+
+		FileChooser chooser = new FileChooser();
+		arquivo = null;
+
+		chooser.getExtensionFilters().addAll(//
+				new FileChooser.ExtensionFilter("All Files", "*.*"), new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+				new FileChooser.ExtensionFilter("PNG", "*.png"));
+
+		chooser.setTitle("Escolher foto do produto");
+
+		arquivo = chooser.showOpenDialog(new Stage());
+
+		if (arquivo != null) {
+
+			local = arquivo.getAbsolutePath();
+			txtEnderecoDaFoto.setText(local);
+
+			bytes = getByte();
+
+			Foto fot = new Foto();
+			fot.setLocal(local);
+			fot.setFoto(bytes);
+
+			setFoto(fot);
+
+			Produto prod = new Produto();
+			prod.setFoto(fot);
+
+			setProduto(prod);
+
+		} else {
+
+			local = "";
+			bytes = null;
+			txtEnderecoDaFoto.setText(local);
 
 		}
 
@@ -138,6 +217,51 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 		return listaCategoria;
 
 	}
+	
+	@FXML
+	public void onBtVisualizarFotoAction(ActionEvent event) {
+
+		if (!txtEnderecoDaFoto.getText().equals("")) {
+
+			createVisualizarFotoDialogForm("/gui/VisualizarFotoView.fxml");
+
+		} else {
+
+			Alerts.showAlert("Visualizar foto", "Selecionar a foto do produto", "Primeiro selecione um imagem",
+					AlertType.ERROR);
+
+		}
+
+	}
+
+	private void createVisualizarFotoDialogForm(String absoluteName) {
+
+		try {
+
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			Pane pane = loader.load();
+
+			Main.setDialogScene(new Scene(pane));
+			Stage produtoStage = new Stage();
+			produtoStage.setTitle(Strings.getTitle());
+			produtoStage.setScene(Main.getDialogScene());
+			produtoStage.setResizable(false);
+			produtoStage.initModality(Modality.APPLICATION_MODAL);
+			produtoStage.initOwner(null);
+
+			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
+			produtoStage.getIcons().add(applicationIcon);
+
+			produtoStage.showAndWait();
+
+		} catch (IOException e) {
+
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela foto do produto", e.getMessage(),
+					AlertType.ERROR);
+
+		}
+
+	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -153,13 +277,11 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 		produtoService = new ProdutoService();
 		produto = new Produto();
-
+		
+		setProduto(PrincipalFormController.getProduto());
+		
 		Constraints.setTextFieldInteger(txtQuantidade);
-
-		txtNome.setText(produto.getNome());
-		txtQuantidade.setText(String.valueOf(produto.getQuantidade()));
-		txtAreaDescricao.setText(produto.getDescricao());
-
+	
 		updateFormData();
 
 	}
@@ -230,8 +352,12 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 		txtQuantidade.setText(String.valueOf(PrincipalFormController.getProduto().getQuantidade()));
 		comboBoxSetor.setValue(PrincipalFormController.getProduto().getSetor());
 		comboBoxCategoria.setValue(PrincipalFormController.getProduto().getCategoria());
+		txtEstoqueMinimo.setText(String.valueOf(PrincipalFormController.getProduto().getEstoqueMinimo()));
 		txtAreaDescricao.setText(PrincipalFormController.getProduto().getDescricao());
-
+		txtEnderecoDaFoto.setText(String.valueOf(new File(PrincipalFormController.getProduto().getFoto().getLocal()).toURI().toString()));
+	
+		System.out.println(txtEnderecoDaFoto.getText());
+		
 		setProduto(PrincipalFormController.getProduto());
 
 		produtoComparar = this.produto;
@@ -240,7 +366,7 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 	@Override
 	public void onDataChanged() {
-
+	
 		principalController.updateTableView();
 
 	}
@@ -268,5 +394,48 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 		}
 
 	};
+	
+	public byte[] getByte() {
+
+		InputStream converter = null;
+		bytes = new byte[(int) local.length()];
+
+		int offset = 0;
+		int numRead = 0;
+
+		try {
+
+			converter = new FileInputStream(local);
+
+		} catch (FileNotFoundException e) {
+
+			e.printStackTrace();
+
+		}
+
+		try {
+
+			while (offset < bytes.length && (numRead = converter.read(bytes, offset, bytes.length - offset)) >= 0) {
+				offset += numRead;
+			}
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		}
+
+		return bytes;
+	}
+
+	public static Foto getFoto() {
+		return foto;
+	}
+
+	public static void setFoto(Foto foto) {
+		ProdutoEditarFormController.foto = foto;
+	}
+	
+	
 
 }

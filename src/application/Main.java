@@ -9,13 +9,19 @@ import java.sql.SQLException;
 
 import db.DB;
 import gui.util.Alerts;
+import gui.util.Strings;
+import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import properties.PropertiesFile;
 
 public class Main extends Application {
@@ -37,7 +43,7 @@ public class Main extends Application {
 		conn = DB.getConnection();
 
 		if (conn != null) {
-			
+
 			try {
 
 				// impede que seja criada uma nova instância do programa
@@ -47,23 +53,7 @@ public class Main extends Application {
 
 				try {
 
-					FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LoginView.fxml"));
-					Pane pane = loader.load();
-
-					mainScene = new Scene(pane);
-
-					// Define o Style
-					setUserAgentStylesheet(STYLESHEET_CASPIAN);
-					// setUserAgentStylesheet(STYLESHEET_MODENA);
-
-					primaryStage.setScene(mainScene);
-					primaryStage.setResizable(false);
-					primaryStage.setTitle("Controle de Estoque");
-
-					Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
-					primaryStage.getIcons().add(applicationIcon);
-
-					primaryStage.show();
+					splash(primaryStage);
 
 				} catch (Exception e) {
 
@@ -80,7 +70,7 @@ public class Main extends Application {
 			}
 
 		} else {
-			
+
 			try {
 
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ConfigurarPerpetiesDB.fxml"));
@@ -94,9 +84,9 @@ public class Main extends Application {
 
 				primaryStage.setScene(mainScene);
 				primaryStage.setResizable(false);
-				primaryStage.setTitle("Configuarar banco de dados");
+				primaryStage.setTitle(Strings.getTitle());
 
-				Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
+				Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
 				primaryStage.getIcons().add(applicationIcon);
 
 				primaryStage.show();
@@ -107,6 +97,89 @@ public class Main extends Application {
 						AlertType.ERROR);
 
 			}
+
+		}
+
+	}
+
+	private void splash(Stage primaryStage) throws IOException {
+
+		try {
+
+			StackPane pane = FXMLLoader.load(getClass().getResource(("/gui/splash.fxml")));
+
+			primaryStage.setScene(new Scene(pane));
+			primaryStage.setResizable(false);
+			primaryStage.initStyle(StageStyle.TRANSPARENT);
+
+			primaryStage.show();
+
+			// Load splash screen with fade in effect
+			FadeTransition fadeIn = new FadeTransition(Duration.seconds(3), pane);
+			fadeIn.setFromValue(0);
+			fadeIn.setToValue(1);
+			fadeIn.setCycleCount(1);
+
+			// Finish splash with fade out effect
+			FadeTransition fadeOut = new FadeTransition(Duration.seconds(3), pane);
+			fadeOut.setFromValue(1);
+			fadeOut.setToValue(0);
+			fadeOut.setCycleCount(1);
+
+			fadeIn.play();
+
+			// After fade in, start fade out
+			fadeIn.setOnFinished((e) -> {
+
+				fadeOut.play();
+
+			});
+
+			// After fade out, load actual content
+			fadeOut.setOnFinished((e) -> {
+				
+				primaryStage.close();
+				login(primaryStage);
+				
+
+			});
+
+		} catch (IOException ex) {
+
+			Alerts.showAlert("Controle de Estoque", "Erro ao abrir o splash", ex.getLocalizedMessage(),
+					AlertType.ERROR);
+
+		}
+
+	}
+
+	private void login(Stage primaryStage) {
+
+		try {
+
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LoginView.fxml"));
+			AnchorPane pane = loader.load();
+
+			mainScene = new Scene(pane);
+
+			// Define o Style
+			setUserAgentStylesheet(STYLESHEET_CASPIAN);
+			// setUserAgentStylesheet(STYLESHEET_MODENA);
+
+			Stage principalStage = new Stage();
+			principalStage.setTitle(Strings.getTitle());
+
+			principalStage.setScene(mainScene);
+			principalStage.setResizable(false);
+
+			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
+			principalStage.getIcons().add(applicationIcon);
+
+			principalStage.show();
+
+		} catch (IOException e) {
+
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela login", e.getCause().toString(), AlertType.ERROR);
 
 		}
 

@@ -1,12 +1,9 @@
 package gui;
 
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -56,7 +53,9 @@ public class ProdutoShowFormController implements Initializable {
 	}
 
 	public Produto getProduto() {
+
 		return produto;
+
 	}
 
 	@Override
@@ -74,7 +73,10 @@ public class ProdutoShowFormController implements Initializable {
 		labelSetor.setText(PrincipalFormController.getProduto().getSetor());
 		labelCategoria.setText(PrincipalFormController.getProduto().getCategoria());
 		labelSaldoAtual.setText(String.valueOf(PrincipalFormController.getProduto().getQuantidade()));
-		labelStatus.setText(String.valueOf(PrincipalFormController.getProduto().getEstoqueMinimo()));
+
+		labelStatus.setText(status(PrincipalFormController.getProduto().getEstoqueMinimo(),
+				PrincipalFormController.getProduto().getQuantidade()));
+
 		labelDetalhes.setText(PrincipalFormController.getProduto().getDescricao());
 
 		// imageViewProduto.setImage(new Image ("/imagens/bozo.jpg"));
@@ -95,30 +97,26 @@ public class ProdutoShowFormController implements Initializable {
 		// ImageIcon(PrincipalFormController.getProduto().getFoto().getFoto());
 
 		/*
-		 * try { 
-		 * byte[] imageInbyte = PrincipalFormController.getProduto().getFoto().getFoto(); 
-		 * BufferedImage img1;
-		 * img1 = ImageIO.read(new ByteArrayInputStream(imageInbyte)); 
-		 * Image image = SwingFXUtils.toFXImage(img1, null); 
-		 * imageViewProduto.setImage(image);
+		 * try { byte[] imageInbyte =
+		 * PrincipalFormController.getProduto().getFoto().getFoto(); BufferedImage img1;
+		 * img1 = ImageIO.read(new ByteArrayInputStream(imageInbyte)); Image image =
+		 * SwingFXUtils.toFXImage(img1, null); imageViewProduto.setImage(image);
 		 * imageViewProduto.setPreserveRatio(true);
 		 * 
-		 * } catch (IOException e) { // TODO Auto-generated catch block
+		 * } catch (IOException e) { e.printStackTrace(); }
+		 */
+
+		/*
+		 * Image image = null; try {
+		 * 
+		 * image =
+		 * byteToImage(PrincipalFormController.getProduto().getFoto().getFoto());
+		 * 
+		 * } catch (IOException e) {
+		 * 
+		 * 
 		 * e.printStackTrace(); }
 		 */
-		
-		
-		
-        /*Image image = null;
-		try {
-			
-			image = byteToImage(PrincipalFormController.getProduto().getFoto().getFoto());
-			
-		} catch (IOException e) {
-			
-			
-			e.printStackTrace();
-		}*/
 
 		if (PrincipalFormController.getProduto().getFoto().getFoto() == null) {
 
@@ -126,9 +124,10 @@ public class ProdutoShowFormController implements Initializable {
 
 		} else {
 
-			imageViewProduto.setImage(new Image(new File(PrincipalFormController.getProduto().getFoto().getLocal()).toURI().toString()));
-			//System.out.println();
-			
+			imageViewProduto.setImage(
+					new Image(new File(PrincipalFormController.getProduto().getFoto().getLocal()).toURI().toString()));
+
+			// System.out.println();
 
 			// imageViewProduto.setImage(new Image (new
 			// ByteArrayInputStream(PrincipalFormController.getProduto().getFoto().getFoto())));
@@ -136,14 +135,35 @@ public class ProdutoShowFormController implements Initializable {
 		}
 
 	}
-	
-	public static Image byteToImage(byte[] img) throws IOException {
-        
-	 	BufferedImage bi = ImageIO.read(new ByteArrayInputStream(img));
-        Image image = SwingFXUtils.toFXImage(bi, null);
-        
-        return image;
-  }
 
+	public static Image byteToImage(byte[] img) throws IOException {
+
+		BufferedImage bi = ImageIO.read(new ByteArrayInputStream(img));
+		Image image = SwingFXUtils.toFXImage(bi, null);
+
+		return image;
+	}
+
+	public String status(Integer estoque_minimo, Integer quantidade) {
+
+		String status = "";
+
+		if (quantidade <= estoque_minimo) {
+
+			status = "Estoque baixo";
+
+		} else if ((quantidade >= estoque_minimo * 3) || (quantidade <= estoque_minimo * 6)) {
+
+			status = "Estoque normal";
+
+		} else {
+
+			status = "Estoque alto";
+
+		}
+
+		return status;
+
+	}
 
 }

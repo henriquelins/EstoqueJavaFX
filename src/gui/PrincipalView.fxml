@@ -50,7 +50,7 @@
                               <Insets />
                            </opaqueInsets>
                         </TextField>
-                        <ComboBox fx:id="cbPesquisaSetor" layoutX="412.0" layoutY="7.0" onAction="#onCbPesquisarAction" prefWidth="150.0" promptText="Selecione o setor..." />
+                        <ComboBox fx:id="cbPesquisaSetor" layoutX="412.0" layoutY="4.0" onAction="#onCbPesquisarAction" prefHeight="25.0" prefWidth="150.0" promptText="Selecione o setor..." />
                         <Button fx:id="btNovo" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="603.0" layoutY="5.0" mnemonicParsing="false" onAction="#onBtNovoAction" prefHeight="25.0" prefWidth="99.0" text="Novo Produto" />
                      </children>
                   </AnchorPane>
@@ -60,10 +60,11 @@
               <columns>
                 <TableColumn fx:id="tableColumnId" editable="false" prefWidth="30.0" style="-fx-alignment: CENTER;" text="Id" />
                   <TableColumn fx:id="tableColumnNome" editable="false" prefWidth="160.0" style="-fx-alignment: CENTER;" text="Nome" />
-                  <TableColumn fx:id="tableColumnDescricao" editable="false" prefWidth="200.0" style="-fx-alignment: CENTER;" text="Descrição" />
+                  <TableColumn fx:id="tableColumnDescricao" editable="false" prefWidth="300.0" style="-fx-alignment: CENTER;" text="Descrição" />
                   <TableColumn fx:id="tableColumnSetor" prefWidth="120.0" style="-fx-alignment: CENTER;" text="Setor" />
-                  <TableColumn fx:id="tableColumnCategoria" prefWidth="120.0" style="-fx-alignment: CENTER;" text="Categoria" />
+                  <TableColumn fx:id="tableColumnCategoria" prefWidth="200.0" style="-fx-alignment: CENTER;" text="Categoria" />
                   <TableColumn fx:id="tableColumnQuantidade" editable="false" style="-fx-alignment: CENTER;" text="Saldo Atual" />
+                  <TableColumn fx:id="tableColumnStatus" editable="false" prefWidth="100.0" style="-fx-alignment: CENTER;" text="Status" />
                   <TableColumn fx:id="tableColumnMOVIMENTACAO" prefWidth="114.0" style="-fx-alignment: CENTER;" />
                   <TableColumn fx:id="tableColumnEDIT" prefWidth="60.0" style="-fx-alignment: CENTER;" />
                   <TableColumn fx:id="tableColumnREMOVE" prefWidth="60.0" style="-fx-alignment: CENTER;" />
