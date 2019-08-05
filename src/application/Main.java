@@ -63,7 +63,8 @@ public class Main extends Application {
 				}
 
 			} catch (IOException e) {
-
+				
+			
 				Alerts.showAlert("Controle de Estoque", "Erro ao abrir o programa",
 						"Já existe uma instância do programa aberta!", AlertType.ERROR);
 
@@ -73,7 +74,7 @@ public class Main extends Application {
 
 			try {
 
-				FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ConfigurarPerpetiesDB.fxml"));
+				FXMLLoader loader = new FXMLLoader(getClass().getResource(Strings.getConfigurarPerpetiesDBView()));
 				Pane pane = loader.load();
 
 				mainScene = new Scene(pane);
@@ -95,6 +96,8 @@ public class Main extends Application {
 
 				Alerts.showAlert("Controle de Estoque", "Erro ao abrir a tela", e.getLocalizedMessage(),
 						AlertType.ERROR);
+				
+				
 
 			}
 
@@ -106,7 +109,7 @@ public class Main extends Application {
 
 		try {
 
-			StackPane pane = FXMLLoader.load(getClass().getResource(("/gui/splash.fxml")));
+			StackPane pane = FXMLLoader.load(getClass().getResource((Strings.getSplashView())));
 
 			primaryStage.setScene(new Scene(pane));
 			primaryStage.setResizable(false);
@@ -137,10 +140,9 @@ public class Main extends Application {
 
 			// After fade out, load actual content
 			fadeOut.setOnFinished((e) -> {
-				
+
 				primaryStage.close();
 				login(primaryStage);
-				
 
 			});
 
@@ -157,7 +159,7 @@ public class Main extends Application {
 
 		try {
 
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LoginView.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(Strings.getLoginView()));
 			AnchorPane pane = loader.load();
 
 			mainScene = new Scene(pane);

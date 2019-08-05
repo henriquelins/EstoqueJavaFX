@@ -9,14 +9,21 @@
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CategoriaNovoFormController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="352.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CategoriaNovoFormController">
    <children>
-      <ToolBar prefHeight="40.0" prefWidth="600.0">
+      <ToolBar prefHeight="40.0" prefWidth="200.0">
         <items>
-            <Button fx:id="btNovo" mnemonicParsing="false" onAction="#onBtNovoAction" text="Novo" />
-            <Button fx:id="btSalvar" layoutX="10.0" layoutY="13.0" mnemonicParsing="false" onAction="#onBtSalvarAction" text="Salvar" />
-            <Button fx:id="btExcluir" mnemonicParsing="false" onAction="#onBtExcluirAction" text="Excluir" />
+            <AnchorPane prefHeight="30.0" prefWidth="570.0">
+               <children>
+                  <Label layoutX="66.0" layoutY="-1.0" prefHeight="27.0" prefWidth="338.0" text="Cadastro de categoria">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
         </items>
       </ToolBar>
       <AnchorPane prefHeight="300.0" prefWidth="600.0">
@@ -35,6 +42,9 @@
                   </TableView>
                </content>
             </ScrollPane>
+            <Button fx:id="btExcluir" layoutX="470.0" layoutY="254.0" mnemonicParsing="false" onAction="#onBtExcluirAction" text="Excluir" />
+            <Button fx:id="btSalvar" layoutX="410.0" layoutY="254.0" mnemonicParsing="false" onAction="#onBtSalvarAction" text="Salvar" />
+            <Button fx:id="btNovo" layoutX="354.0" layoutY="254.0" mnemonicParsing="false" onAction="#onBtNovoAction" text="Novo" />
          </children>
       </AnchorPane>
    </children>

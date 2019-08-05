@@ -454,18 +454,20 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			scrollPane.setFitToHeight(true);
 			scrollPane.setFitToWidth(true);
 
-			Stage principalStage = new Stage();
-			principalStage.setTitle(Strings.getTitle());
+			Stage produtoStage = new Stage();
+			produtoStage.setTitle(Strings.getTitle());
 
-			principalStage.setScene(new Scene(scrollPane));
+			produtoStage.setScene(new Scene(scrollPane));
 
-			principalStage.setResizable(true);
-			principalStage.setMaximized(true);
+			produtoStage.setResizable(true);
+			produtoStage.setMaximized(true);
+			produtoStage.initModality(Modality.APPLICATION_MODAL);
+			produtoStage.initOwner(null);
 
 			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
-			principalStage.getIcons().add(applicationIcon);
+			produtoStage.getIcons().add(applicationIcon);
 
-			principalStage.showAndWait();
+			produtoStage.showAndWait();
 
 		} catch (IOException e) {
 

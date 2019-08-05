@@ -26,7 +26,7 @@ public class VisualizarFotoFormController implements Initializable {
 
 	private void initializeNodes() {
 
-		txtEndereco.setText(ProdutoNovoFormController.getLocal());
+		txtEndereco.setText(ProdutoNovoFormController.getLocal().toString());
 
 		imageView.setImage(new Image(ProdutoNovoFormController.getArquivo().toURI().toString()));
 

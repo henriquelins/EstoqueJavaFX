@@ -51,7 +51,7 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 	private PrincipalFormController principalController;
 
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
-	
+
 	private static Foto foto;
 
 	private byte[] bytes;
@@ -68,10 +68,10 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 	@FXML
 	private TextField txtQuantidade;
-	
+
 	@FXML
 	private TextField txtEstoqueMinimo;
-	
+
 	@FXML
 	private TextField txtEnderecoDaFoto;
 
@@ -86,7 +86,7 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 	@FXML
 	private Button btSalvarProduto;
-	
+
 	@FXML
 	private Button btFotoProduto;
 
@@ -119,7 +119,7 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 		}
 
 	}
-	
+
 	@FXML
 	public void onBtFotoProdutoAction(ActionEvent event) {
 
@@ -217,7 +217,7 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 		return listaCategoria;
 
 	}
-	
+
 	@FXML
 	public void onBtVisualizarFotoAction(ActionEvent event) {
 
@@ -237,6 +237,10 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 	private void createVisualizarFotoDialogForm(String absoluteName) {
 
 		try {
+
+			ProdutoNovoFormController.setArquivo(arquivo);
+			ProdutoNovoFormController.setLocal(local);
+			ProdutoNovoFormController.setFoto(foto);
 
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
@@ -277,11 +281,14 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 		produtoService = new ProdutoService();
 		produto = new Produto();
-		
+		foto = new Foto();
+		local = new String();
+
 		setProduto(PrincipalFormController.getProduto());
-		
+
 		Constraints.setTextFieldInteger(txtQuantidade);
-	
+		Constraints.setTextFieldInteger(txtEstoqueMinimo);
+
 		updateFormData();
 
 	}
@@ -289,10 +296,11 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 	private Produto getFormData() {
 
 		Produto produto = new Produto();
+		Foto foto = new Foto();
 
 		if (txtNome.getText() == null || txtNome.getText().trim().equals("")) {
 
-			Alerts.showAlert("Novo Produto", null, "Digite o nome do Produto", AlertType.INFORMATION);
+			Alerts.showAlert("Novo Produto", "Campo obrigatório", "Digite o nome do Produto", AlertType.INFORMATION);
 
 			txtNome.requestFocus();
 
@@ -300,15 +308,24 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 		} else if (txtQuantidade.getText() == null || txtQuantidade.getText().trim().equals("")) {
 
-			Alerts.showAlert("Novo Produto", null, "Digite a quantidade inicial do produto", AlertType.INFORMATION);
+			Alerts.showAlert("Novo Produto", "Campo obrigatório", "Digite a quantidade inicial do produto",
+					AlertType.INFORMATION);
 
 			txtQuantidade.requestFocus();
 
 			produto = null;
 
+		} else if (txtEstoqueMinimo.getText() == null || txtEstoqueMinimo.getText().trim().equals("")) {
+
+			Alerts.showAlert("Novo Produto", "Campo obrigatório", "Digite o estoque mínimo", AlertType.INFORMATION);
+
+			txtAreaDescricao.requestFocus();
+
+			produto = null;
+
 		} else if (comboBoxSetor.getSelectionModel().getSelectedItem() == null) {
 
-			Alerts.showAlert("Novo Produto", null, "Selecione o setor", AlertType.INFORMATION);
+			Alerts.showAlert("Novo Produto", "Campos obrigatório", "Selecione o setor", AlertType.INFORMATION);
 
 			comboBoxSetor.requestFocus();
 
@@ -316,7 +333,7 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 		} else if (comboBoxCategoria.getSelectionModel().getSelectedItem() == null) {
 
-			Alerts.showAlert("Novo Produto", null, "Selecione a categoria", AlertType.INFORMATION);
+			Alerts.showAlert("Novo Produto", "Campo obrigatório", "Selecione a categoria", AlertType.INFORMATION);
 
 			comboBoxCategoria.requestFocus();
 
@@ -324,7 +341,8 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 		} else if (txtAreaDescricao.getText() == null || txtAreaDescricao.getText().trim().equals("")) {
 
-			Alerts.showAlert("Novo Produto", null, "Digite a descrição do produto", AlertType.INFORMATION);
+			Alerts.showAlert("Novo Produto", "Campo obrigatório", "Digite a descrição do produto",
+					AlertType.INFORMATION);
 
 			txtAreaDescricao.requestFocus();
 
@@ -332,12 +350,17 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 		} else {
 
+			foto.setLocal(local);
+			foto.setFoto(bytes);
+
 			produto.setIdProduto(Integer.valueOf(txtIdProduto.getText()));
 			produto.setNome(txtNome.getText());
 			produto.setQuantidade(Integer.valueOf(txtQuantidade.getText()));
+			produto.setEstoqueMinimo(Integer.valueOf(txtEstoqueMinimo.getText()));
 			produto.setSetor(String.valueOf(comboBoxSetor.getSelectionModel().getSelectedItem()));
 			produto.setCategoria(String.valueOf(comboBoxCategoria.getSelectionModel().getSelectedItem()));
 			produto.setDescricao(txtAreaDescricao.getText());
+			produto.setFoto(foto);
 
 		}
 
@@ -354,10 +377,15 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 		comboBoxCategoria.setValue(PrincipalFormController.getProduto().getCategoria());
 		txtEstoqueMinimo.setText(String.valueOf(PrincipalFormController.getProduto().getEstoqueMinimo()));
 		txtAreaDescricao.setText(PrincipalFormController.getProduto().getDescricao());
-		txtEnderecoDaFoto.setText(String.valueOf(new File(PrincipalFormController.getProduto().getFoto().getLocal()).toURI().toString()));
-	
-		System.out.println(txtEnderecoDaFoto.getText());
-		
+		txtEnderecoDaFoto.setText(PrincipalFormController.getProduto().getFoto().getLocal().toString());
+
+		bytes = PrincipalFormController.getProduto().getFoto().getFoto();
+
+		ProdutoNovoFormController
+				.setArquivo(new File(PrincipalFormController.getProduto().getFoto().getLocal().toString()));
+		ProdutoNovoFormController.setLocal(PrincipalFormController.getProduto().getFoto().getLocal().toString());
+		ProdutoNovoFormController.setFoto(PrincipalFormController.getProduto().getFoto());
+
 		setProduto(PrincipalFormController.getProduto());
 
 		produtoComparar = this.produto;
@@ -366,7 +394,7 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 	@Override
 	public void onDataChanged() {
-	
+
 		principalController.updateTableView();
 
 	}
@@ -394,7 +422,7 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 		}
 
 	};
-	
+
 	public byte[] getByte() {
 
 		InputStream converter = null;
@@ -435,7 +463,16 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 	public static void setFoto(Foto foto) {
 		ProdutoEditarFormController.foto = foto;
 	}
-	
-	
 
+	public static String getLocal() {
+		return local;
+	}
+
+	public static void setLocal(String local) {
+		ProdutoEditarFormController.local = local;
+	}
+
+	public static File getArquivo() {
+		return arquivo;
+	}
 }

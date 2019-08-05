@@ -96,7 +96,7 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 	public void onBtSalvarProdutoAction(ActionEvent event) {
 
 		setProduto(getFormData());
-				
+
 		if (produto != null) {
 
 			produtoService.produtoNovoOuEditar(produto);
@@ -204,7 +204,7 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
 
-			Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
+			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
 			produtoStage.getIcons().add(applicationIcon);
 
 			produtoStage.showAndWait();
@@ -229,17 +229,17 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 	private void notifyDataChangeListeners() {
 
 		for (DataChangeListener listener : dataChangeListeners) {
-			
+
 			listener.onDataChanged();
-			
+
 		}
 
 	}
 
 	public void setProdutoService(ProdutoService produtoService) {
-		
+
 		this.produtoService = produtoService;
-		
+
 	}
 
 	public void setProduto(Produto produto) {
@@ -297,6 +297,7 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 		Constraints.setTextFieldInteger(txtEstoqueMinimo);
 
 		principalController = new PrincipalFormController();
+		
 	}
 
 	private Produto getFormData() {
@@ -347,7 +348,8 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 		} else if (txtAreaDescricao.getText() == null || txtAreaDescricao.getText().trim().equals("")) {
 
-			Alerts.showAlert("Novo Produto", "Campo obrigatório", "Digite a descrição do produto", AlertType.INFORMATION);
+			Alerts.showAlert("Novo Produto", "Campo obrigatório", "Digite a descrição do produto",
+					AlertType.INFORMATION);
 
 			txtAreaDescricao.requestFocus();
 

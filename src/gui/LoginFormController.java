@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -36,6 +37,9 @@ public class LoginFormController implements Initializable {
 
 	@FXML
 	private Button btOK;
+	
+	@FXML
+	private Label labelTitle;
 
 	@FXML
 	public void onBtOKAction(ActionEvent event) {
@@ -104,6 +108,8 @@ public class LoginFormController implements Initializable {
 		
 		logado = new Usuario();
 		usuarioService = new UsuarioService();
+		
+		labelTitle.setText(Strings.getTitleLogin());
 		
 	}
 

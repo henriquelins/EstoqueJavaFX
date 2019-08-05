@@ -216,6 +216,8 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 	public void update(Produto produto) {
 
 		PreparedStatement st = null;
+		ResultSet rs = null;
+		int id = 0;
 
 		try {
 
@@ -232,8 +234,23 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			st.setInt(6, produto.getEstoqueMinimo());
 			st.setInt(7, produto.getIdProduto());
 
-			st.executeUpdate();
-			
+			int rowsAffected = st.executeUpdate();
+
+			if (rowsAffected > 0) {
+
+				rs = st.getGeneratedKeys();
+
+				if (rs.next()) {
+
+					id = rs.getInt(1);
+					produto.setIdProduto(id);
+
+				}
+
+				updateFoto(produto);
+
+			}
+
 			conn.commit();
 
 		} catch (SQLException e) {
@@ -267,7 +284,7 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			st = conn.prepareStatement("DELETE FROM produto WHERE id_produto = ?");
 
 			st.setInt(1, id);
-						
+
 			int rowsAffected = st.executeUpdate();
 
 			if (rowsAffected == 0) {
@@ -275,7 +292,7 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 				throw new DbException("Erro ao deletar o produto");
 
 			}
-			
+
 			conn.commit();
 
 		} catch (SQLException e) {
@@ -312,7 +329,7 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			st.setInt(2, idProduto);
 
 			st.executeUpdate();
-			
+
 			conn.commit();
 
 		} catch (SQLException e) {
@@ -380,14 +397,46 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 	}
 
 	@Override
-	public void updateFoto(Produto foto) {
-		// TODO Auto-generated method stub
+	public void updateFoto(Produto produto) {
+		
+		PreparedStatement st = null;
 
+		try {
+
+			conn.setAutoCommit(false);
+
+			st = conn.prepareStatement("UPDATE foto SET foto = ?, local = ? WHERE id_produto = ?");
+			
+			st.setBytes(1, produto.getFoto().getFoto());
+			st.setString(2, produto.getFoto().getLocal());
+			st.setInt(3, produto.getIdProduto());
+
+			conn.commit();
+
+		} catch (SQLException e) {
+
+			try {
+
+				conn.rollback();
+				throw new DbException("Transaction rolled back. Cause by: " + e.getLocalizedMessage());
+
+			} catch (SQLException e1) {
+
+				throw new DbException("Error trying to rollback. Cause by: " + e.getLocalizedMessage());
+			}
+
+		} finally {
+
+			DB.closeStatement(st);
+
+		}
+		
+		
 	}
 
 	@Override
 	public void deleteByIdFoto(Integer id) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
