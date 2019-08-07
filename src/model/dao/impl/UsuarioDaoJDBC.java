@@ -175,7 +175,7 @@ public class UsuarioDaoJDBC implements UsuarioDao {
 		ResultSet rs = null;
 		
 		try {
-			st = conn.prepareStatement("SELECT * FROM usuario ORDER BY nome_usuario");
+			st = conn.prepareStatement("SELECT * FROM usuario ORDER BY id_usuario");
 
 			rs = st.executeQuery();
 

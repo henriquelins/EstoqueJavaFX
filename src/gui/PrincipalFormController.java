@@ -35,6 +35,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -135,49 +136,49 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	@FXML
 	public void onMenuItemMovimentacao(ActionEvent event) {
 
-		createMovimentacaoListDialogForm("/gui/MovimentacaoListView.fxml");
+		createMovimentacaoListDialogForm(Strings.getMovimentacaoListView());
 
 	}
 
 	@FXML
 	public void onMenuItemUsuario(ActionEvent event) {
 
-		createUsuarioDialogForm("/gui/UsuarioView.fxml");
+		createUsuarioDialogForm(Strings.getUsuarioView());
 
 	}
 
 	@FXML
 	public void onMenuItemProduto(ActionEvent event) {
-
-		createProdutoNovoDialogForm("/gui/ProdutoNovoView.fxml");
+		
+		createProdutoDialogForm(Strings.getProdutoNovoView());
 
 	}
 
 	@FXML
 	public void onMenuItemSetor(ActionEvent event) {
 
-		createSetorNovoDialogForm("/gui/SetorNovoView.fxml");
+		createVBoxDialogForm(Strings.getSetorNovoView());
 
 	}
 
 	@FXML
 	public void onMenuItemCategoria(ActionEvent event) {
 
-		createCategoriaNovoDialogForm("/gui/CategoriaNovoView.fxml");
+		createVBoxDialogForm(Strings.getCategoriaNovoView());
 
 	}
 
 	@FXML
 	public void onMenuItemSobre(ActionEvent event) {
 
-		createSobreDialogForm("/gui/SobreView.fxml");
+		createPaneDialogForm(Strings.getSobreView());
 
 	}
 
 	@FXML
 	public void onBtNovoAction(ActionEvent event) {
 
-		createProdutoNovoDialogForm("/gui/ProdutoNovoView.fxml");
+		createProdutoDialogForm(Strings.getProdutoNovoView());
 
 	}
 
@@ -205,10 +206,12 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 				updateTableView();
 				updatePesquisa();
 
-			}
+			} else {
 
-			updateTableView();
-			updatePesquisa();
+				updateTableView();
+				updatePesquisa();
+
+			}
 
 		}
 
@@ -241,10 +244,12 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 					updateTableView();
 					updatePesquisa();
 
-				}
+				} else {
 
-				updateTableView();
-				updatePesquisa();
+					updateTableView();
+					updatePesquisa();
+
+				}
 
 			} else {
 
@@ -257,10 +262,12 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 					updateTableView();
 					updatePesquisa();
 
-				}
+				} else {
 
-				updateTableView();
-				updatePesquisa();
+					updateTableView();
+					updatePesquisa();
+
+				}
 
 			}
 
@@ -298,6 +305,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		for (Setor setor : setorService.findAllNome()) {
 
 			listaSetor.add(setor.getNome());
+			
 		}
 
 		return listaSetor;
@@ -390,16 +398,17 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 	}
 
-	private void createSetorNovoDialogForm(String absoluteName) {
+	private void createVBoxDialogForm(String absoluteName) {
 
 		try {
 
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-			VBox vbox = loader.load();
+			VBox pane = loader.load();
 
+			Main.setDialogScene(new Scene(pane));
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle(Strings.getTitle());
-			produtoStage.setScene(new Scene(vbox));
+			produtoStage.setScene(Main.getDialogScene());
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
@@ -411,33 +420,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 		} catch (IOException e) {
 
-			Alerts.showAlert("IO Exception", "Erro ao carregar a tela Setor", e.getLocalizedMessage(), AlertType.ERROR);
-
-		}
-	}
-
-	private void createCategoriaNovoDialogForm(String absoluteName) {
-
-		try {
-
-			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-			VBox vbox = loader.load();
-
-			Stage produtoStage = new Stage();
-			produtoStage.setTitle(Strings.getTitle());
-			produtoStage.setScene(new Scene(vbox));
-			produtoStage.setResizable(false);
-			produtoStage.initModality(Modality.APPLICATION_MODAL);
-			produtoStage.initOwner(null);
-
-			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
-			produtoStage.getIcons().add(applicationIcon);
-
-			produtoStage.showAndWait();
-
-		} catch (IOException e) {
-
-			Alerts.showAlert("IO Exception", "Erro ao carregar a tela Categoria", e.getLocalizedMessage(),
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela", e.getLocalizedMessage(),
 					AlertType.ERROR);
 
 		}
@@ -449,16 +432,15 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		try {
 
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-			ScrollPane scrollPane = loader.load();
+			ScrollPane pane = loader.load();
 
-			scrollPane.setFitToHeight(true);
-			scrollPane.setFitToWidth(true);
-
+			pane.setFitToHeight(true);
+			pane.setFitToWidth(true);
+			
+			Main.setDialogScene(new Scene(pane));
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle(Strings.getTitle());
-
-			produtoStage.setScene(new Scene(scrollPane));
-
+			produtoStage.setScene(Main.getDialogScene());
 			produtoStage.setResizable(true);
 			produtoStage.setMaximized(true);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
@@ -471,79 +453,14 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 		} catch (IOException e) {
 
-			Alerts.showAlert("IO Exception", "Erro ao carregar a tela Movimentação", e.getLocalizedMessage(),
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela", e.getLocalizedMessage(),
 					AlertType.ERROR);
 
 		}
 
 	}
-
-	private void createProdutoShowDialogForm(Produto prod, String absoluteName) {
-
-		try {
-
-			setProduto(prod);
-
-			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-			Pane pane = loader.load();
-
-			Main.setDialogScene(new Scene(pane));
-			Stage produtoStage = new Stage();
-			produtoStage.setTitle(Strings.getTitle());
-			produtoStage.setScene(Main.getDialogScene());
-			produtoStage.setResizable(false);
-			produtoStage.initModality(Modality.APPLICATION_MODAL);
-			produtoStage.initOwner(null);
-
-			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
-			produtoStage.getIcons().add(applicationIcon);
-
-			produtoStage.showAndWait();
-
-		} catch (IOException e) {
-
-			Alerts.showAlert("IO Exception", "Erro ao carregar a tela detelhes do produto", e.getMessage(),
-					AlertType.ERROR);
-
-		}
-	}
-
-	private void createProdutoEditarDialogForm(Produto prod, String absoluteName) {
-
-		try {
-
-			setProduto(prod);
-		
-			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-			Pane pane = loader.load();
-
-			ProdutoEditarFormController controller = loader.getController();
-			controller.setProduto(produto);
-			controller.setProdutoService(new ProdutoService());
-			controller.subscribeDataChangeListener(this);
-
-			Main.setDialogScene(new Scene(pane));
-			Stage produtoStage = new Stage();
-			produtoStage.setTitle(Strings.getTitle());
-			produtoStage.setScene(Main.getDialogScene());
-			produtoStage.setResizable(false);
-			produtoStage.initModality(Modality.APPLICATION_MODAL);
-			produtoStage.initOwner(null);
-
-			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
-			produtoStage.getIcons().add(applicationIcon);
-
-			produtoStage.showAndWait();
-
-		} catch (IOException e) {
-
-			Alerts.showAlert("IO Exception", "Erro ao carregar a tela editar produtos", e.getMessage(),
-					AlertType.ERROR);
-
-		}
-	}
-
-	private void createProdutoNovoDialogForm(String absoluteName) {
+	
+	private void createProdutoDialogForm(String absoluteName) {
 
 		try {
 
@@ -570,10 +487,82 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 		} catch (IOException e) {
 
-			Alerts.showAlert("IO Exception", "Erro ao carregar a tela Produtos", e.getMessage(), AlertType.ERROR);
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela", e.getMessage(),
+					AlertType.ERROR);
 
 		}
 	}
+
+
+	
+	private void createProdutoEditarDialogForm(Produto prod, String absoluteName) {
+
+		try {
+
+			setProduto(prod);
+
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			Pane pane = loader.load();
+
+			ProdutoEditarFormController controller = loader.getController();
+			controller.setProduto(produto);
+			controller.setProdutoService(new ProdutoService());
+			controller.subscribeDataChangeListener(this);
+
+			Main.setDialogScene(new Scene(pane));
+			Stage produtoStage = new Stage();
+			produtoStage.setTitle(Strings.getTitle());
+			produtoStage.setScene(Main.getDialogScene());
+			produtoStage.setResizable(false);
+			produtoStage.initModality(Modality.APPLICATION_MODAL);
+			produtoStage.initOwner(null);
+
+			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
+			produtoStage.getIcons().add(applicationIcon);
+
+			produtoStage.showAndWait();
+
+		} catch (IOException e) {
+
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela", e.getMessage(),
+					AlertType.ERROR);
+
+		}
+	}
+	
+	private void createProdutoShowDialogForm(Produto prod, String absoluteName) {
+
+		try {
+
+			setProduto(prod);
+
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			Pane pane = loader.load();
+
+			ProdutoShowFormController controller = loader.getController();
+			controller.setProduto(produto);
+			
+			Main.setDialogScene(new Scene(pane));
+			Stage produtoStage = new Stage();
+			produtoStage.setTitle(Strings.getTitle());
+			produtoStage.setScene(Main.getDialogScene());
+			produtoStage.setResizable(false);
+			produtoStage.initModality(Modality.APPLICATION_MODAL);
+			produtoStage.initOwner(null);
+
+			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
+			produtoStage.getIcons().add(applicationIcon);
+
+			produtoStage.showAndWait();
+
+		} catch (IOException e) {
+
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela", e.getMessage(),
+					AlertType.ERROR);
+
+		}
+	}
+
 
 	private void createMovimentacaoDialogForm(Produto prod, String absoluteName) {
 
@@ -605,7 +594,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 		} catch (IOException e) {
 
-			Alerts.showAlert("IO Exception", "Erro ao carregar a tela Produtos", e.getMessage(), AlertType.ERROR);
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela", e.getMessage(), AlertType.ERROR);
 		}
 	}
 
@@ -614,14 +603,12 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		try {
 
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-			ScrollPane scrollPane = loader.load();
+			BorderPane pane = loader.load();
 
-			scrollPane.setFitToHeight(true);
-			scrollPane.setFitToWidth(true);
-
+			Main.setDialogScene(new Scene(pane));
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle(Strings.getTitle());
-			produtoStage.setScene(new Scene(scrollPane));
+			produtoStage.setScene(Main.getDialogScene());
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
@@ -633,21 +620,22 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 		} catch (IOException e) {
 
-			Alerts.showAlert("IO Exception", "Erro ao carregar a tela Usuários", e.getMessage(), AlertType.ERROR);
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela", e.getMessage(), AlertType.ERROR);
 
 		}
 	}
 
-	private void createSobreDialogForm(String absoluteName) {
+	private void createPaneDialogForm(String absoluteName) {
 
 		try {
 
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 
+			Main.setDialogScene(new Scene(pane));
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle(Strings.getTitle());
-			produtoStage.setScene(new Scene(pane));
+			produtoStage.setScene(Main.getDialogScene());
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
@@ -659,7 +647,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 		} catch (IOException e) {
 
-			Alerts.showAlert("IO Exception", "Erro ao carregar a tela Sobre o aplicativo", e.getMessage(),
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela", e.getMessage(),
 					AlertType.ERROR);
 
 		}
@@ -705,14 +693,14 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 				super.updateItem(prod, empty);
 
 				if (prod == null) {
-					
+
 					setGraphic(null);
 					return;
-					
+
 				}
 
 				setGraphic(button);
-				button.setOnAction(event -> createProdutoEditarDialogForm(prod, "/gui/ProdutoEditarView.fxml"));
+				button.setOnAction(event -> createProdutoEditarDialogForm(prod, Strings.getProdutoEditarView()));
 
 			}
 		});
@@ -786,7 +774,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 				}
 
 				setGraphic(button);
-				button.setOnAction(event -> createProdutoShowDialogForm(prod, "/gui/ProdutoShowView.fxml"));
+				button.setOnAction(event -> createProdutoShowDialogForm(prod, Strings.getProdutoShowView()));
 
 			}
 		});

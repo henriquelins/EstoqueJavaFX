@@ -57,7 +57,7 @@ public class LoginFormController implements Initializable {
 
 					Utils.currentStage(event).close();
 					
-					createPrincipalForm("/gui/PrincipalView.fxml");
+					createPrincipalForm(Strings.getPrincipalView());
 
 				} else {
 
@@ -125,7 +125,6 @@ public class LoginFormController implements Initializable {
 
 			Stage principalStage = new Stage();
 			principalStage.setTitle(Strings.getTitle());
-
 			principalStage.setScene(new Scene(scrollPane));
 			
 			principalStage.setResizable(true);

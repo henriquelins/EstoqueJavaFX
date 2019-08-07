@@ -1,5 +1,6 @@
 package model.dao.impl;
 
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -360,12 +361,15 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 		try {
 
 			conn.setAutoCommit(false);
-
+			
 			st = conn.prepareStatement("INSERT INTO foto (id_produto, foto, local)" + " VALUES (?, ?, ?)");
 
+			Blob blob = st.getConnection().createBlob();
+			blob.setBytes(2, produto.getFoto().getFoto());
+			
 			st.setInt(1, produto.getIdProduto());
-			st.setBytes(2, produto.getFoto().getFoto());
-			st.setString(3, produto.getFoto().getLocal());
+			st.setBlob(2, blob);
+			st.setString(3, produto.getFoto().getLocal());			
 
 			int rowsAffected = st.executeUpdate();
 

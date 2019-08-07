@@ -1,8 +1,10 @@
 package gui;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import gui.util.Strings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
@@ -27,9 +29,21 @@ public class VisualizarFotoFormController implements Initializable {
 	private void initializeNodes() {
 
 		txtEndereco.setText(ProdutoNovoFormController.getLocal().toString());
+		visualisarFoto();
+	}
 
-		imageView.setImage(new Image(ProdutoNovoFormController.getArquivo().toURI().toString()));
+	public void visualisarFoto() {
+		
+		if (PrincipalFormController.getProduto().getFoto().getFoto() == null) {
 
+			imageView.setImage(new Image( Strings.getSemFoto()));
+
+		} else {
+
+			imageView.setImage(
+					new Image(new File(PrincipalFormController.getProduto().getFoto().getLocal()).toURI().toString()));
+
+		}
 	}
 
 }

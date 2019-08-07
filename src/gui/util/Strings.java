@@ -5,7 +5,7 @@ public class Strings {
 	public Strings() {
 	}
 
-	// Titles
+	// Label Titles
 
 	public static String getTitle() {
 
@@ -24,6 +24,15 @@ public class Strings {
 		return "Login";
 
 	}
+	
+	public static String getTitleUsuario() {
+
+		return "Cadastro de Usuários";
+
+	}
+	
+	
+	
 
 	// Images
 
@@ -44,6 +53,14 @@ public class Strings {
 		return "/imagens/conecta_2.png";
 
 	}
+	
+	public static String getSemFoto() {
+
+		return "/imagens/SEM-FOTO.png";
+
+	}
+	
+	
 
 	
 	

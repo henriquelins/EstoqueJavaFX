@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
 
+import gui.util.Strings;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -120,7 +121,7 @@ public class ProdutoShowFormController implements Initializable {
 
 		if (PrincipalFormController.getProduto().getFoto().getFoto() == null) {
 
-			imageViewProduto.setImage(new Image("/imagens/SEM-FOTO.png"));
+			imageViewProduto.setImage(new Image( Strings.getSemFoto()));
 
 		} else {
 
@@ -128,9 +129,25 @@ public class ProdutoShowFormController implements Initializable {
 					new Image(new File(PrincipalFormController.getProduto().getFoto().getLocal()).toURI().toString()));
 
 			// System.out.println();
-
-			// imageViewProduto.setImage(new Image (new
-			// ByteArrayInputStream(PrincipalFormController.getProduto().getFoto().getFoto())));
+			
+			
+			/*ByteArrayInputStream bis = new ByteArrayInputStream(PrincipalFormController.getProduto().getFoto().getFoto());
+			BufferedImage bImage2 = ImageIO.read(bis);
+			ImageIO.write(bImage2, "jpg", new File("output.jpg") );
+			
+			
+			BufferedImage img = null;
+			
+			try {
+				 img = ImageIO.read(new ByteArrayInputStream(PrincipalFormController.getProduto().getFoto().getFoto()));
+				 
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+				
+			imageViewProduto.setImage(new Image (bImage2));*/
 
 		}
 

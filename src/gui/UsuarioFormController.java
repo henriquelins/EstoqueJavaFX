@@ -1,6 +1,5 @@
 package gui;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -9,27 +8,24 @@ import application.Main;
 import db.DbIntegrityException;
 import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
+import gui.util.Strings;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Usuario;
 import model.services.UsuarioService;
@@ -45,6 +41,12 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 	private Usuario usuarioComparar;
 
 	private static ObservableList<Usuario> listaUsuarios;
+	
+	@FXML
+	private ScrollPane scrollPane;
+	
+	@FXML
+	private Label labelTitle;
 
 	@FXML
 	private TextField txtIdUsuario;
@@ -69,18 +71,6 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 
 	@FXML
 	private Button btCancelarEditarUsuario;
-	
-	@FXML
-	private TextField txtPesquisar;
-	
-	@FXML
-	private Button btPesquisarUsuario;
-	
-	@FXML
-	private Button btAcesso;
-	
-	@FXML
-	private HBox hbox;
 
 	@FXML
 	public TableView<Usuario> tableViewUsuario;
@@ -154,52 +144,16 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 		} else {
 
 			limparCampos();
+
 		}
 
 	}
-	
-	
+
 	@FXML
 	public void onBtPesquisarAction(ActionEvent event) {
-		
+
 		Alerts.showAlert("Button Pesquisar", "Não implementado", "onBtPesquisarAction", AlertType.ERROR);
-		
-	}
-	
-	@FXML
-	public void onBtAcessoAction(ActionEvent event) {
-		
-		createAcessoDialogForm("/gui/AcessoView.fxml");
-		
-	}
 
-	private void createAcessoDialogForm(String absoluteName) {
-		
-		try {
-
-			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-			Pane pane = loader.load();
-
-			Stage produtoStage = new Stage();
-			produtoStage.setTitle("Acesso");
-			produtoStage.setScene(new Scene(pane));
-			produtoStage.setResizable(false);
-			produtoStage.initModality(Modality.APPLICATION_MODAL);
-			produtoStage.initOwner(null);
-
-			Image applicationIcon = new Image(getClass().getResourceAsStream("/imagens/bozo.jpg"));
-			produtoStage.getIcons().add(applicationIcon);
-
-			produtoStage.showAndWait();
-
-		} catch (IOException e) {
-
-			Alerts.showAlert("IO Exception", "Erro ao carregar a tela Acesso", e.getMessage(),
-					AlertType.ERROR);
-
-		}
-
-		
 	}
 
 	protected void editarCamposDoUsuario() {
@@ -224,8 +178,6 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 		}
 
 	}
-	
-	
 
 	protected void novoCamposDoUsuario() {
 
@@ -328,7 +280,9 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 	}
 
 	private void initializeNodes() {
-
+		
+		labelTitle.setText(Strings.getTitleUsuario());
+		
 		showUsuarioDetails(null);
 
 		tableViewUsuario.getSelectionModel().selectedItemProperty()
@@ -341,9 +295,11 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("Nome"));
 		tableColumnLogin.setCellValueFactory(new PropertyValueFactory<>("Login"));
 
-		Stage stage = (Stage) Main.getMainScene().getWindow();
-		hbox.prefHeightProperty().bind(stage.heightProperty());
+		Stage stage = (Stage) Main.getMainScene().getWindow();		
+		scrollPane.prefHeightProperty().bind(stage.heightProperty());
+		scrollPane.prefWidthProperty().bind(stage.heightProperty());
 		tableViewUsuario.prefHeightProperty().bind(stage.heightProperty());
+		tableViewUsuario.prefHeightProperty().bind(stage.widthProperty());
 
 		service = new UsuarioService();
 		usuarioTabela = new Usuario();
@@ -355,7 +311,9 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 	public void updateTableView() {
 
 		if (service == null) {
+			
 			throw new IllegalStateException("Serviço está nulo");
+			
 		}
 
 		listaUsuarios = FXCollections.observableArrayList(service.findAll());
