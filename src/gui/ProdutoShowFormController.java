@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.SynchronousQueue;
 
 import javax.imageio.ImageIO;
 
@@ -80,76 +81,32 @@ public class ProdutoShowFormController implements Initializable {
 
 		labelDetalhes.setText(PrincipalFormController.getProduto().getDescricao());
 
-		// imageViewProduto.setImage(new Image ("/imagens/bozo.jpg"));
-		// imageViewProduto.setImage(new Image ("/imagens/SEM-FOTO.png"));
-
-		// imageViewProduto.setImage(new Image (new
-		// ByteArrayInputStream(PrincipalFormController.getProduto().getFoto().getFoto())));
-
-		// Image imagem = new Image(new
-		// ByteArrayInputStream(PrincipalFormController.getProduto().getFoto().getFoto()));
-
-		// imageViewProduto .setImage(imagem);
-
-		// InputStream is = new ByteArrayInputStream(
-		// PrincipalFormController.getProduto().getFoto().getFoto());
-
-		// ImageIcon iconFrente = new
-		// ImageIcon(PrincipalFormController.getProduto().getFoto().getFoto());
-
-		/*
-		 * try { byte[] imageInbyte =
-		 * PrincipalFormController.getProduto().getFoto().getFoto(); BufferedImage img1;
-		 * img1 = ImageIO.read(new ByteArrayInputStream(imageInbyte)); Image image =
-		 * SwingFXUtils.toFXImage(img1, null); imageViewProduto.setImage(image);
-		 * imageViewProduto.setPreserveRatio(true);
-		 * 
-		 * } catch (IOException e) { e.printStackTrace(); }
-		 */
-
-		/*
-		 * Image image = null; try {
-		 * 
-		 * image =
-		 * byteToImage(PrincipalFormController.getProduto().getFoto().getFoto());
-		 * 
-		 * } catch (IOException e) {
-		 * 
-		 * 
-		 * e.printStackTrace(); }
-		 */
-
+		
+		
+		
+		System.out.println(PrincipalFormController.getProduto().getFoto().getFoto());
+		
 		if (PrincipalFormController.getProduto().getFoto().getFoto() == null) {
-
-			imageViewProduto.setImage(new Image( Strings.getSemFoto()));
-
+			
+			imageViewProduto.setImage(new Image (Strings.getSemFoto()));
+			
 		} else {
-
-			imageViewProduto.setImage(
-					new Image(new File(PrincipalFormController.getProduto().getFoto().getLocal()).toURI().toString()));
-
-			// System.out.println();
-			
-			
-			/*ByteArrayInputStream bis = new ByteArrayInputStream(PrincipalFormController.getProduto().getFoto().getFoto());
-			BufferedImage bImage2 = ImageIO.read(bis);
-			ImageIO.write(bImage2, "jpg", new File("output.jpg") );
-			
-			
-			BufferedImage img = null;
 			
 			try {
-				 img = ImageIO.read(new ByteArrayInputStream(PrincipalFormController.getProduto().getFoto().getFoto()));
-				 
+				imageViewProduto.setImage(byteToImage(PrincipalFormController.getProduto().getFoto().getFoto()));
+				//imageViewProduto.setImage(new Image (new ByteArrayInputStream(PrincipalFormController.getProduto().getFoto().getFoto())));
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
-				
-			imageViewProduto.setImage(new Image (bImage2));*/
-
+			
+			//imageViewProduto.setImage(new Image (new ByteArrayInputStream(PrincipalFormController.getProduto().getFoto().getFoto())));
 		}
+
+			//imageViewProduto.setImage(new Image( Strings.getSemFoto()));
+
 
 	}
 

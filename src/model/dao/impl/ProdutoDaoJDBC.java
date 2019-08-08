@@ -1,5 +1,6 @@
 package model.dao.impl;
 
+import java.io.ByteArrayInputStream;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -361,15 +362,12 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 		try {
 
 			conn.setAutoCommit(false);
-			
+
 			st = conn.prepareStatement("INSERT INTO foto (id_produto, foto, local)" + " VALUES (?, ?, ?)");
 
-			Blob blob = st.getConnection().createBlob();
-			blob.setBytes(2, produto.getFoto().getFoto());
-			
 			st.setInt(1, produto.getIdProduto());
-			st.setBlob(2, blob);
-			st.setString(3, produto.getFoto().getLocal());			
+			st.setBytes(2, produto.getFoto().getFoto());
+			st.setString(3, produto.getFoto().getLocal());
 
 			int rowsAffected = st.executeUpdate();
 
@@ -402,7 +400,7 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 
 	@Override
 	public void updateFoto(Produto produto) {
-		
+
 		PreparedStatement st = null;
 
 		try {
@@ -410,7 +408,7 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			conn.setAutoCommit(false);
 
 			st = conn.prepareStatement("UPDATE foto SET foto = ?, local = ? WHERE id_produto = ?");
-			
+
 			st.setBytes(1, produto.getFoto().getFoto());
 			st.setString(2, produto.getFoto().getLocal());
 			st.setInt(3, produto.getIdProduto());
@@ -434,13 +432,11 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			DB.closeStatement(st);
 
 		}
-		
-		
+
 	}
 
 	@Override
 	public void deleteByIdFoto(Integer id) {
-		
 
 	}
 

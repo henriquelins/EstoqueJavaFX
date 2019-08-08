@@ -1,5 +1,7 @@
 package gui;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,6 +11,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import javax.imageio.ImageIO;
 
 import application.Main;
 import gui.listeners.DataChangeListener;
@@ -125,14 +129,43 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 			local = arquivo.getAbsolutePath();
 			txtEnderecoDaFoto.setText(local);
+			InputStream converter = null;
 
-			bytes = getByte();
+			bytes = new byte[(int) arquivo.length()];
 
+			try {
+
+				converter = new FileInputStream(local);
+
+			} catch (FileNotFoundException e) {
+
+				e.printStackTrace();
+			}
+
+			int offset = 0;
+			int numRead = 0;
+
+			try {
+
+				while (offset < bytes.length && (numRead = converter.read(bytes, offset, bytes.length - offset)) >= 0) {
+					offset += numRead;
+				}
+
+				
+
+			} catch (IOException e) {
+
+				e.printStackTrace();
+
+			}
+			
 			Foto fot = new Foto();
 			fot.setLocal(local);
 			fot.setFoto(bytes);
 
 			setFoto(fot);
+			
+			System.out.println(foto.getIdFoto());
 
 			Produto prod = new Produto();
 			prod.setFoto(fot);
@@ -297,7 +330,7 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 		Constraints.setTextFieldInteger(txtEstoqueMinimo);
 
 		principalController = new PrincipalFormController();
-		
+
 	}
 
 	private Produto getFormData() {
