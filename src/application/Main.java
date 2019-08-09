@@ -114,6 +114,9 @@ public class Main extends Application {
 			primaryStage.setScene(new Scene(pane));
 			primaryStage.setResizable(false);
 			primaryStage.initStyle(StageStyle.TRANSPARENT);
+			
+			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
+			primaryStage.getIcons().add(applicationIcon);
 
 			primaryStage.show();
 

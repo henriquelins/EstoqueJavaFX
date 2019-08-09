@@ -2,11 +2,9 @@ package gui;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.concurrent.SynchronousQueue;
 
 import javax.imageio.ImageIO;
 
@@ -81,32 +79,24 @@ public class ProdutoShowFormController implements Initializable {
 
 		labelDetalhes.setText(PrincipalFormController.getProduto().getDescricao());
 
-		
-		
-		
 		System.out.println(PrincipalFormController.getProduto().getFoto().getFoto());
-		
+
 		if (PrincipalFormController.getProduto().getFoto().getFoto() == null) {
-			
-			imageViewProduto.setImage(new Image (Strings.getSemFoto()));
-			
+
+			imageViewProduto.setImage(new Image(Strings.getSemFoto()));
+
 		} else {
-			
+
 			try {
+
 				imageViewProduto.setImage(byteToImage(PrincipalFormController.getProduto().getFoto().getFoto()));
-				//imageViewProduto.setImage(new Image (new ByteArrayInputStream(PrincipalFormController.getProduto().getFoto().getFoto())));
-				
+
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+
 				e.printStackTrace();
 			}
-			
-			
-			//imageViewProduto.setImage(new Image (new ByteArrayInputStream(PrincipalFormController.getProduto().getFoto().getFoto())));
+
 		}
-
-			//imageViewProduto.setImage(new Image( Strings.getSemFoto()));
-
 
 	}
 
@@ -117,6 +107,7 @@ public class ProdutoShowFormController implements Initializable {
 
 		return image;
 	}
+	
 
 	public String status(Integer estoque_minimo, Integer quantidade) {
 
@@ -126,7 +117,7 @@ public class ProdutoShowFormController implements Initializable {
 
 			status = "Estoque baixo";
 
-		} else if ((quantidade >= estoque_minimo * 3) || (quantidade <= estoque_minimo * 6)) {
+		} else if ((quantidade >= estoque_minimo * 3) && (quantidade <= estoque_minimo * 6)) {
 
 			status = "Estoque normal";
 

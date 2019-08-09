@@ -1,11 +1,10 @@
 package model.dao.impl;
 
-import java.io.ByteArrayInputStream;
-import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -218,8 +217,6 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 	public void update(Produto produto) {
 
 		PreparedStatement st = null;
-		ResultSet rs = null;
-		int id = 0;
 
 		try {
 
@@ -236,22 +233,7 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			st.setInt(6, produto.getEstoqueMinimo());
 			st.setInt(7, produto.getIdProduto());
 
-			int rowsAffected = st.executeUpdate();
-
-			if (rowsAffected > 0) {
-
-				rs = st.getGeneratedKeys();
-
-				if (rs.next()) {
-
-					id = rs.getInt(1);
-					produto.setIdProduto(id);
-
-				}
-
-				updateFoto(produto);
-
-			}
+			updateFoto(produto);
 
 			conn.commit();
 
@@ -373,7 +355,7 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 
 			if (rowsAffected == 0) {
 
-				throw new DbException("Erro ao inserir a foto");
+				throw new DbException("Erro ao inserir foto");
 
 			}
 
@@ -396,6 +378,7 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			DB.closeStatement(st);
 
 		}
+
 	}
 
 	@Override
@@ -407,11 +390,11 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 
 			conn.setAutoCommit(false);
 
-			st = conn.prepareStatement("UPDATE foto SET foto = ?, local = ? WHERE id_produto = ?");
+			st = conn.prepareStatement("UPDATE foto SET foto = ?, local = ?,  WHERE id_foto = ?, ");
 
 			st.setBytes(1, produto.getFoto().getFoto());
 			st.setString(2, produto.getFoto().getLocal());
-			st.setInt(3, produto.getIdProduto());
+			st.setInt(3, produto.getFoto().getIdFoto());
 
 			conn.commit();
 

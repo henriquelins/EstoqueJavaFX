@@ -6,6 +6,7 @@ import java.util.Optional;
 import gui.PrincipalFormController;
 import gui.util.Alerts;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Alert.AlertType;
 import model.dao.DaoFactory;
 import model.dao.ProdutoDao;
 import model.entities.Produto;
@@ -30,7 +31,9 @@ public class ProdutoService {
 
 				dao.insert(produto);
 
-			}
+			} 
+			
+			
 
 		} else {
 
@@ -41,7 +44,7 @@ public class ProdutoService {
 
 				dao.update(produto);
 
-			}
+			} 
 
 		}
 	}

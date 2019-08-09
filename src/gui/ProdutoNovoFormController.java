@@ -1,7 +1,5 @@
 package gui;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -11,8 +9,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import javax.imageio.ImageIO;
 
 import application.Main;
 import gui.listeners.DataChangeListener;
@@ -25,14 +21,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.Image;
-import javafx.scene.layout.Pane;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -54,7 +50,7 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 	private PrincipalFormController principalController;
 
-	private byte[] bytes;
+	private static byte[] bytes;
 
 	private static File arquivo;
 
@@ -148,40 +144,52 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 			try {
 
 				while (offset < bytes.length && (numRead = converter.read(bytes, offset, bytes.length - offset)) >= 0) {
+
 					offset += numRead;
 				}
-
-				
 
 			} catch (IOException e) {
 
 				e.printStackTrace();
 
 			}
-			
+
 			Foto fot = new Foto();
 			fot.setLocal(local);
 			fot.setFoto(bytes);
 
 			setFoto(fot);
-			
-			System.out.println(foto.getIdFoto());
 
 			Produto prod = new Produto();
 			prod.setFoto(fot);
 
 			setProduto(prod);
+			
+			ProdutoNovoFormController.setLocal(local);
+			ProdutoNovoFormController.setBytes(bytes);
 
 		} else {
 
 			local = "";
 			bytes = null;
 			txtEnderecoDaFoto.setText(local);
+			
+			ProdutoNovoFormController.setLocal(local);
+			ProdutoNovoFormController.setBytes(bytes);
 
 		}
 
 	}
-
+	
+	public static byte[]  getBytes() {
+		return bytes;
+	}
+	
+	
+	public static void setBytes(byte[] bytes) {
+		ProdutoNovoFormController.bytes = bytes;
+	}
+	
 	public static Foto getFoto() {
 		return foto;
 	}
@@ -211,7 +219,7 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 		if (!txtEnderecoDaFoto.getText().equals("")) {
 
-			createVisualizarFotoDialogForm("/gui/VisualizarFotoView.fxml");
+			createVisualizarFotoDialogForm(Strings.getVisualizarFotoView());
 
 		} else {
 
@@ -225,7 +233,7 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 	private void createVisualizarFotoDialogForm(String absoluteName) {
 
 		try {
-
+			
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 

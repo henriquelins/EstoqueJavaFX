@@ -54,7 +54,7 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 	private static Foto foto;
 
-	private byte[] bytes;
+	private static byte[] bytes;
 
 	private static File arquivo;
 
@@ -105,7 +105,9 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 			ok = compararCampos();
 
 			if (ok == false) {
-
+				
+				System.out.println(produto.toString());
+				
 				produtoService.produtoNovoOuEditar(this.produto);
 				notifyDataChangeListeners();
 				Utils.fecharDialogAction();
@@ -138,8 +140,34 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 			local = arquivo.getAbsolutePath();
 			txtEnderecoDaFoto.setText(local);
+			InputStream converter = null;
 
-			bytes = getByte();
+			bytes = new byte[(int) arquivo.length()];
+
+			try {
+
+				converter = new FileInputStream(local);
+
+			} catch (FileNotFoundException e) {
+
+				e.printStackTrace();
+			}
+
+			int offset = 0;
+			int numRead = 0;
+
+			try {
+
+				while (offset < bytes.length && (numRead = converter.read(bytes, offset, bytes.length - offset)) >= 0) {
+
+					offset += numRead;
+				}
+
+			} catch (IOException e) {
+
+				e.printStackTrace();
+
+			}
 
 			Foto fot = new Foto();
 			fot.setLocal(local);
@@ -152,11 +180,17 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 			setProduto(prod);
 
+			ProdutoNovoFormController.setLocal(local);
+			ProdutoNovoFormController.setBytes(bytes);
+
 		} else {
 
 			local = "";
 			bytes = null;
 			txtEnderecoDaFoto.setText(local);
+
+			ProdutoNovoFormController.setLocal(local);
+			ProdutoNovoFormController.setBytes(bytes);
 
 		}
 
@@ -223,7 +257,7 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 		if (!txtEnderecoDaFoto.getText().equals("")) {
 
-			createVisualizarFotoDialogForm("/gui/VisualizarFotoView.fxml");
+			createVisualizarFotoDialogForm(Strings.getVisualizarFotoView());
 
 		} else {
 
@@ -238,9 +272,8 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 		try {
 
-			ProdutoNovoFormController.setArquivo(arquivo);
 			ProdutoNovoFormController.setLocal(local);
-			ProdutoNovoFormController.setFoto(foto);
+			ProdutoNovoFormController.setBytes(bytes);
 
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
@@ -349,7 +382,8 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 			produto = null;
 
 		} else {
-
+			
+			foto.setIdFoto(PrincipalFormController.getProduto().getFoto().getIdFoto());
 			foto.setLocal(local);
 			foto.setFoto(bytes);
 
