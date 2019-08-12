@@ -2,7 +2,6 @@ package gui;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -39,31 +38,26 @@ public class VisualizarFotoFormController implements Initializable {
 	}
 
 	public void visualisarFoto() {
-		
+
 		if (PrincipalFormController.getProduto().getFoto().getFoto() == null) {
 
-			imageView.setImage(new Image( Strings.getSemFoto()));
+			imageView.setImage(new Image(Strings.getSemFoto()));
 
 		} else {
 
-			//imageView.setImage(
-					//new Image(new File(PrincipalFormController.getProduto().getFoto().getLocal()).toURI().toString()));
-			
 			try {
-				
+
 				imageView.setImage(byteToImage(ProdutoNovoFormController.getBytes()));
-				
-				//imageView.setImage(byteToImage(PrincipalFormController.getProduto().getFoto().getFoto()));
-				
+
 			} catch (IOException e) {
 
 				e.printStackTrace();
-				
+
 			}
-			
+
 		}
 	}
-	
+
 	public static Image byteToImage(byte[] img) throws IOException {
 
 		BufferedImage bi = ImageIO.read(new ByteArrayInputStream(img));

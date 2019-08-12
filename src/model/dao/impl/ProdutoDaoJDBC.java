@@ -4,12 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import db.DB;
 import db.DbException;
+import gui.util.Alerts;
+import gui.util.Utils;
+import javafx.scene.control.Alert.AlertType;
 import model.dao.ProdutoDao;
 import model.entities.Foto;
 import model.entities.Produto;
@@ -55,9 +57,10 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 				foto.setFoto(rs.getBytes("foto"));
 				foto.setLocal(rs.getString("local"));
 
-				produto.setFoto(foto);
+				// produto.setFoto(foto);
 
 				return produto;
+
 			}
 
 			conn.commit();
@@ -119,7 +122,9 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 				foto.setLocal(rs.getString("local"));
 
 				produto.setFoto(foto);
+
 				list.add(produto);
+
 			}
 
 			conn.commit();
@@ -179,10 +184,10 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 				if (rs.next()) {
 
 					id = rs.getInt(1);
-					produto.setIdProduto(id);
 
 				}
 
+				produto.setIdProduto(id);
 				insertFoto(produto);
 
 				conn.commit();
@@ -233,7 +238,19 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			st.setInt(6, produto.getEstoqueMinimo());
 			st.setInt(7, produto.getIdProduto());
 
-			updateFoto(produto);
+			st.executeUpdate();
+
+			DB.closeStatement(st);
+
+			//updateFoto(produto);
+			
+			st = conn.prepareStatement("UPDATE foto SET foto = ?, local = ?  WHERE id_foto = ?");
+
+			st.setBytes(1, produto.getFoto().getFoto());
+			st.setString(2, produto.getFoto().getLocal());
+			st.setInt(3, produto.getFoto().getIdFoto());
+
+			st.executeUpdate();
 
 			conn.commit();
 
@@ -247,12 +264,13 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			} catch (SQLException e1) {
 
 				throw new DbException("Error trying to rollback. Cause by: " + e.getLocalizedMessage());
+		
+
 			}
 
 		} finally {
 
 			DB.closeStatement(st);
-
 		}
 	}
 
@@ -343,8 +361,6 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 
 		try {
 
-			conn.setAutoCommit(false);
-
 			st = conn.prepareStatement("INSERT INTO foto (id_produto, foto, local)" + " VALUES (?, ?, ?)");
 
 			st.setInt(1, produto.getIdProduto());
@@ -359,19 +375,9 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 
 			}
 
-			conn.commit();
-
 		} catch (SQLException e) {
 
-			try {
-
-				conn.rollback();
-				throw new DbException("Transaction rolled back. Cause by: " + e.getLocalizedMessage());
-
-			} catch (SQLException e1) {
-
-				throw new DbException("Error trying to rollback. Cause by: " + e.getLocalizedMessage());
-			}
+			throw new DbException("Erro ao inserir foto: " + e.getLocalizedMessage());
 
 		} finally {
 
@@ -388,27 +394,30 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 
 		try {
 
-			conn.setAutoCommit(false);
+			// conn.setAutoCommit(false);
 
-			st = conn.prepareStatement("UPDATE foto SET foto = ?, local = ?,  WHERE id_foto = ?, ");
+			st = conn.prepareStatement("UPDATE foto SET foto = ?, local = ?  WHERE id_foto = ?");
 
 			st.setBytes(1, produto.getFoto().getFoto());
 			st.setString(2, produto.getFoto().getLocal());
 			st.setInt(3, produto.getFoto().getIdFoto());
 
-			conn.commit();
+			st.executeUpdate();
+
+			// conn.commit();
 
 		} catch (SQLException e) {
 
-			try {
+			// try {
 
-				conn.rollback();
-				throw new DbException("Transaction rolled back. Cause by: " + e.getLocalizedMessage());
+			// conn.rollback();
+			throw new DbException("Transaction rolled back. Cause by: " + e.getLocalizedMessage());
 
-			} catch (SQLException e1) {
+			// } catch (SQLException e1) {
 
-				throw new DbException("Error trying to rollback. Cause by: " + e.getLocalizedMessage());
-			}
+			// throw new DbException("Error trying to rollback. Cause by: " +
+			// e.getLocalizedMessage());
+			// }
 
 		} finally {
 

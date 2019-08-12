@@ -77,7 +77,7 @@ public class UsuarioDaoJDBC implements UsuarioDao {
 		try {
 			
 			st = conn
-					.prepareStatement("UPDATE usuario " + "SET nome_usuario = ?, login = ?, senha = ?" + "WHERE id_usuario = ?");
+					.prepareStatement("UPDATE usuario SET nome_usuario = ?, login = ?, senha = ? WHERE id_usuario = ?");
 
 			st.setString(1, usuario.getNome());
 			st.setString(2, usuario.getLogin());

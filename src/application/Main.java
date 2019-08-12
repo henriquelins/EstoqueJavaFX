@@ -47,7 +47,7 @@ public class Main extends Application {
 			try {
 
 				// impede que seja criada uma nova instância do programa
-				portSocket = Integer.parseInt(PropertiesFile.loadPropertiesSocket().getProperty("socketPort"));
+				portSocket = Integer.parseInt(PropertiesFile.loadPropertiesSocket().getProperty(Strings.getPropertiessocketPort()));
 				setServerSocket(new ServerSocket(portSocket));
 				setSocket(new Socket(InetAddress.getLocalHost().getHostAddress(), portSocket));
 
@@ -63,8 +63,7 @@ public class Main extends Application {
 				}
 
 			} catch (IOException e) {
-				
-			
+
 				Alerts.showAlert("Controle de Estoque", "Erro ao abrir o programa",
 						"Já existe uma instância do programa aberta!", AlertType.ERROR);
 
@@ -96,8 +95,6 @@ public class Main extends Application {
 
 				Alerts.showAlert("Controle de Estoque", "Erro ao abrir a tela", e.getLocalizedMessage(),
 						AlertType.ERROR);
-				
-				
 
 			}
 
@@ -114,7 +111,7 @@ public class Main extends Application {
 			primaryStage.setScene(new Scene(pane));
 			primaryStage.setResizable(false);
 			primaryStage.initStyle(StageStyle.TRANSPARENT);
-			
+
 			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
 			primaryStage.getIcons().add(applicationIcon);
 

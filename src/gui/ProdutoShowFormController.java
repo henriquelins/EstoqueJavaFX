@@ -79,7 +79,6 @@ public class ProdutoShowFormController implements Initializable {
 
 		labelDetalhes.setText(PrincipalFormController.getProduto().getDescricao());
 
-		System.out.println(PrincipalFormController.getProduto().getFoto().getFoto());
 
 		if (PrincipalFormController.getProduto().getFoto().getFoto() == null) {
 

@@ -21,17 +21,17 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import model.entities.Categoria;
 import model.entities.Foto;
 import model.entities.Produto;
@@ -97,7 +97,7 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 	public void onBtSalvarProdutoAction(ActionEvent event) {
 
 		setProduto(getFormData());
-
+	
 		if (this.produto != null) {
 
 			boolean ok = false;
@@ -105,10 +105,8 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 			ok = compararCampos();
 
 			if (ok == false) {
-				
-				System.out.println(produto.toString());
-				
-				produtoService.produtoNovoOuEditar(this.produto);
+
+				produtoService.produtoNovoOuEditar(produto);
 				notifyDataChangeListeners();
 				Utils.fecharDialogAction();
 
@@ -382,7 +380,7 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 			produto = null;
 
 		} else {
-			
+
 			foto.setIdFoto(PrincipalFormController.getProduto().getFoto().getIdFoto());
 			foto.setLocal(local);
 			foto.setFoto(bytes);
@@ -412,7 +410,6 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 		txtEstoqueMinimo.setText(String.valueOf(PrincipalFormController.getProduto().getEstoqueMinimo()));
 		txtAreaDescricao.setText(PrincipalFormController.getProduto().getDescricao());
 		txtEnderecoDaFoto.setText(PrincipalFormController.getProduto().getFoto().getLocal().toString());
-
 		bytes = PrincipalFormController.getProduto().getFoto().getFoto();
 
 		ProdutoNovoFormController

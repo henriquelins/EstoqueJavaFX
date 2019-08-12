@@ -12,7 +12,7 @@ public class Strings {
 		return "Conecta - Controle de estoque";
 
 	}
-	
+
 	public static String getTitleSplash() {
 
 		return "Controle de Estoque";
@@ -24,15 +24,20 @@ public class Strings {
 		return "Login";
 
 	}
-	
+
 	public static String getTitleUsuario() {
 
 		return "Cadastro de Usuários";
 
 	}
-	
-	
-	
+
+	// Properties
+
+	public static String getPropertiessocketPort() {
+
+		return "socketPort";
+
+	}
 
 	// Images
 
@@ -53,18 +58,13 @@ public class Strings {
 		return "/imagens/conecta_2.png";
 
 	}
-	
+
 	public static String getSemFoto() {
 
 		return "/imagens/SEM-FOTO.png";
 
 	}
-	
-	
 
-	
-	
-	
 	// fxml
 
 	public static String getSplashView() {

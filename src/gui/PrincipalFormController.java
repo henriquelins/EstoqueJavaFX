@@ -535,7 +535,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		try {
 
 			setProduto(prod);
-
+			
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 
