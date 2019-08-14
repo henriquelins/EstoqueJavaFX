@@ -4,7 +4,6 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import application.Main;
 import db.DbIntegrityException;
 import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
@@ -18,6 +17,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.ScrollPane;
@@ -26,7 +26,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Stage;
 import model.entities.Usuario;
 import model.services.UsuarioService;
 
@@ -41,10 +40,10 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 	private Usuario usuarioComparar;
 
 	private static ObservableList<Usuario> listaUsuarios;
-	
+
 	@FXML
 	private ScrollPane scrollPane;
-	
+
 	@FXML
 	private Label labelTitle;
 
@@ -73,6 +72,9 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 	private Button btCancelarEditarUsuario;
 
 	@FXML
+	private ChoiceBox<String> choiceBoxAcesso;
+
+	@FXML
 	public TableView<Usuario> tableViewUsuario;
 
 	@FXML
@@ -83,6 +85,9 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 
 	@FXML
 	private TableColumn<Usuario, String> tableColumnLogin;
+	
+	@FXML
+	private TableColumn<Usuario, String> tableColumnAcesso;
 
 	@FXML
 	private TableColumn<Usuario, Usuario> tableColumnEDIT;
@@ -272,6 +277,13 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 
 	}
 
+	private ObservableList<String> listaAcesso() {
+
+		ObservableList<String> listaChoiceBox = FXCollections.observableArrayList("1 - Administrador", "2 - Operador");
+		return listaChoiceBox;
+
+	}
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
@@ -280,9 +292,9 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 	}
 
 	private void initializeNodes() {
-		
+
 		labelTitle.setText(Strings.getTitleUsuario());
-		
+
 		showUsuarioDetails(null);
 
 		tableViewUsuario.getSelectionModel().selectedItemProperty()
@@ -294,15 +306,12 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("idUsuario"));
 		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("Nome"));
 		tableColumnLogin.setCellValueFactory(new PropertyValueFactory<>("Login"));
-
-		Stage stage = (Stage) Main.getMainScene().getWindow();		
-		scrollPane.prefHeightProperty().bind(stage.heightProperty());
-		scrollPane.prefWidthProperty().bind(stage.heightProperty());
-		tableViewUsuario.prefHeightProperty().bind(stage.heightProperty());
-		tableViewUsuario.prefHeightProperty().bind(stage.widthProperty());
+		tableColumnAcesso.setCellValueFactory(new PropertyValueFactory<>("Acesso"));;
 
 		service = new UsuarioService();
 		usuarioTabela = new Usuario();
+
+		choiceBoxAcesso.setItems(listaAcesso());
 
 		updateTableView();
 
@@ -311,9 +320,9 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 	public void updateTableView() {
 
 		if (service == null) {
-			
+
 			throw new IllegalStateException("Serviço está nulo");
-			
+
 		}
 
 		listaUsuarios = FXCollections.observableArrayList(service.findAll());
@@ -366,6 +375,17 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 
 			pswRepetirSenha.requestFocus();
 			usuario = null;
+			
+		
+		}else if (choiceBoxAcesso.getSelectionModel().isEmpty() == true) {
+
+				Alerts.showAlert("Novo Usuário", "Campo obrigatório", "Selecione o acesso!",
+						AlertType.INFORMATION);
+
+				choiceBoxAcesso.requestFocus();
+				usuario = null;
+
+			
 
 		} else {
 
@@ -378,10 +398,21 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 				usuario.setIdUsuario(Integer.valueOf(txtIdUsuario.getText()));
 
 			}
+			
+			String selectedChoice = choiceBoxAcesso.getSelectionModel().getSelectedItem();
+			
+			//choiceBox.getSelectionModel().setSelectedItem("oranges");
+			
+			System.out.println(selectedChoice);
+			
+			//int acesso = Integer.valueOf(String.valueOf(choiceBoxAcesso.getSelectionModel()));
 
+			int acesso = Integer.valueOf(selectedChoice.substring(0,1));
+			
 			usuario.setNome(txtNome.getText());
 			usuario.setLogin(txtLogin.getText());
 			usuario.setSenha(pswSenha.getText());
+			usuario.setAcesso(acesso);
 
 		}
 

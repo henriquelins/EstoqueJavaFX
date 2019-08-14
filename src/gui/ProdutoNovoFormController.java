@@ -44,10 +44,6 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 	private ProdutoService produtoService;
 
-	private static Produto produto;
-
-	private static Foto foto;
-
 	private PrincipalFormController principalController;
 
 	private static byte[] bytes;
@@ -95,11 +91,11 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 	@FXML
 	public void onBtSalvarProdutoAction(ActionEvent event) {
 
-		setProduto(getFormData());
+		PrincipalFormController.setProduto(getFormData());
 
-		if (produto != null) {
+		if (PrincipalFormController.getProduto() != null) {
 
-			produtoService.produtoNovoOuEditar(produto);
+			produtoService.produtoNovoOuEditar(PrincipalFormController.getProduto());
 			notifyDataChangeListeners();
 			Utils.fecharDialogAction();
 
@@ -158,76 +154,58 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 			fot.setLocal(local);
 			fot.setFoto(bytes);
 
-			setFoto(fot);
-
 			Produto prod = new Produto();
 			prod.setFoto(fot);
 
-			setProduto(prod);
-			
-			ProdutoNovoFormController.setLocal(local);
-			ProdutoNovoFormController.setBytes(bytes);
+			PrincipalFormController.setProduto(prod);
+
+			local = "";
+			bytes = null;
 
 		} else {
 
 			local = "";
 			bytes = null;
 			txtEnderecoDaFoto.setText(local);
-			
-			ProdutoNovoFormController.setLocal(local);
-			ProdutoNovoFormController.setBytes(bytes);
 
 		}
 
 	}
-	
-	public static byte[]  getBytes() {
-		
+
+	public static byte[] getBytes() {
+
 		return bytes;
-		
-	}
-	
-	
-	public static void setBytes(byte[] bytes) {
-		
-		ProdutoNovoFormController.bytes = bytes;
-		
-	}
-	
-	public static Foto getFoto() {
-		
-		return foto;
-		
+
 	}
 
-	public static void setFoto(Foto foto) {
-		
-		ProdutoNovoFormController.foto = foto;
-		
+	public static void setBytes(byte[] bytes) {
+
+		ProdutoNovoFormController.bytes = bytes;
+
 	}
 
 	public static String getLocal() {
-		
+
 		return local;
-		
+
 	}
 
 	public static void setLocal(String local) {
-		
+
 		ProdutoNovoFormController.local = local;
-		
+
 	}
 
 	public static File getArquivo() {
-		
+
 		return arquivo;
-		
+
 	}
 
 	public static void setArquivo(File arquivo) {
-		
+
 		ProdutoNovoFormController.arquivo = arquivo;
-		
+
 	}
 
 	@FXML
@@ -249,10 +227,7 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 	private void createVisualizarFotoDialogForm(String absoluteName) {
 
 		try {
-			
-			ProdutoNovoFormController.setLocal(local);
-			ProdutoNovoFormController.setBytes(bytes);
-			
+
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 
@@ -302,12 +277,6 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 	}
 
-	public void setProduto(Produto produto) {
-
-		ProdutoNovoFormController.produto = produto;
-
-	}
-
 	private List<String> listaSetor() {
 
 		SetorService setorService = new SetorService();
@@ -349,11 +318,7 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 		comboBoxCategoria.setItems(FXCollections.observableArrayList(listaCategoria()));
 
 		produtoService = new ProdutoService();
-		produto = new Produto();
-		foto = new Foto();
 		local = new String();
-		
-		setProduto(PrincipalFormController.getProduto());
 
 		Constraints.setTextFieldInteger(txtQuantidade);
 		Constraints.setTextFieldInteger(txtEstoqueMinimo);
@@ -418,9 +383,18 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 			produto = null;
 
 		} else {
+			
+			if (PrincipalFormController.getProduto().getFoto().getIdFoto() == 0) {
 
-			foto.setLocal(local);
-			foto.setFoto(bytes);
+				foto.setIdFoto(0);
+
+			} else {
+
+				foto.setIdFoto(PrincipalFormController.getProduto().getFoto().getIdFoto());
+			}
+
+			foto.setLocal(PrincipalFormController.getProduto().getFoto().getLocal());
+			foto.setFoto(PrincipalFormController.getProduto().getFoto().getFoto());
 
 			produto.setNome(txtNome.getText());
 			produto.setQuantidade(Integer.valueOf(txtQuantidade.getText()));

@@ -15,9 +15,4 @@ public interface ProdutoDao {
 	List<Produto> findNomeProduto(String nomeProduto);
 	List<Produto> findNomeSetor(String nomeSetor);
 	
-	void insertFoto(Produto produto);
-	void updateFoto(Produto foto);
-	void deleteByIdFoto(Integer id);
-	
-	
 }

@@ -9,12 +9,12 @@ public class Usuario implements Serializable {
 	private String nome;
 	private String login;
 	private String senha;
-	private Acesso acesso;
+	private int acesso;
 
 	public Usuario() {
 	}
 
-	public Usuario(Integer idUsuario, String nome, String login, String senha, Acesso acesso) {
+	public Usuario(Integer idUsuario, String nome, String login, String senha, int acesso) {
 
 		this.idUsuario = idUsuario;
 		this.nome = nome;
@@ -56,19 +56,23 @@ public class Usuario implements Serializable {
 		this.senha = senha;
 	}
 
-	public Acesso getAcesso() {
+	public int getAcesso() {
 		return acesso;
 	}
 
-	public void setAcesso(Acesso acesso) {
+	public void setAcesso(int acesso) {
 		this.acesso = acesso;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((acesso == null) ? 0 : acesso.hashCode());
+		result = prime * result + acesso;
 		result = prime * result + ((idUsuario == null) ? 0 : idUsuario.hashCode());
 		result = prime * result + ((login == null) ? 0 : login.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
@@ -85,10 +89,7 @@ public class Usuario implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Usuario other = (Usuario) obj;
-		if (acesso == null) {
-			if (other.acesso != null)
-				return false;
-		} else if (!acesso.equals(other.acesso))
+		if (acesso != other.acesso)
 			return false;
 		if (idUsuario == null) {
 			if (other.idUsuario != null)
@@ -118,9 +119,9 @@ public class Usuario implements Serializable {
 		return "Usuario [idUsuario=" + idUsuario + ", nome=" + nome + ", login=" + login + ", senha=" + senha
 				+ ", acesso=" + acesso + "]";
 	}
-
+	
 	public String usuarioLogado() {
-		return "Logado: " + nome + " ";
+		return "Usuario logado - " + nome + " :)";
 	}
 
 }

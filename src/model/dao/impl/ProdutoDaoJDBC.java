@@ -9,11 +9,7 @@ import java.util.List;
 
 import db.DB;
 import db.DbException;
-import gui.util.Alerts;
-import gui.util.Utils;
-import javafx.scene.control.Alert.AlertType;
 import model.dao.ProdutoDao;
-import model.entities.Foto;
 import model.entities.Produto;
 
 public class ProdutoDaoJDBC implements ProdutoDao {
@@ -34,31 +30,14 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 
 			conn.setAutoCommit(false);
 
-			st = conn.prepareStatement(
-					"SELECT * FROM produto as pr inner join foto as ft on pr.id_produto = ft.id_produto where pr.id_produto = ?");
+			st = conn.prepareStatement("SELECT * FROM produto where id_produto = ?");
 
 			st.setInt(1, id);
 			rs = st.executeQuery();
 
 			while (rs.next()) {
 
-				Produto produto = new Produto();
-				Foto foto = new Foto();
-
-				produto.setIdProduto(rs.getInt("id_produto"));
-				produto.setNome(rs.getString("nome_produto"));
-				produto.setDescricao(rs.getString("descricao"));
-				produto.setSetor(rs.getString("setor"));
-				produto.setCategoria(rs.getString("categoria"));
-				produto.setQuantidade(rs.getInt("quantidade"));
-				produto.setEstoqueMinimo(rs.getInt("estoque_minimo"));
-
-				foto.setIdFoto(rs.getInt("id_foto"));
-				foto.setFoto(rs.getBytes("foto"));
-				foto.setLocal(rs.getString("local"));
-
-				// produto.setFoto(foto);
-
+				Produto produto = instantiateProduto(rs);
 				return produto;
 
 			}
@@ -98,31 +77,14 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 
 			conn.setAutoCommit(false);
 
-			st = conn.prepareStatement(
-					"SELECT * FROM produto as pr inner join foto as ft on pr.id_produto = ft.id_produto order by pr.id_produto");
+			st = conn.prepareStatement("SELECT * FROM produto order by id_produto");
 			rs = st.executeQuery();
 
 			List<Produto> list = new ArrayList<>();
 
 			while (rs.next()) {
 
-				Produto produto = new Produto();
-				Foto foto = new Foto();
-
-				produto.setIdProduto(rs.getInt("id_produto"));
-				produto.setNome(rs.getString("nome_produto"));
-				produto.setDescricao(rs.getString("descricao"));
-				produto.setSetor(rs.getString("setor"));
-				produto.setCategoria(rs.getString("categoria"));
-				produto.setQuantidade(rs.getInt("quantidade"));
-				produto.setEstoqueMinimo(rs.getInt("estoque_minimo"));
-
-				foto.setIdFoto(rs.getInt("id_foto"));
-				foto.setFoto(rs.getBytes("foto"));
-				foto.setLocal(rs.getString("local"));
-
-				produto.setFoto(foto);
-
+				Produto produto = instantiateProduto(rs);
 				list.add(produto);
 
 			}
@@ -156,17 +118,14 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 	public void insert(Produto produto) {
 
 		PreparedStatement st = null;
-		ResultSet rs = null;
-		int id = 0;
 
 		try {
 
 			conn.setAutoCommit(false);
 
 			st = conn.prepareStatement(
-					"INSERT INTO produto (nome_produto, descricao, setor, categoria, quantidade, estoque_minimo)"
-							+ " VALUES (?, ?, ? ,?, ?, ?)",
-					java.sql.Statement.RETURN_GENERATED_KEYS);
+					"INSERT INTO produto (nome_produto, descricao, setor, categoria, quantidade, estoque_minimo, foto)"
+							+ " VALUES (?, ?, ? ,?, ?, ?, ?)");
 
 			st.setString(1, produto.getNome());
 			st.setString(2, produto.getDescricao());
@@ -174,31 +133,21 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			st.setString(4, produto.getCategoria());
 			st.setInt(5, produto.getQuantidade());
 			st.setInt(6, produto.getEstoqueMinimo());
+			st.setBytes(7, produto.getFoto());
 
 			int rowsAffected = st.executeUpdate();
 
-			if (rowsAffected > 0) {
+			if (rowsAffected == 0) {
 
-				rs = st.getGeneratedKeys();
-
-				if (rs.next()) {
-
-					id = rs.getInt(1);
-
-				}
-
-				produto.setIdProduto(id);
-				insertFoto(produto);
-
-				conn.commit();
-
-			} else {
-
-				new DbException("Unexpected error! No rows affected!");
+				new DbException("Erro ao inserir o produto");
 
 			}
 
-		} catch (SQLException e) {
+			conn.commit();
+
+		} catch (
+
+		SQLException e) {
 
 			try {
 
@@ -213,7 +162,6 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 		} finally {
 
 			DB.closeStatement(st);
-			DB.closeResultSet(rs);
 
 		}
 	}
@@ -228,7 +176,7 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			conn.setAutoCommit(false);
 
 			st = conn.prepareStatement(
-					"UPDATE produto SET nome_produto = ?, descricao = ?, setor = ?, categoria = ?, quantidade = ?, estoque_minimo = ? WHERE id_produto = ?");
+					"UPDATE produto SET nome_produto = ?, descricao = ?, setor = ?, categoria = ?, quantidade = ?, estoque_minimo = ? , foto = ? WHERE id_produto = ?");
 
 			st.setString(1, produto.getNome());
 			st.setString(2, produto.getDescricao());
@@ -236,19 +184,8 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			st.setString(4, produto.getCategoria());
 			st.setInt(5, produto.getQuantidade());
 			st.setInt(6, produto.getEstoqueMinimo());
-			st.setInt(7, produto.getIdProduto());
-
-			st.executeUpdate();
-
-			DB.closeStatement(st);
-
-			//updateFoto(produto);
-			
-			st = conn.prepareStatement("UPDATE foto SET foto = ?, local = ?  WHERE id_foto = ?");
-
-			st.setBytes(1, produto.getFoto().getFoto());
-			st.setString(2, produto.getFoto().getLocal());
-			st.setInt(3, produto.getFoto().getIdFoto());
+			st.setBytes(7, produto.getFoto());
+			st.setInt(8, produto.getIdProduto());
 
 			st.executeUpdate();
 
@@ -264,7 +201,6 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			} catch (SQLException e1) {
 
 				throw new DbException("Error trying to rollback. Cause by: " + e.getLocalizedMessage());
-		
 
 			}
 
@@ -355,84 +291,6 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 	}
 
 	@Override
-	public void insertFoto(Produto produto) {
-
-		PreparedStatement st = null;
-
-		try {
-
-			st = conn.prepareStatement("INSERT INTO foto (id_produto, foto, local)" + " VALUES (?, ?, ?)");
-
-			st.setInt(1, produto.getIdProduto());
-			st.setBytes(2, produto.getFoto().getFoto());
-			st.setString(3, produto.getFoto().getLocal());
-
-			int rowsAffected = st.executeUpdate();
-
-			if (rowsAffected == 0) {
-
-				throw new DbException("Erro ao inserir foto");
-
-			}
-
-		} catch (SQLException e) {
-
-			throw new DbException("Erro ao inserir foto: " + e.getLocalizedMessage());
-
-		} finally {
-
-			DB.closeStatement(st);
-
-		}
-
-	}
-
-	@Override
-	public void updateFoto(Produto produto) {
-
-		PreparedStatement st = null;
-
-		try {
-
-			// conn.setAutoCommit(false);
-
-			st = conn.prepareStatement("UPDATE foto SET foto = ?, local = ?  WHERE id_foto = ?");
-
-			st.setBytes(1, produto.getFoto().getFoto());
-			st.setString(2, produto.getFoto().getLocal());
-			st.setInt(3, produto.getFoto().getIdFoto());
-
-			st.executeUpdate();
-
-			// conn.commit();
-
-		} catch (SQLException e) {
-
-			// try {
-
-			// conn.rollback();
-			throw new DbException("Transaction rolled back. Cause by: " + e.getLocalizedMessage());
-
-			// } catch (SQLException e1) {
-
-			// throw new DbException("Error trying to rollback. Cause by: " +
-			// e.getLocalizedMessage());
-			// }
-
-		} finally {
-
-			DB.closeStatement(st);
-
-		}
-
-	}
-
-	@Override
-	public void deleteByIdFoto(Integer id) {
-
-	}
-
-	@Override
 	public List<Produto> findNomeProduto(String nomeProduto) {
 
 		PreparedStatement st = null;
@@ -442,8 +300,7 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 
 			conn.setAutoCommit(false);
 
-			st = conn.prepareStatement(
-					"SELECT * FROM produto as pr inner join foto as ft on pr.id_produto = ft.id_produto where pr.nome_produto like ? order by pr.id_produto");
+			st = conn.prepareStatement("SELECT * FROM produto where nome_produto like ? order by id_produto");
 			st.setString(1, "%" + nomeProduto + "%");
 			rs = st.executeQuery();
 
@@ -451,24 +308,9 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 
 			while (rs.next()) {
 
-				Produto produto = new Produto();
-				Foto foto = new Foto();
-
-				produto.setIdProduto(rs.getInt("id_produto"));
-				produto.setNome(rs.getString("nome_produto"));
-				produto.setDescricao(rs.getString("descricao"));
-				produto.setSetor(rs.getString("setor"));
-				produto.setCategoria(rs.getString("categoria"));
-				produto.setQuantidade(rs.getInt("quantidade"));
-				produto.setEstoqueMinimo(rs.getInt("estoque_minimo"));
-
-				foto.setIdFoto(rs.getInt("id_foto"));
-				foto.setFoto(rs.getBytes("foto"));
-				foto.setLocal(rs.getString("local"));
-
-				produto.setFoto(foto);
-
+				Produto produto = instantiateProduto(rs);
 				list.add(produto);
+
 			}
 
 			conn.commit();
@@ -506,8 +348,7 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 
 			conn.setAutoCommit(false);
 
-			st = conn.prepareStatement(
-					"SELECT * FROM produto as pr inner join foto as ft on pr.id_produto = ft.id_produto where pr.setor = ? order by pr.id_produto");
+			st = conn.prepareStatement("SELECT * FROM produto where setor = ? order by id_produto");
 			st.setString(1, nomeSetor);
 			rs = st.executeQuery();
 
@@ -515,23 +356,9 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 
 			while (rs.next()) {
 
-				Produto produto = new Produto();
-				Foto foto = new Foto();
-
-				produto.setIdProduto(rs.getInt("id_produto"));
-				produto.setNome(rs.getString("nome_produto"));
-				produto.setDescricao(rs.getString("descricao"));
-				produto.setSetor(rs.getString("setor"));
-				produto.setCategoria(rs.getString("categoria"));
-				produto.setQuantidade(rs.getInt("quantidade"));
-				produto.setEstoqueMinimo(rs.getInt("estoque_minimo"));
-
-				foto.setIdFoto(rs.getInt("id_foto"));
-				foto.setFoto(rs.getBytes("foto"));
-				foto.setLocal(rs.getString("local"));
-
-				produto.setFoto(foto);
+				Produto produto = instantiateProduto(rs);
 				list.add(produto);
+
 			}
 
 			conn.commit();
@@ -556,6 +383,23 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			DB.closeResultSet(rs);
 
 		}
+
+	}
+
+	private Produto instantiateProduto(ResultSet rs) throws SQLException {
+
+		Produto produto = new Produto();
+
+		produto.setIdProduto(rs.getInt("id_produto"));
+		produto.setNome(rs.getString("nome_produto"));
+		produto.setDescricao(rs.getString("descricao"));
+		produto.setSetor(rs.getString("setor"));
+		produto.setCategoria(rs.getString("categoria"));
+		produto.setQuantidade(rs.getInt("quantidade"));
+		produto.setEstoqueMinimo(rs.getInt("estoque_minimo"));
+		produto.setFoto(rs.getBytes("foto"));
+
+		return produto;
 
 	}
 }

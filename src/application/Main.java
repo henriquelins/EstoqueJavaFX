@@ -17,7 +17,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -25,9 +24,11 @@ import javafx.util.Duration;
 import properties.PropertiesFile;
 
 public class Main extends Application {
-
+	
+	// Tela cheia
 	private static Scene mainScene;
-
+	
+	// Tela diálogo
 	private static Scene dialogScene;
 
 	private static Socket socket;
@@ -70,33 +71,9 @@ public class Main extends Application {
 			}
 
 		} else {
-
-			try {
-
-				FXMLLoader loader = new FXMLLoader(getClass().getResource(Strings.getConfigurarPerpetiesDBView()));
-				Pane pane = loader.load();
-
-				mainScene = new Scene(pane);
-
-				// Define o Style
-				setUserAgentStylesheet(STYLESHEET_CASPIAN);
-				// setUserAgentStylesheet(STYLESHEET_MODENA);
-
-				primaryStage.setScene(mainScene);
-				primaryStage.setResizable(false);
-				primaryStage.setTitle(Strings.getTitle());
-
-				Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
-				primaryStage.getIcons().add(applicationIcon);
-
-				primaryStage.show();
-
-			} catch (Exception e) {
-
-				Alerts.showAlert("Controle de Estoque", "Erro ao abrir a tela", e.getLocalizedMessage(),
-						AlertType.ERROR);
-
-			}
+			
+			primaryStage.close();
+			carregarTela(primaryStage, Strings.getLoginView());
 
 		}
 
@@ -117,13 +94,13 @@ public class Main extends Application {
 
 			primaryStage.show();
 
-			// Load splash screen with fade in effect
+			// Carrega a tela splash com fade in effect
 			FadeTransition fadeIn = new FadeTransition(Duration.seconds(3), pane);
 			fadeIn.setFromValue(0);
 			fadeIn.setToValue(1);
 			fadeIn.setCycleCount(1);
 
-			// Finish splash with fade out effect
+			// Termina a tela splash com fade out effect
 			FadeTransition fadeOut = new FadeTransition(Duration.seconds(3), pane);
 			fadeOut.setFromValue(1);
 			fadeOut.setToValue(0);
@@ -131,18 +108,18 @@ public class Main extends Application {
 
 			fadeIn.play();
 
-			// After fade in, start fade out
+			// Depois de fade in, inicia o fade out
 			fadeIn.setOnFinished((e) -> {
 
 				fadeOut.play();
 
 			});
 
-			// After fade out, load actual content
+			// Depois do fade out, carrega a tela inicial - login
 			fadeOut.setOnFinished((e) -> {
 
 				primaryStage.close();
-				login(primaryStage);
+				carregarTela(primaryStage, Strings.getLoginView());
 
 			});
 
@@ -155,11 +132,11 @@ public class Main extends Application {
 
 	}
 
-	private void login(Stage primaryStage) {
+	private void carregarTela(Stage primaryStage, String tela) {
 
 		try {
 
-			FXMLLoader loader = new FXMLLoader(getClass().getResource(Strings.getLoginView()));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(tela));
 			AnchorPane pane = loader.load();
 
 			mainScene = new Scene(pane);
@@ -181,7 +158,7 @@ public class Main extends Application {
 
 		} catch (IOException e) {
 
-			Alerts.showAlert("IO Exception", "Erro ao carregar a tela login", e.getCause().toString(), AlertType.ERROR);
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela", e.getCause().toString(), AlertType.ERROR);
 
 		}
 
@@ -224,7 +201,7 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
-
+		
 		launch(args);
 
 	}

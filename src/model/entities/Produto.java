@@ -1,6 +1,7 @@
 package model.entities;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class Produto implements Serializable {
 
@@ -12,14 +13,14 @@ public class Produto implements Serializable {
 	private String categoria;
 	private int quantidade;
 	private int estoqueMinimo;
-	private Foto foto;
-	
+	private byte[] foto;
+
 	public Produto() {
 	}
 
 	public Produto(Integer idProduto, String nome, String descricao, String setor, String categoria, int quantidade,
-			int estoqueMinimo, Foto foto) {
-		
+			int estoqueMinimo, byte[] foto) {
+
 		this.idProduto = idProduto;
 		this.nome = nome;
 		this.descricao = descricao;
@@ -28,7 +29,7 @@ public class Produto implements Serializable {
 		this.quantidade = quantidade;
 		this.estoqueMinimo = estoqueMinimo;
 		this.foto = foto;
-		
+
 	}
 
 	public Integer getIdProduto() {
@@ -87,12 +88,16 @@ public class Produto implements Serializable {
 		this.estoqueMinimo = estoqueMinimo;
 	}
 
-	public Foto getFoto() {
+	public byte[] getFoto() {
 		return foto;
 	}
 
-	public void setFoto(Foto foto) {
+	public void setFoto(byte[] foto) {
 		this.foto = foto;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 	@Override
@@ -102,7 +107,7 @@ public class Produto implements Serializable {
 		result = prime * result + ((categoria == null) ? 0 : categoria.hashCode());
 		result = prime * result + ((descricao == null) ? 0 : descricao.hashCode());
 		result = prime * result + estoqueMinimo;
-		result = prime * result + ((foto == null) ? 0 : foto.hashCode());
+		result = prime * result + Arrays.hashCode(foto);
 		result = prime * result + ((idProduto == null) ? 0 : idProduto.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		result = prime * result + quantidade;
@@ -131,10 +136,7 @@ public class Produto implements Serializable {
 			return false;
 		if (estoqueMinimo != other.estoqueMinimo)
 			return false;
-		if (foto == null) {
-			if (other.foto != null)
-				return false;
-		} else if (!foto.equals(other.foto))
+		if (!Arrays.equals(foto, other.foto))
 			return false;
 		if (idProduto == null) {
 			if (other.idProduto != null)
@@ -160,8 +162,7 @@ public class Produto implements Serializable {
 	public String toString() {
 		return "Produto [idProduto=" + idProduto + ", nome=" + nome + ", descricao=" + descricao + ", setor=" + setor
 				+ ", categoria=" + categoria + ", quantidade=" + quantidade + ", estoqueMinimo=" + estoqueMinimo
-				+ ", foto=" + foto + "]";
+				+ ", foto=" + Arrays.toString(foto) + "]";
 	}
 
-	
 }

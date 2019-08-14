@@ -44,15 +44,11 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 	private ProdutoService produtoService;
 
-	private Produto produto;
-
 	private Produto produtoComparar;
 
 	private PrincipalFormController principalController;
 
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
-
-	private static Foto foto;
 
 	private static byte[] bytes;
 
@@ -96,9 +92,9 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 	@FXML
 	public void onBtSalvarProdutoAction(ActionEvent event) {
 
-		setProduto(getFormData());
-	
-		if (this.produto != null) {
+		PrincipalFormController.setProduto(getFormData());
+
+		if (PrincipalFormController.getProduto() != null) {
 
 			boolean ok = false;
 
@@ -106,7 +102,7 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 			if (ok == false) {
 
-				produtoService.produtoNovoOuEditar(produto);
+				produtoService.produtoNovoOuEditar(PrincipalFormController.getProduto());
 				notifyDataChangeListeners();
 				Utils.fecharDialogAction();
 
@@ -167,28 +163,23 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 			}
 
-			Foto fot = new Foto();
-			fot.setLocal(local);
-			fot.setFoto(bytes);
-
-			setFoto(fot);
+			Foto foto = new Foto();
+			foto.setLocal(local);
+			foto.setFoto(bytes);
 
 			Produto prod = new Produto();
-			prod.setFoto(fot);
+			prod.setFoto(foto);
 
-			setProduto(prod);
-
-			ProdutoNovoFormController.setLocal(local);
-			ProdutoNovoFormController.setBytes(bytes);
+			PrincipalFormController.setProduto(prod);
+			
+			local = "";
+			bytes = null;
 
 		} else {
 
 			local = "";
 			bytes = null;
 			txtEnderecoDaFoto.setText(local);
-
-			ProdutoNovoFormController.setLocal(local);
-			ProdutoNovoFormController.setBytes(bytes);
 
 		}
 
@@ -213,12 +204,6 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 	public void setProdutoService(ProdutoService produtoService) {
 
 		this.produtoService = produtoService;
-
-	}
-
-	public void setProduto(Produto produto) {
-
-		this.produto = produto;
 
 	}
 
@@ -270,9 +255,6 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 		try {
 
-			ProdutoNovoFormController.setLocal(local);
-			ProdutoNovoFormController.setBytes(bytes);
-
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 
@@ -311,11 +293,7 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 		comboBoxCategoria.setItems(FXCollections.observableArrayList(listaCategoria()));
 
 		produtoService = new ProdutoService();
-		produto = new Produto();
-		foto = new Foto();
 		local = new String();
-
-		setProduto(PrincipalFormController.getProduto());
 
 		Constraints.setTextFieldInteger(txtQuantidade);
 		Constraints.setTextFieldInteger(txtEstoqueMinimo);
@@ -382,8 +360,8 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 		} else {
 
 			foto.setIdFoto(PrincipalFormController.getProduto().getFoto().getIdFoto());
-			foto.setLocal(local);
-			foto.setFoto(bytes);
+			foto.setLocal(PrincipalFormController.getProduto().getFoto().getLocal());
+			foto.setFoto(PrincipalFormController.getProduto().getFoto().getFoto());
 
 			produto.setIdProduto(Integer.valueOf(txtIdProduto.getText()));
 			produto.setNome(txtNome.getText());
@@ -392,6 +370,7 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 			produto.setSetor(String.valueOf(comboBoxSetor.getSelectionModel().getSelectedItem()));
 			produto.setCategoria(String.valueOf(comboBoxCategoria.getSelectionModel().getSelectedItem()));
 			produto.setDescricao(txtAreaDescricao.getText());
+			
 			produto.setFoto(foto);
 
 		}
@@ -411,15 +390,9 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 		txtAreaDescricao.setText(PrincipalFormController.getProduto().getDescricao());
 		txtEnderecoDaFoto.setText(PrincipalFormController.getProduto().getFoto().getLocal().toString());
 		bytes = PrincipalFormController.getProduto().getFoto().getFoto();
-
-		ProdutoNovoFormController
-				.setArquivo(new File(PrincipalFormController.getProduto().getFoto().getLocal().toString()));
-		ProdutoNovoFormController.setLocal(PrincipalFormController.getProduto().getFoto().getLocal().toString());
-		ProdutoNovoFormController.setFoto(PrincipalFormController.getProduto().getFoto());
-
-		setProduto(PrincipalFormController.getProduto());
-
-		produtoComparar = this.produto;
+		local = PrincipalFormController.getProduto().getFoto().getLocal();
+		
+		produtoComparar = PrincipalFormController.getProduto(); 
 
 	}
 
@@ -438,10 +411,10 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 			return ok;
 
-		} else if (this.produto.getNome().equals(produtoComparar.getNome())
-				&& this.produto.getSetor().equals(produtoComparar.getSetor())
-				&& this.produto.getCategoria().equals(produtoComparar.getCategoria())
-				&& this.produto.getDescricao().equals(produtoComparar.getDescricao())) {
+		} else if (PrincipalFormController.getProduto().getNome().equals(produtoComparar.getNome())
+				&& PrincipalFormController.getProduto().getSetor().equals(produtoComparar.getSetor())
+				&& PrincipalFormController.getProduto().getCategoria().equals(produtoComparar.getCategoria())
+				&& PrincipalFormController.getProduto().getDescricao().equals(produtoComparar.getDescricao())) {
 
 			ok = true;
 			return ok;
@@ -485,14 +458,6 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 		}
 
 		return bytes;
-	}
-
-	public static Foto getFoto() {
-		return foto;
-	}
-
-	public static void setFoto(Foto foto) {
-		ProdutoEditarFormController.foto = foto;
 	}
 
 	public static String getLocal() {

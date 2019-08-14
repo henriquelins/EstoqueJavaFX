@@ -468,7 +468,6 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			Pane pane = loader.load();
 
 			ProdutoNovoFormController controller = loader.getController();
-			controller.setProduto(produto);
 			controller.setProdutoService(new ProdutoService());
 			controller.subscribeDataChangeListener(this);
 
@@ -505,7 +504,6 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			Pane pane = loader.load();
 
 			ProdutoEditarFormController controller = loader.getController();
-			controller.setProduto(produto);
 			controller.setProdutoService(new ProdutoService());
 			controller.subscribeDataChangeListener(this);
 
