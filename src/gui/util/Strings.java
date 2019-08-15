@@ -5,6 +5,20 @@ public class Strings {
 	public Strings() {
 	}
 
+	// choiceBox
+
+	public static String getCase1choiceBoxAcesso1() {
+
+		return "1 - Administrador";
+
+	}
+
+	public static String getCase1choiceBoxAcesso2() {
+
+		return "2 - Operador";
+
+	}
+
 	// Label Titles
 
 	public static String getTitle() {
