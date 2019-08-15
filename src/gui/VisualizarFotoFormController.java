@@ -33,13 +33,13 @@ public class VisualizarFotoFormController implements Initializable {
 
 	private void initializeNodes() {
 
-		txtEndereco.setText(PrincipalFormController.getProduto().getFoto().getLocal().toString());
 		visualisarFoto();
+		
 	}
 
 	public void visualisarFoto() {
 
-		if (PrincipalFormController.getProduto().getFoto().getFoto() == null) {
+		if (PrincipalFormController.getProduto().getFoto() == null) {
 
 			imageView.setImage(new Image(Strings.getSemFoto()));
 
@@ -47,7 +47,7 @@ public class VisualizarFotoFormController implements Initializable {
 
 			try {
 				
-				imageView.setImage(byteToImage(PrincipalFormController.getProduto().getFoto().getFoto()));
+				imageView.setImage(byteToImage(PrincipalFormController.getProduto().getFoto()));
 
 			} catch (IOException e) {
 

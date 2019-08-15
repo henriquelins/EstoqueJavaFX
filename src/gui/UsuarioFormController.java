@@ -9,6 +9,7 @@ import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Strings;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,7 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.ScrollPane;
@@ -72,7 +73,7 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 	private Button btCancelarEditarUsuario;
 
 	@FXML
-	private ChoiceBox<String> choiceBoxAcesso;
+	private ComboBox<String> comboBoxAcesso;
 
 	@FXML
 	public TableView<Usuario> tableViewUsuario;
@@ -163,9 +164,8 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 			txtLogin.setEditable(true);
 			pswSenha.setEditable(true);
 			pswRepetirSenha.setEditable(true);
-			choiceBoxAcesso.setDisable(true);
-
-			btNovoUsuario.setDisable(true);
+		
+			btNovoUsuario.setDisable(false);
 			btCancelarEditarUsuario.setVisible(true);
 			btSalvarUsuario.setVisible(true);
 
@@ -185,8 +185,7 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 		txtLogin.setEditable(true);
 		pswSenha.setEditable(true);
 		pswRepetirSenha.setEditable(true);
-		choiceBoxAcesso.setDisable(true);
-
+	
 		btNovoUsuario.setDisable(true);
 		btCancelarEditarUsuario.setVisible(true);
 		btSalvarUsuario.setVisible(true);
@@ -202,7 +201,7 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 		txtLogin.setText("");
 		pswSenha.setText("");
 		pswRepetirSenha.setText("");
-		//choiceBoxAcesso.selectionModelProperty().setValue(null);
+		comboBoxAcesso.setValue("Selecione o tipo de acesso...");
 
 		setUsuario(new Usuario());
 
@@ -215,7 +214,7 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 		txtLogin.setEditable(false);
 		pswSenha.setEditable(false);
 		pswRepetirSenha.setEditable(false);
-		choiceBoxAcesso.setDisable(false);
+	
 
 	}
 
@@ -237,11 +236,8 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 				txtLogin.setText(usuario.getLogin());
 				pswSenha.setText(usuario.getSenha());
 				pswRepetirSenha.setText(usuario.getSenha());
-				//choiceBoxAcesso.getSelectionModel().select(selectChoiceBox(usuario.getAcesso()));
-				
-				choiceBoxAcesso.setValue(selectChoiceBox(usuario.getAcesso()));
-				//choiceBoxAcesso.selectionModelProperty().setValue(selectChoiceBox(usuario.getAcesso()));
-
+				comboBoxAcesso.setValue(selectChoiceBox(usuario.getAcesso()));
+			
 				setUsuarioTabela(usuario);
 
 				setUsuario(usuario);
@@ -310,12 +306,15 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("idUsuario"));
 		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("Nome"));
 		tableColumnLogin.setCellValueFactory(new PropertyValueFactory<>("Login"));
-		tableColumnAcesso.setCellValueFactory(new PropertyValueFactory<>("Acesso"));
+		
+		tableColumnAcesso
+		.setCellValueFactory((param) -> new SimpleStringProperty(selectChoiceBox(param.getValue().getAcesso())));
 
 		service = new UsuarioService();
 		usuarioTabela = new Usuario();
-
-		choiceBoxAcesso.setItems(listaAcesso());
+		
+		
+		comboBoxAcesso.setItems(listaAcesso());
 
 		updateTableView();
 
@@ -380,11 +379,11 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 			pswRepetirSenha.requestFocus();
 			usuario = null;
 
-		} else if (choiceBoxAcesso.getSelectionModel().isEmpty() == true) {
+		} else if (comboBoxAcesso.getSelectionModel().isEmpty() == true) {
 
 			Alerts.showAlert("Novo Usuário", "Campo obrigatório", "Selecione o acesso!", AlertType.INFORMATION);
 
-			choiceBoxAcesso.requestFocus();
+			comboBoxAcesso.requestFocus();
 			usuario = null;
 
 		} else {
@@ -402,7 +401,7 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 			usuario.setNome(txtNome.getText());
 			usuario.setLogin(txtLogin.getText());
 			usuario.setSenha(pswSenha.getText());
-			usuario.setAcesso(selectAcesso(choiceBoxAcesso.getSelectionModel().getSelectedItem()));
+			usuario.setAcesso(selectAcesso(comboBoxAcesso.getSelectionModel().getSelectedItem()));
 
 		}
 
@@ -518,20 +517,20 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 
 	public String selectChoiceBox(int acesso) {
 
-		String selectChoiceBox = "";
+		String selectComboBoxAcesso = "";
 
 		switch (acesso) {
 
 		case 1:
-			selectChoiceBox = Strings.getCase1choiceBoxAcesso1();
+			selectComboBoxAcesso = Strings.getCase1choiceBoxAcesso1();
 			break;
 
 		case 2:
-			selectChoiceBox = Strings.getCase1choiceBoxAcesso2();
+			selectComboBoxAcesso = Strings.getCase1choiceBoxAcesso2();
 			break;
 		}
 
-		return selectChoiceBox;
+		return selectComboBoxAcesso.substring(3);
 	}
 
 	public int selectAcesso(String selectChoiceBox) {

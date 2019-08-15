@@ -80,7 +80,7 @@ public class ProdutoShowFormController implements Initializable {
 		labelDetalhes.setText(PrincipalFormController.getProduto().getDescricao());
 
 
-		if (PrincipalFormController.getProduto().getFoto().getFoto() == null) {
+		if (PrincipalFormController.getProduto().getFoto() == null) {
 
 			imageViewProduto.setImage(new Image(Strings.getSemFoto()));
 
@@ -88,7 +88,7 @@ public class ProdutoShowFormController implements Initializable {
 
 			try {
 
-				imageViewProduto.setImage(byteToImage(PrincipalFormController.getProduto().getFoto().getFoto()));
+				imageViewProduto.setImage(byteToImage(PrincipalFormController.getProduto().getFoto()));
 
 			} catch (IOException e) {
 
