@@ -15,7 +15,6 @@ import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import gui.util.Strings;
-import gui.util.Utils;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -40,16 +39,17 @@ import model.services.ProdutoService;
 import model.services.SetorService;
 
 public class ProdutoEditarFormController implements Initializable, DataChangeListener {
+	
+	private Produto produtoComparar;
 
 	private ProdutoService produtoService;
 
-	private Produto produtoComparar;
-
 	private PrincipalFormController principalController;
 
-	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
-
 	private static byte[] bytes;
+
+	// Lista de ouvintes para receber alguma modificação
+	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 
 	@FXML
 	private TextField txtIdProduto;
@@ -96,7 +96,6 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 				produtoService.produtoNovoOuEditar(PrincipalFormController.getProduto());
 				notifyDataChangeListeners();
-				Utils.fecharDialogAction();
 
 			} else {
 
@@ -412,37 +411,5 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 	};
 
-	public byte[] getByte(String local) {
-
-		InputStream converter = null;
-		bytes = new byte[(int) local.length()];
-
-		int offset = 0;
-		int numRead = 0;
-
-		try {
-
-			converter = new FileInputStream(local);
-
-		} catch (FileNotFoundException e) {
-
-			e.printStackTrace();
-
-		}
-
-		try {
-
-			while (offset < bytes.length && (numRead = converter.read(bytes, offset, bytes.length - offset)) >= 0) {
-				offset += numRead;
-			}
-
-		} catch (IOException e) {
-
-			e.printStackTrace();
-
-		}
-
-		return bytes;
-	}
 
 }

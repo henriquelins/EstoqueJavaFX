@@ -72,6 +72,7 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 
 		PreparedStatement st = null;
 		ResultSet rs = null;
+		List<Produto> list = new ArrayList<>();
 
 		try {
 
@@ -79,8 +80,6 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 
 			st = conn.prepareStatement("SELECT * FROM produto order by id_produto");
 			rs = st.executeQuery();
-
-			List<Produto> list = new ArrayList<>();
 
 			while (rs.next()) {
 
@@ -152,11 +151,13 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			try {
 
 				conn.rollback();
-				throw new DbException("Transaction rolled back. Cause by: " + e.getLocalizedMessage());
+				throw new DbException("Transaction rolled back. Cause by: " +
+				e.getLocalizedMessage());
 
 			} catch (SQLException e1) {
 
-				throw new DbException("Error trying to rollback. Cause by: " + e.getLocalizedMessage());
+				throw new DbException("Error trying to rollback. Cause by: " +
+				e.getLocalizedMessage());
 			}
 
 		} finally {
@@ -173,7 +174,7 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 
 		try {
 
-			conn.setAutoCommit(false);
+			//conn.setAutoCommit(false);
 
 			st = conn.prepareStatement(
 					"UPDATE produto SET nome_produto = ?, descricao = ?, setor = ?, categoria = ?, quantidade = ?, estoque_minimo = ? , foto = ? WHERE id_produto = ?");
@@ -189,20 +190,22 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 
 			st.executeUpdate();
 
-			conn.commit();
+			//conn.commit();
 
 		} catch (SQLException e) {
 
-			try {
+			//try {
 
-				conn.rollback();
-				throw new DbException("Transaction rolled back. Cause by: " + e.getLocalizedMessage());
+				//conn.rollback();
+				throw new DbException("Transaction rolled back. Cause by: " +
+				e.getLocalizedMessage());
 
-			} catch (SQLException e1) {
+			//} catch (SQLException e1) {
 
-				throw new DbException("Error trying to rollback. Cause by: " + e.getLocalizedMessage());
+				//throw new DbException("Error trying to rollback. Cause by: " +
+				//e.getLocalizedMessage());
 
-			}
+			//}
 
 		} finally {
 

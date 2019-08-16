@@ -89,7 +89,6 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 			produtoService.produtoNovoOuEditar(PrincipalFormController.getProduto());
 			notifyDataChangeListeners();
-			Utils.fecharDialogAction();
 
 		}
 

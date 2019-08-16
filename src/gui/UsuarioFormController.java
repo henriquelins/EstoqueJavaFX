@@ -531,6 +531,7 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 		}
 
 		return selectComboBoxAcesso.substring(3);
+
 	}
 
 	public int selectAcesso(String selectChoiceBox) {
