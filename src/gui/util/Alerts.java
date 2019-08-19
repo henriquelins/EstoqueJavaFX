@@ -21,6 +21,13 @@ public class Alerts {
 
 		alert.show();
 	}
+	
+	public static void closeAlert(Alert alert) {
+
+		alert.close();
+		
+	}
+
 
 	public static Optional<ButtonType> showConfirmation(String title, String content) {
 

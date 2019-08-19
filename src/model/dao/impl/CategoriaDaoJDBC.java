@@ -19,76 +19,131 @@ public class CategoriaDaoJDBC implements CategoriaDao {
 	public CategoriaDaoJDBC(Connection conn) {
 		this.conn = conn;
 	}
-	
+
 	@Override
 	public void insert(Categoria categoria) {
+
 		PreparedStatement st = null;
+
 		try {
-			st = conn.prepareStatement("INSERT INTO categoria " + "(nome) " + "VALUES " + "(?)",
-					java.sql.Statement.RETURN_GENERATED_KEYS);
+
+			conn.setAutoCommit(false);
+
+			st = conn.prepareStatement("INSERT INTO categoria (nome, id_setor) VALUES (?,?)");
 
 			st.setString(1, categoria.getNome());
-			
-			int rowsAffected = st.executeUpdate();
+			st.setInt(2, categoria.getIdSetor());
 
-			if (rowsAffected > 0) {
-				ResultSet rs = st.getGeneratedKeys();
-				if (rs.next()) {
-					int id = rs.getInt(1);
-					categoria.setIdCategoria(id);
-				}
-				DB.closeResultSet(rs);
-			} else {
-				throw new DbException("Unexpected error! No rows affected!");
-			}
+			st.executeUpdate();
+
+			conn.commit();
+
 		} catch (SQLException e) {
-			throw new DbException(e.getMessage());
+
+			try {
+
+				conn.rollback();
+				throw new DbException("Transaction rolled back. Cause by: " + e.getLocalizedMessage());
+
+			} catch (SQLException e1) {
+
+				throw new DbException("Error trying to rollback. Cause by: " + e.getLocalizedMessage());
+			}
+
 		} finally {
+
 			DB.closeStatement(st);
+
 		}
+
 	}
 
 	@Override
 	public void update(Categoria categoria) {
+
 		PreparedStatement st = null;
+
 		try {
-			st = conn
-					.prepareStatement("UPDATE categoria " + "SET nome = ?" + "WHERE id_categoria = ?");
+
+			conn.setAutoCommit(false);
+
+			st = conn.prepareStatement("UPDATE categoria SET nome = ?, id_setor = ? WHERE id_categoria = ?");
 
 			st.setString(1, categoria.getNome());
-			st.setInt(2, categoria.getIdCategoria());
+			st.setInt(2, categoria.getIdSetor());
+			st.setInt(3, categoria.getIdCategoria());
 
 			st.executeUpdate();
+
+			conn.commit();
+
 		} catch (SQLException e) {
-			throw new DbException(e.getMessage());
+
+			try {
+
+				conn.rollback();
+				throw new DbException("Transaction rolled back. Cause by: " + e.getLocalizedMessage());
+
+			} catch (SQLException e1) {
+
+				throw new DbException("Error trying to rollback. Cause by: " + e.getLocalizedMessage());
+			}
+
 		} finally {
+
 			DB.closeStatement(st);
+
 		}
+
 	}
 
 	@Override
 	public void deleteById(Integer id) {
+
 		PreparedStatement st = null;
+
 		try {
+
+			conn.setAutoCommit(false);
+
 			st = conn.prepareStatement("DELETE FROM categoria WHERE id_categoria = ?");
 
 			st.setInt(1, id);
 
 			st.executeUpdate();
+
+			conn.commit();
+
 		} catch (SQLException e) {
-			throw new DbException(e.getMessage());
+
+			try {
+
+				conn.rollback();
+				throw new DbException("Transaction rolled back. Cause by: " + e.getLocalizedMessage());
+
+			} catch (SQLException e1) {
+
+				throw new DbException("Error trying to rollback. Cause by: " + e.getLocalizedMessage());
+			}
+
 		} finally {
+
 			DB.closeStatement(st);
+
 		}
 
 	}
 
-	
 	@Override
 	public List<Categoria> findAllNome() {
+
 		PreparedStatement st = null;
 		ResultSet rs = null;
+
 		try {
+
+			conn.setAutoCommit(false);
+
 			st = conn.prepareStatement("SELECT * FROM categoria ORDER BY nome");
 
 			rs = st.executeQuery();
@@ -96,51 +151,135 @@ public class CategoriaDaoJDBC implements CategoriaDao {
 			List<Categoria> list = new ArrayList<>();
 
 			while (rs.next()) {
+
 				Categoria categoria = instantiateCategoria(rs);
+
 				list.add(categoria);
+
 			}
+
+			conn.commit();
+
 			return list;
+
 		} catch (SQLException e) {
-			throw new DbException(e.getMessage());
+
+			try {
+
+				conn.rollback();
+				throw new DbException("Transaction rolled back. Cause by: " + e.getLocalizedMessage());
+
+			} catch (SQLException e1) {
+
+				throw new DbException("Error trying to rollback. Cause by: " + e.getLocalizedMessage());
+			}
+
 		} finally {
+
 			DB.closeStatement(st);
-			DB.closeResultSet(rs);
+
 		}
 	}
-	
+
 	@Override
 	public List<Categoria> findAllId() {
+
 		PreparedStatement st = null;
 		ResultSet rs = null;
-		try {
-			st = conn.prepareStatement("SELECT * FROM categoria ORDER BY id_categoria");
 
+		try {
+
+			conn.setAutoCommit(false);
+
+			st = conn.prepareStatement("SELECT * FROM categoria ORDER BY id_categoria");
 			rs = st.executeQuery();
 
 			List<Categoria> list = new ArrayList<>();
 
 			while (rs.next()) {
+
 				Categoria categoria = instantiateCategoria(rs);
 				list.add(categoria);
+
 			}
+
+			conn.commit();
+
 			return list;
+
 		} catch (SQLException e) {
-			throw new DbException(e.getMessage());
+
+			try {
+
+				conn.rollback();
+				throw new DbException("Transaction rolled back. Cause by: " + e.getLocalizedMessage());
+
+			} catch (SQLException e1) {
+
+				throw new DbException("Error trying to rollback. Cause by: " + e.getLocalizedMessage());
+			}
+
 		} finally {
+
 			DB.closeStatement(st);
-			DB.closeResultSet(rs);
+
 		}
 	}
 
-
-
 	private Categoria instantiateCategoria(ResultSet rs) throws SQLException {
+
 		Categoria categoria = new Categoria();
 		categoria.setIdCategoria(rs.getInt("id_categoria"));
 		categoria.setNome(rs.getString("nome"));
+		categoria.setIdSetor(rs.getInt("id_setor"));
 		return categoria;
+
 	}
-	
-	
+
+	@Override
+	public List<Categoria> findIdSetor(Integer id_setor) {
+
+		PreparedStatement st = null;
+		ResultSet rs = null;
+
+		try {
+
+			conn.setAutoCommit(false);
+
+			st = conn.prepareStatement("SELECT * FROM categoria where id_setor = ? ORDER BY id_categoria");
+			st.setInt(1, id_setor);
+			rs = st.executeQuery();
+
+			List<Categoria> list = new ArrayList<>();
+
+			while (rs.next()) {
+
+				Categoria categoria = instantiateCategoria(rs);
+				list.add(categoria);
+
+			}
+
+			conn.commit();
+
+			return list;
+
+		} catch (SQLException e) {
+
+			try {
+
+				conn.rollback();
+				throw new DbException("Transaction rolled back. Cause by: " + e.getLocalizedMessage());
+
+			} catch (SQLException e1) {
+
+				throw new DbException("Error trying to rollback. Cause by: " + e.getLocalizedMessage());
+			}
+
+		} finally {
+
+			DB.closeStatement(st);
+
+		}
+	}
 
 }

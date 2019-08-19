@@ -10,4 +10,5 @@ public interface CategoriaDao {
 	void deleteById(Integer id);
 	List<Categoria> findAllId();
 	List<Categoria> findAllNome();
+	List<Categoria> findIdSetor(Integer id_setor);
 }

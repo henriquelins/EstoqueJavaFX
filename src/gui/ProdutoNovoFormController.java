@@ -47,6 +47,10 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 	private static byte[] bytes;
 
+	private String setor;
+
+	private int id_setor;
+
 	// Lista de ouvintes para receber alguma modificação
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 
@@ -88,7 +92,13 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 		if (PrincipalFormController.getProduto() != null) {
 
 			produtoService.produtoNovoOuEditar(PrincipalFormController.getProduto());
+			Utils.fecharDialogAction();
 			notifyDataChangeListeners();
+
+		} else {
+
+			Alerts.showAlert("Produto", "Salvar", "Erro ao salvar o produto", AlertType.INFORMATION);
+			Utils.fecharDialogAction();
 
 		}
 
@@ -101,8 +111,8 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 		File arquivo = null;
 		String local = "";
 
-		chooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("All Files", "*.*"),
-				new FileChooser.ExtensionFilter("JPG", "*.jpg"), new FileChooser.ExtensionFilter("PNG", "*.png"));
+		chooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+				new FileChooser.ExtensionFilter("PNG", "*.png"));
 
 		chooser.setTitle("Escolher foto do produto");
 
@@ -147,6 +157,25 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 		}
 
+	}
+
+	@FXML
+	public void onSelectComboBoxSetorAction(ActionEvent event) {
+
+		SetorService setorService = new SetorService();
+		CategoriaService categoriaService = new CategoriaService();
+
+		setSetor(comboBoxSetor.getSelectionModel().getSelectedItem());
+		setId_setor(setorService.findNomeIdSetor(getSetor()));
+
+		List<String> listaCategoria = new ArrayList<>();
+
+		for (Categoria categoria : FXCollections.observableArrayList(categoriaService.findIdSetor(id_setor))) {
+
+			listaCategoria.add(categoria.getNome());
+		}
+
+		comboBoxCategoria.setItems(FXCollections.observableArrayList(listaCategoria));
 	}
 
 	public static byte[] getBytes() {
@@ -248,20 +277,6 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 	}
 
-	private List<String> listaCategoria() {
-
-		CategoriaService categoriaService = new CategoriaService();
-		List<String> listaCategoria = new ArrayList<>();
-
-		for (Categoria categoria : categoriaService.findAllNome()) {
-
-			listaCategoria.add(categoria.getNome());
-		}
-
-		return listaCategoria;
-
-	}
-
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
@@ -272,7 +287,6 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 	private void initializeNodes() {
 
 		comboBoxSetor.setItems(FXCollections.observableArrayList(listaSetor()));
-		comboBoxCategoria.setItems(FXCollections.observableArrayList(listaCategoria()));
 
 		produtoService = new ProdutoService();
 
@@ -359,5 +373,23 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 		principalController.updateTableView();
 
 	}
+
+	// Getters and Setters
+
+	public String getSetor() {
+		return setor;
+	}
+
+	public void setSetor(String setor) {
+		this.setor = setor;
+	}
+
+	public int getId_setor() {
+		return id_setor;
+	}
+
+	public void setId_setor(int id_setor) {
+		this.id_setor = id_setor;
+	};
 
 }

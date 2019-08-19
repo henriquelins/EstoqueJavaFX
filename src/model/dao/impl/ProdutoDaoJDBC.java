@@ -133,14 +133,16 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			st.setInt(5, produto.getQuantidade());
 			st.setInt(6, produto.getEstoqueMinimo());
 			st.setBytes(7, produto.getFoto());
-
-			int rowsAffected = st.executeUpdate();
+			
+			st.executeUpdate();
+			
+			/*int rowsAffected = st.executeUpdate();
 
 			if (rowsAffected == 0) {
 
 				new DbException("Erro ao inserir o produto");
 
-			}
+			}*/
 
 			conn.commit();
 
@@ -174,7 +176,7 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 
 		try {
 
-			//conn.setAutoCommit(false);
+			conn.setAutoCommit(false);
 
 			st = conn.prepareStatement(
 					"UPDATE produto SET nome_produto = ?, descricao = ?, setor = ?, categoria = ?, quantidade = ?, estoque_minimo = ? , foto = ? WHERE id_produto = ?");
@@ -190,22 +192,22 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 
 			st.executeUpdate();
 
-			//conn.commit();
+			conn.commit();
 
 		} catch (SQLException e) {
 
-			//try {
+			try {
 
-				//conn.rollback();
+				conn.rollback();
 				throw new DbException("Transaction rolled back. Cause by: " +
 				e.getLocalizedMessage());
 
-			//} catch (SQLException e1) {
+			} catch (SQLException e1) {
 
-				//throw new DbException("Error trying to rollback. Cause by: " +
-				//e.getLocalizedMessage());
+				throw new DbException("Error trying to rollback. Cause by: " +
+				e.getLocalizedMessage());
 
-			//}
+			}
 
 		} finally {
 

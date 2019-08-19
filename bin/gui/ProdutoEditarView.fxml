@@ -33,7 +33,7 @@
             <Label layoutX="486.0" layoutY="20.0" text="Estoq. mínimo" />
             <TextField fx:id="txtQuantidade" layoutX="393.0" layoutY="45.0" prefHeight="25.0" prefWidth="80.0" />
             <TextField fx:id="txtEstoqueMinimo" layoutX="486.0" layoutY="45.0" prefHeight="25.0" prefWidth="80.0" />
-            <ComboBox fx:id="comboBoxSetor" layoutX="34.0" layoutY="105.0" prefHeight="25.0" prefWidth="196.0" promptText="Selecione o setor..." />
+            <ComboBox fx:id="comboBoxSetor" layoutX="34.0" layoutY="105.0" onAction="#onSelectComboBoxSetorAction" prefHeight="25.0" prefWidth="196.0" promptText="Selecione o setor..." />
             <ComboBox fx:id="comboBoxCategoria" layoutX="34.0" layoutY="166.0" prefHeight="25.0" prefWidth="196.0" promptText="Selecione a categoria..." />
             <TextArea fx:id="txtAreaDescricao" layoutX="256.0" layoutY="106.0" prefHeight="87.0" prefWidth="311.0" />
             <Button fx:id="btVisualizarFoto" layoutX="454.0" layoutY="230.0" mnemonicParsing="false" onAction="#onBtVisualizarFotoAction" prefHeight="25.0" prefWidth="111.0" text="Visualizar foto" />

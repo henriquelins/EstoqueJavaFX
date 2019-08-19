@@ -22,71 +22,123 @@ public class SetorDaoJDBC implements SetorDao {
 
 	@Override
 	public void insert(Setor setor) {
+
 		PreparedStatement st = null;
+
 		try {
-			st = conn.prepareStatement("INSERT INTO setor " + "(nome) " + "VALUES " + "(?)",
-					java.sql.Statement.RETURN_GENERATED_KEYS);
+
+			conn.setAutoCommit(false);
+
+			st = conn.prepareStatement("INSERT INTO setor  (nome) VALUES (?)");
 
 			st.setString(1, setor.getNome());
 
-			int rowsAffected = st.executeUpdate();
+			conn.commit();
 
-			if (rowsAffected > 0) {
-				ResultSet rs = st.getGeneratedKeys();
-				if (rs.next()) {
-					int id = rs.getInt(1);
-					setor.setIdSetor(id);
-				}
-				DB.closeResultSet(rs);
-			} else {
-				throw new DbException("Unexpected error! No rows affected!");
-			}
 		} catch (SQLException e) {
-			throw new DbException(e.getMessage());
+
+			try {
+
+				conn.rollback();
+				throw new DbException("Transaction rolled back. Cause by: " + e.getLocalizedMessage());
+
+			} catch (SQLException e1) {
+
+				throw new DbException("Error trying to rollback. Cause by: " + e.getLocalizedMessage());
+			}
+
 		} finally {
+
 			DB.closeStatement(st);
+
 		}
+
 	}
 
 	@Override
 	public void update(Setor setor) {
+
 		PreparedStatement st = null;
+
 		try {
-			st = conn.prepareStatement("UPDATE setor " + "SET nome = ?" + "WHERE id_setor = ?");
+
+			conn.setAutoCommit(false);
+
+			st = conn.prepareStatement("UPDATE setor SET nome = ? WHERE id_setor = ?");
 
 			st.setString(1, setor.getNome());
 			st.setInt(2, setor.getIdSetor());
 
 			st.executeUpdate();
+
+			conn.commit();
+
 		} catch (SQLException e) {
-			throw new DbException(e.getMessage());
+
+			try {
+
+				conn.rollback();
+				throw new DbException("Transaction rolled back. Cause by: " + e.getLocalizedMessage());
+
+			} catch (SQLException e1) {
+
+				throw new DbException("Error trying to rollback. Cause by: " + e.getLocalizedMessage());
+			}
+
 		} finally {
+
 			DB.closeStatement(st);
+
 		}
+
 	}
 
 	@Override
 	public void deleteById(Integer id) {
+		
 		PreparedStatement st = null;
+		
 		try {
+			
+			conn.setAutoCommit(false);
+			
 			st = conn.prepareStatement("DELETE FROM setor WHERE id_setor = ?");
 
 			st.setInt(1, id);
 
 			st.executeUpdate();
+			
+			conn.commit();
+		
 		} catch (SQLException e) {
-			throw new DbException(e.getMessage());
+
+			try {
+
+				conn.rollback();
+				throw new DbException("Transaction rolled back. Cause by: " + e.getLocalizedMessage());
+
+			} catch (SQLException e1) {
+
+				throw new DbException("Error trying to rollback. Cause by: " + e.getLocalizedMessage());
+			}
+
 		} finally {
+
 			DB.closeStatement(st);
+
 		}
+
 
 	}
 
 	@Override
 	public List<Setor> findAllNome() {
+		
 		PreparedStatement st = null;
 		ResultSet rs = null;
+		
 		try {
+			
 			st = conn.prepareStatement("SELECT * FROM setor ORDER BY nome");
 
 			rs = st.executeQuery();
@@ -94,23 +146,34 @@ public class SetorDaoJDBC implements SetorDao {
 			List<Setor> list = new ArrayList<>();
 
 			while (rs.next()) {
+				
 				Setor setor = instantiateSetor(rs);
 				list.add(setor);
+				
 			}
+			
 			return list;
+			
 		} catch (SQLException e) {
+			
 			throw new DbException(e.getMessage());
+			
 		} finally {
+			
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
+			
 		}
 	}
 
 	@Override
 	public List<Setor> findAllId() {
+		
 		PreparedStatement st = null;
 		ResultSet rs = null;
+		
 		try {
+			
 			st = conn.prepareStatement("SELECT * FROM setor ORDER BY id_setor");
 
 			rs = st.executeQuery();
@@ -118,23 +181,68 @@ public class SetorDaoJDBC implements SetorDao {
 			List<Setor> list = new ArrayList<>();
 
 			while (rs.next()) {
+				
 				Setor setor = instantiateSetor(rs);
 				list.add(setor);
+				
 			}
+			
 			return list;
+			
 		} catch (SQLException e) {
+			
 			throw new DbException(e.getMessage());
+			
 		} finally {
+			
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
+			
 		}
 	}
 
 	private Setor instantiateSetor(ResultSet rs) throws SQLException {
+		
 		Setor setor = new Setor();
 		setor.setIdSetor(rs.getInt("id_setor"));
 		setor.setNome(rs.getString("nome"));
 		return setor;
+		
+	}
+
+	@Override
+	public Integer findIdSetor(String nomeSetor) {
+
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		int id_setor = 0;
+
+		try {
+
+			st = conn.prepareStatement("SELECT id_setor FROM setor where nome = ?");
+			st.setString(1, nomeSetor);
+
+			rs = st.executeQuery();
+
+			while (rs.next()) {
+
+				id_setor = rs.getInt("id_setor");
+
+			}
+
+			return id_setor;
+
+		} catch (SQLException e) {
+
+			throw new DbException(e.getMessage());
+
+		} finally {
+
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+
+		}
+
 	}
 
 }

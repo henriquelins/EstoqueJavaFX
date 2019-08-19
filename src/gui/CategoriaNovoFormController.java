@@ -1,6 +1,8 @@
 package gui;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -14,12 +16,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.entities.Categoria;
+import model.entities.Setor;
 import model.services.CategoriaService;
+import model.services.SetorService;
 
 public class CategoriaNovoFormController implements Initializable {
 
@@ -30,6 +35,10 @@ public class CategoriaNovoFormController implements Initializable {
 	private CategoriaService service;
 
 	private static ObservableList<Categoria> listaCategoria;
+
+	private int id_setor;
+
+	private String setor;
 
 	@FXML
 	private Button btNovo;
@@ -47,6 +56,9 @@ public class CategoriaNovoFormController implements Initializable {
 	private TextField txtNome;
 
 	@FXML
+	private ComboBox<String> comboBoxSetor;
+
+	@FXML
 	public TableView<Categoria> tableViewCategoria;
 
 	@FXML
@@ -62,7 +74,7 @@ public class CategoriaNovoFormController implements Initializable {
 		txtId.setText("");
 		txtNome.requestFocus();
 
-		Categoria categoriaNova = new Categoria(null, "");
+		Categoria categoriaNova = new Categoria(null, "", 0);
 
 		setCategoria(categoriaNova);
 
@@ -87,7 +99,8 @@ public class CategoriaNovoFormController implements Initializable {
 
 			} else {
 
-				Alerts.showAlert("Categoria", "Editar Categoria", "Não houve alteração no registro", AlertType.INFORMATION);
+				Alerts.showAlert("Categoria", "Editar Categoria", "Não houve alteração no registro",
+						AlertType.INFORMATION);
 
 			}
 
@@ -99,15 +112,16 @@ public class CategoriaNovoFormController implements Initializable {
 	public void onBtExcluirAction(ActionEvent event) {
 
 		if (service == null) {
-			
+
 			throw new IllegalThreadStateException("Service está nulo");
-			
+
 		}
 		try {
 
 			if (categoria.getIdCategoria() != null) {
 
-				Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você deseja deletar a categoria " + categoria.getNome() + " ?");
+				Optional<ButtonType> result = Alerts.showConfirmation("Confirmação",
+						"Você deseja deletar a categoria " + categoria.getNome() + " ?");
 
 				if (result.get() == ButtonType.OK) {
 
@@ -123,24 +137,42 @@ public class CategoriaNovoFormController implements Initializable {
 			}
 
 		} catch (DbIntegrityException e) {
-			
+
 			Alerts.showAlert("Categoria", "Excluir", "Erro ao excluir a categoria", AlertType.INFORMATION);
 			limparCampos();
-			
+
 		}
 
 	}
 
+	@FXML
+	public void onSelectComboBoxSetorAction(ActionEvent event) {
+
+		if (service == null) {
+
+			throw new IllegalStateException("Service nulo");
+
+		}
+
+		SetorService setorService = new SetorService();
+		setSetor(comboBoxSetor.getSelectionModel().getSelectedItem());
+		setId_setor(setorService.findNomeIdSetor(getSetor()));
+
+		listaCategoria = FXCollections.observableArrayList(service.findIdSetor(id_setor));
+		tableViewCategoria.setItems(listaCategoria);
+
+	}
+
 	public void setCategoria(CategoriaService service) {
-		
+
 		this.service = service;
-		
+
 	}
 
 	public void setCategoria(Categoria categoria) {
-		
+
 		this.categoria = categoria;
-		
+
 	}
 
 	@Override
@@ -150,8 +182,25 @@ public class CategoriaNovoFormController implements Initializable {
 
 	}
 
+	private List<String> listaSetor() {
+
+		SetorService setorService = new SetorService();
+		List<String> listaSetor = new ArrayList<>();
+
+		for (Setor setor : setorService.findAllNome()) {
+
+			listaSetor.add(setor.getNome());
+
+		}
+
+		return listaSetor;
+
+	}
+
 	private void initializeNodes() {
-		
+
+		comboBoxSetor.setItems(FXCollections.observableArrayList(listaSetor()));
+
 		showDetails(null);
 
 		tableViewCategoria.getSelectionModel().selectedItemProperty()
@@ -159,12 +208,10 @@ public class CategoriaNovoFormController implements Initializable {
 
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("idCategoria"));
 		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("Nome"));
-	
+
 		service = new CategoriaService();
 		categoria = new Categoria();
 
-		updateTableView();
-		
 	}
 
 	public void updateTableView() {
@@ -173,7 +220,10 @@ public class CategoriaNovoFormController implements Initializable {
 			throw new IllegalStateException("Service nulo");
 		}
 
-		listaCategoria = FXCollections.observableArrayList(service.findAllId());
+		SetorService setorService = new SetorService();	
+		setId_setor(setorService.findNomeIdSetor(getSetor()));
+
+		listaCategoria = FXCollections.observableArrayList(service.findIdSetor(id_setor));
 		tableViewCategoria.setItems(listaCategoria);
 
 	}
@@ -203,6 +253,7 @@ public class CategoriaNovoFormController implements Initializable {
 			}
 
 			categoria.setNome(txtNome.getText());
+			categoria.setIdSetor(getId_setor());
 
 		}
 
@@ -228,12 +279,12 @@ public class CategoriaNovoFormController implements Initializable {
 	}
 
 	public void limparCampos() {
-		
+
 		txtId.setText("");
 		txtNome.setText("");
-		
+
 		setCategoria(new Categoria());
-		
+
 	};
 
 	public boolean compararCampos() {
@@ -255,6 +306,22 @@ public class CategoriaNovoFormController implements Initializable {
 
 		}
 
+	}
+
+	public int getId_setor() {
+		return id_setor;
+	}
+
+	public void setId_setor(int id_setor) {
+		this.id_setor = id_setor;
+	}
+
+	public String getSetor() {
+		return setor;
+	}
+
+	public void setSetor(String setor) {
+		this.setor = setor;
 	};
 
 }

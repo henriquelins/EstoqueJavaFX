@@ -37,7 +37,7 @@ public class LoginFormController implements Initializable {
 
 	@FXML
 	private Button btOK;
-	
+
 	@FXML
 	private Label labelTitle;
 
@@ -56,7 +56,7 @@ public class LoginFormController implements Initializable {
 				if (logado != null) {
 
 					Utils.currentStage(event).close();
-					
+
 					createPrincipalForm(Strings.getPrincipalView());
 
 				} else {
@@ -72,7 +72,7 @@ public class LoginFormController implements Initializable {
 			} catch (NullPointerException e) {
 
 				Alerts.showAlert("Login", null, e.getLocalizedMessage(), AlertType.ERROR);
-				
+
 			}
 
 		}
@@ -80,21 +80,21 @@ public class LoginFormController implements Initializable {
 	}
 
 	public static void setLogado(Usuario logado) {
-		
+
 		LoginFormController.logado = logado;
-		
+
 	}
 
 	public static Usuario getLogado() {
-		
+
 		return logado;
-		
+
 	}
 
 	public static String usuarioLogado() {
-		
+
 		return logado.usuarioLogado();
-		
+
 	}
 
 	@Override
@@ -105,12 +105,12 @@ public class LoginFormController implements Initializable {
 	}
 
 	private void initializeNodes() {
-		
+
 		logado = new Usuario();
 		usuarioService = new UsuarioService();
-		
+
 		labelTitle.setText(Strings.getTitleLogin());
-		
+
 	}
 
 	private void createPrincipalForm(String absoluteName) {
@@ -126,13 +126,13 @@ public class LoginFormController implements Initializable {
 			Stage principalStage = new Stage();
 			principalStage.setTitle(Strings.getTitle());
 			principalStage.setScene(new Scene(scrollPane));
-			
+
 			principalStage.setResizable(true);
 			principalStage.setMaximized(true);
-						
+
 			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
 			principalStage.getIcons().add(applicationIcon);
-			
+
 			principalStage.show();
 
 		} catch (IOException e) {

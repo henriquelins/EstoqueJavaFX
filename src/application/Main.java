@@ -24,10 +24,10 @@ import javafx.util.Duration;
 import properties.PropertiesFile;
 
 public class Main extends Application {
-	
+
 	// Tela cheia
 	private static Scene mainScene;
-	
+
 	// Tela diálogo
 	private static Scene dialogScene;
 
@@ -48,7 +48,8 @@ public class Main extends Application {
 			try {
 
 				// impede que seja criada uma nova instância do programa
-				portSocket = Integer.parseInt(PropertiesFile.loadPropertiesSocket().getProperty(Strings.getPropertiessocketPort()));
+				portSocket = Integer
+						.parseInt(PropertiesFile.loadPropertiesSocket().getProperty(Strings.getPropertiessocketPort()));
 				setServerSocket(new ServerSocket(portSocket));
 				setSocket(new Socket(InetAddress.getLocalHost().getHostAddress(), portSocket));
 
@@ -71,7 +72,7 @@ public class Main extends Application {
 			}
 
 		} else {
-			
+
 			primaryStage.close();
 			carregarTela(primaryStage, Strings.getLoginView());
 
@@ -201,7 +202,7 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
-		
+
 		launch(args);
 
 	}

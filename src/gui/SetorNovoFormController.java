@@ -172,7 +172,7 @@ public class SetorNovoFormController implements Initializable {
 			throw new IllegalStateException("Service nulo");
 		}
 
-		listaSetor = FXCollections.observableArrayList(service.findAllId());
+		listaSetor = FXCollections.observableArrayList(service.findAllNome());
 		tableViewSetor.setItems(listaSetor);
 
 	}

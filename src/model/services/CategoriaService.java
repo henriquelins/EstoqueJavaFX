@@ -41,15 +41,27 @@ public class CategoriaService {
 	}
 
 	public void remove(Categoria categoria) {
+		
 		dao.deleteById(categoria.getIdCategoria());
+		
 	}
 
 	public List<Categoria> findAllId() {
+		
 		return dao.findAllId();
+		
 	}
 	
 	public List<Categoria> findAllNome() {
+		
 		return dao.findAllNome();
+		
+	}
+
+	public List<Categoria>  findIdSetor(int id_setor) {
+		
+		return dao.findIdSetor(id_setor);
+		
 	}
 
 }

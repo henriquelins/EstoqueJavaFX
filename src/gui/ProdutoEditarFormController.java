@@ -15,6 +15,7 @@ import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import gui.util.Strings;
+import gui.util.Utils;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -39,7 +40,7 @@ import model.services.ProdutoService;
 import model.services.SetorService;
 
 public class ProdutoEditarFormController implements Initializable, DataChangeListener {
-	
+
 	private Produto produtoComparar;
 
 	private ProdutoService produtoService;
@@ -47,6 +48,10 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 	private PrincipalFormController principalController;
 
 	private static byte[] bytes;
+
+	private String setor;
+
+	private int id_setor;
 
 	// Lista de ouvintes para receber alguma modificação
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
@@ -95,16 +100,36 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 			if (ok == false) {
 
 				produtoService.produtoNovoOuEditar(PrincipalFormController.getProduto());
+				Utils.fecharDialogAction();
 				notifyDataChangeListeners();
 
 			} else {
 
-				Alerts.showAlert("Produto", "Editar", "Não houve alteração no registro", AlertType.INFORMATION);
+				Alerts.showAlert("Produto", "Editar", "Não houve alteração nos dados do produto!", AlertType.INFORMATION);
 
 			}
 
 		}
 
+	}
+
+	@FXML
+	public void onSelectComboBoxSetorAction(ActionEvent event) {
+
+		SetorService setorService = new SetorService();
+		CategoriaService categoriaService = new CategoriaService();
+
+		setSetor(comboBoxSetor.getSelectionModel().getSelectedItem());
+		setId_setor(setorService.findNomeIdSetor(getSetor()));
+
+		List<String> listaCategoria = new ArrayList<>();
+
+		for (Categoria categoria : FXCollections.observableArrayList(categoriaService.findIdSetor(id_setor))) {
+
+			listaCategoria.add(categoria.getNome());
+		}
+
+		comboBoxCategoria.setItems(FXCollections.observableArrayList(listaCategoria));
 	}
 
 	@FXML
@@ -114,8 +139,8 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 		File arquivo = null;
 		String local = "";
 
-		chooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("All Files", "*.*"),
-				new FileChooser.ExtensionFilter("JPG", "*.jpg"), new FileChooser.ExtensionFilter("PNG", "*.png"));
+		chooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+				new FileChooser.ExtensionFilter("PNG", "*.png"));
 
 		chooser.setTitle("Escolher foto do produto");
 
@@ -210,19 +235,20 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 	}
 
-	private List<String> listaCategoria() {
-
-		CategoriaService categoriaService = new CategoriaService();
-		List<String> listaCategoria = new ArrayList<>();
-
-		for (Categoria categoria : categoriaService.findAllNome()) {
-
-			listaCategoria.add(categoria.getNome());
-		}
-
-		return listaCategoria;
-
-	}
+	/*
+	 * private List<String> listaCategoria() {
+	 * 
+	 * CategoriaService categoriaService = new CategoriaService(); List<String>
+	 * listaCategoria = new ArrayList<>();
+	 * 
+	 * for (Categoria categoria : categoriaService.findIdSetor(id_setor)) {
+	 * 
+	 * listaCategoria.add(categoria.getNome()); }
+	 * 
+	 * return listaCategoria;
+	 * 
+	 * }
+	 */
 
 	@FXML
 	public void onBtVisualizarFotoAction(ActionEvent event) {
@@ -283,7 +309,6 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 	private void initializeNodes() {
 
 		comboBoxSetor.setItems(FXCollections.observableArrayList(listaSetor()));
-		comboBoxCategoria.setItems(FXCollections.observableArrayList(listaCategoria()));
 
 		produtoService = new ProdutoService();
 
@@ -348,6 +373,15 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 			prod = null;
 
+		} else if (txtAreaDescricao.getText() == null || txtAreaDescricao.getText().trim().equals("")) {
+
+			Alerts.showAlert("Novo Produto", "Campo obrigatório", "Digite a descrição do produto",
+					AlertType.INFORMATION);
+
+			txtAreaDescricao.requestFocus();
+
+			prod = null;
+
 		} else {
 
 			prod.setIdProduto(Integer.valueOf(txtIdProduto.getText()));
@@ -398,7 +432,8 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 		} else if (PrincipalFormController.getProduto().getNome().equals(produtoComparar.getNome())
 				&& PrincipalFormController.getProduto().getSetor().equals(produtoComparar.getSetor())
 				&& PrincipalFormController.getProduto().getCategoria().equals(produtoComparar.getCategoria())
-				&& PrincipalFormController.getProduto().getDescricao().equals(produtoComparar.getDescricao())) {
+				&& PrincipalFormController.getProduto().getDescricao().equals(produtoComparar.getDescricao())
+				&& PrincipalFormController.getProduto().getFoto().equals(produtoComparar.getFoto())) {
 
 			ok = true;
 			return ok;
@@ -409,7 +444,24 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 		}
 
-	};
+	}
 
+	// Getters and Setters
+
+	public String getSetor() {
+		return setor;
+	}
+
+	public void setSetor(String setor) {
+		this.setor = setor;
+	}
+
+	public int getId_setor() {
+		return id_setor;
+	}
+
+	public void setId_setor(int id_setor) {
+		this.id_setor = id_setor;
+	};
 
 }

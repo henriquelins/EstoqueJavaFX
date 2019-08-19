@@ -110,11 +110,11 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 	public void onBtSalvarUsuarioAction(ActionEvent event) {
 
 		setUsuario(getFormData());
-		editarCamposFalso();
-		botoesFalso();
-		tableViewUsuario.setDisable(false);
 
 		if (usuario != null) {
+
+			editarCamposFalso();
+			tableViewUsuario.setDisable(false);
 
 			boolean ok = false;
 
@@ -123,11 +123,14 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 			if (ok == false) {
 
 				service.usuarioNovoOuEditar(usuario);
+				botoesFalso();
 				onDataChanged();
 
 			} else {
 
 				Alerts.showAlert("Usuário", "Editar Usuário", "Não houve alteração no registro", AlertType.INFORMATION);
+
+				botoesFalso();
 
 			}
 
@@ -155,7 +158,6 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 
 	}
 
-
 	protected void editarCamposDoUsuario() {
 
 		if (usuarioTabela.getIdUsuario() != null) {
@@ -164,16 +166,18 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 			txtLogin.setEditable(true);
 			pswSenha.setEditable(true);
 			pswRepetirSenha.setEditable(true);
-		
+
 			btNovoUsuario.setDisable(false);
 			btCancelarEditarUsuario.setVisible(true);
 			btSalvarUsuario.setVisible(true);
 
 			tableViewUsuario.setDisable(true);
+			
+			btNovoUsuario.setDisable(true);
 
 		} else {
 
-			Alerts.showAlert("Usuários", "Editar Usuário" , "Selecione um registro", AlertType.INFORMATION);
+			Alerts.showAlert("Usuários", "Editar Usuário", "Selecione um registro", AlertType.INFORMATION);
 
 		}
 
@@ -185,7 +189,7 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 		txtLogin.setEditable(true);
 		pswSenha.setEditable(true);
 		pswRepetirSenha.setEditable(true);
-	
+
 		btNovoUsuario.setDisable(true);
 		btCancelarEditarUsuario.setVisible(true);
 		btSalvarUsuario.setVisible(true);
@@ -214,7 +218,6 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 		txtLogin.setEditable(false);
 		pswSenha.setEditable(false);
 		pswRepetirSenha.setEditable(false);
-	
 
 	}
 
@@ -237,7 +240,7 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 				pswSenha.setText(usuario.getSenha());
 				pswRepetirSenha.setText(usuario.getSenha());
 				comboBoxAcesso.setValue(selectChoiceBox(usuario.getAcesso()));
-			
+
 				setUsuarioTabela(usuario);
 
 				setUsuario(usuario);
@@ -306,14 +309,13 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("idUsuario"));
 		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("Nome"));
 		tableColumnLogin.setCellValueFactory(new PropertyValueFactory<>("Login"));
-		
-		tableColumnAcesso
-		.setCellValueFactory((param) -> new SimpleStringProperty(selectChoiceBox(param.getValue().getAcesso())));
+
+		tableColumnAcesso.setCellValueFactory(
+				(param) -> new SimpleStringProperty(selectChoiceBox(param.getValue().getAcesso()).substring(3)));
 
 		service = new UsuarioService();
 		usuarioTabela = new Usuario();
-		
-		
+
 		comboBoxAcesso.setItems(listaAcesso());
 
 		updateTableView();
@@ -379,7 +381,7 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 			pswRepetirSenha.requestFocus();
 			usuario = null;
 
-		} else if (comboBoxAcesso.getSelectionModel().isEmpty() == true) {
+		} else if (comboBoxAcesso.getSelectionModel().getSelectedItem().equals("Selecione o tipo de acesso...")) {
 
 			Alerts.showAlert("Novo Usuário", "Campo obrigatório", "Selecione o acesso!", AlertType.INFORMATION);
 
@@ -502,7 +504,8 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 
 		} else if (usuario.getNome().equals(usuarioComparar.getNome())
 				&& usuario.getLogin().equals(usuarioComparar.getLogin())
-				&& usuario.getSenha().equals(usuarioComparar.getSenha())) {
+				&& usuario.getSenha().equals(usuarioComparar.getSenha())
+				&& usuario.getAcesso() == usuarioComparar.getAcesso()) {
 
 			ok = true;
 			return ok;
@@ -522,15 +525,18 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 		switch (acesso) {
 
 		case 1:
+
 			selectComboBoxAcesso = Strings.getCase1choiceBoxAcesso1();
 			break;
 
 		case 2:
+
 			selectComboBoxAcesso = Strings.getCase1choiceBoxAcesso2();
 			break;
+
 		}
 
-		return selectComboBoxAcesso.substring(3);
+		return selectComboBoxAcesso;
 
 	}
 

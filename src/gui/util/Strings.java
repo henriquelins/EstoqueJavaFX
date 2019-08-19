@@ -170,5 +170,13 @@ public class Strings {
 		return "/gui/VisualizarFotoView.fxml";
 
 	}
+	
+	//Extra
+	
+	public static String getExcluirProduto() {
+
+		return "Excluir Produto";
+
+	}
 
 }

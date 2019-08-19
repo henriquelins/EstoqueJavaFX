@@ -7,7 +7,6 @@ import gui.PrincipalFormController;
 import gui.util.Alerts;
 import gui.util.Utils;
 import javafx.scene.control.ButtonType;
-import javafx.stage.Stage;
 import model.dao.DaoFactory;
 import model.dao.ProdutoDao;
 import model.entities.Produto;
@@ -47,9 +46,7 @@ public class ProdutoService {
 			}
 
 		}
-		
-		Utils.fecharDialogAction();
-				
+
 	}
 
 	public void remove(Produto produto) {

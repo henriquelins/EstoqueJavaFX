@@ -2,13 +2,12 @@ package model.entities;
 
 import java.io.Serializable;
 
-
 public class Setor implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private Integer idSetor;
 	private String nome;
-	
+
 	public Setor() {
 	}
 
@@ -69,7 +68,4 @@ public class Setor implements Serializable {
 		return "Setor [idSetor=" + idSetor + ", nome=" + nome + "]";
 	}
 
-	
-	
-	
 }

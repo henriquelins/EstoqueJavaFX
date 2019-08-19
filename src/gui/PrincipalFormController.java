@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 import application.Main;
 import db.DbIntegrityException;
 import gui.listeners.DataChangeListener;
+import gui.util.Acesso;
 import gui.util.Alerts;
 import gui.util.Strings;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -136,35 +137,99 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	@FXML
 	public void onMenuItemMovimentacao(ActionEvent event) {
 
-		createMovimentacaoListDialogForm(Strings.getMovimentacaoListView());
+		boolean concedido = false;
+		Acesso acesso = new Acesso();
+
+		concedido = acesso.concederAcesso(LoginFormController.getLogado().getAcesso(),
+				Strings.getMovimentacaoListView());
+
+		if (concedido == true) {
+
+			createMovimentacaoListDialogForm(Strings.getMovimentacaoListView());
+
+		} else {
+
+			Alerts.showAlert("Acesso negado", "Acesso não concedido ao usuário logado", null, AlertType.ERROR);
+
+		}
 
 	}
 
 	@FXML
 	public void onMenuItemUsuario(ActionEvent event) {
 
-		createUsuarioDialogForm(Strings.getUsuarioView());
+		boolean concedido = false;
+		Acesso acesso = new Acesso();
+		concedido = acesso.concederAcesso(LoginFormController.getLogado().getAcesso(), Strings.getUsuarioView());
+
+		System.out.println(concedido);
+
+		if (concedido == true) {
+
+			createUsuarioDialogForm(Strings.getUsuarioView());
+
+		} else {
+
+			Alerts.showAlert("Acesso negado", "Acesso não concedido ao usuário logado", null, AlertType.ERROR);
+
+		}
 
 	}
 
 	@FXML
 	public void onMenuItemProduto(ActionEvent event) {
-		
-		createProdutoDialogForm(Strings.getProdutoNovoView());
+
+		boolean concedido = false;
+		Acesso acesso = new Acesso();
+		concedido = acesso.concederAcesso(LoginFormController.getLogado().getAcesso(), Strings.getProdutoNovoView());
+
+		if (concedido == true) {
+
+			createProdutoDialogForm(Strings.getProdutoNovoView());
+
+		} else {
+
+			Alerts.showAlert("Acesso negado", "Acesso não concedido ao usuário logado", null, AlertType.ERROR);
+
+		}
 
 	}
 
 	@FXML
 	public void onMenuItemSetor(ActionEvent event) {
 
-		createVBoxDialogForm(Strings.getSetorNovoView());
+		boolean concedido = false;
+		Acesso acesso = new Acesso();
+		concedido = acesso.concederAcesso(LoginFormController.getLogado().getAcesso(), Strings.getSetorNovoView());
+
+		if (concedido == true) {
+
+			createVBoxDialogForm(Strings.getSetorNovoView());
+
+		} else {
+
+			Alerts.showAlert("Acesso negado", "Acesso não concedido ao usuário logado", null, AlertType.ERROR);
+
+		}
 
 	}
 
 	@FXML
 	public void onMenuItemCategoria(ActionEvent event) {
 
-		createVBoxDialogForm(Strings.getCategoriaNovoView());
+		boolean concedido = false;
+		Acesso acesso = new Acesso();
+		concedido = acesso.concederAcesso(LoginFormController.getLogado().getAcesso(), Strings.getCategoriaNovoView());
+
+		if (concedido == true) {
+
+			createVBoxDialogForm(Strings.getCategoriaNovoView());
+
+		} else {
+
+			Alerts.showAlert("Acesso negado", "Acesso não concedido ao usuário logado", null, AlertType.ERROR);
+
+		}
 
 	}
 
@@ -178,7 +243,19 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	@FXML
 	public void onBtNovoAction(ActionEvent event) {
 
-		createProdutoDialogForm(Strings.getProdutoNovoView());
+		boolean concedido = false;
+		Acesso acesso = new Acesso();
+		concedido = acesso.concederAcesso(LoginFormController.getLogado().getAcesso(), Strings.getProdutoNovoView());
+
+		if (concedido == true) {
+
+			createProdutoDialogForm(Strings.getProdutoNovoView());
+
+		} else {
+
+			Alerts.showAlert("Acesso negado", "Acesso não concedido ao usuário logado", null, AlertType.ERROR);
+
+		}
 
 	}
 
@@ -302,10 +379,10 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 		listaSetor.add("Todos");
 
-		for (Setor setor : setorService.findAllNome()) {
+		for (Setor setor : setorService.findAllId()) {
 
 			listaSetor.add(setor.getNome());
-			
+
 		}
 
 		return listaSetor;
@@ -420,8 +497,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 		} catch (IOException e) {
 
-			Alerts.showAlert("IO Exception", "Erro ao carregar a tela", e.getLocalizedMessage(),
-					AlertType.ERROR);
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela", e.getLocalizedMessage(), AlertType.ERROR);
 
 		}
 
@@ -436,7 +512,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 			pane.setFitToHeight(true);
 			pane.setFitToWidth(true);
-			
+
 			Main.setDialogScene(new Scene(pane));
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle(Strings.getTitle());
@@ -453,13 +529,12 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 		} catch (IOException e) {
 
-			Alerts.showAlert("IO Exception", "Erro ao carregar a tela", e.getLocalizedMessage(),
-					AlertType.ERROR);
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela", e.getLocalizedMessage(), AlertType.ERROR);
 
 		}
 
 	}
-	
+
 	private void createProdutoDialogForm(String absoluteName) {
 
 		try {
@@ -486,96 +561,69 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 		} catch (IOException e) {
 
-			Alerts.showAlert("IO Exception", "Erro ao carregar a tela", e.getMessage(),
-					AlertType.ERROR);
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela", e.getMessage(), AlertType.ERROR);
 
 		}
 	}
 
-
-	
 	private void createProdutoEditarDialogForm(Produto prod, String absoluteName) {
 
-		try {
+		boolean concedido = false;
+		Acesso acesso = new Acesso();
 
-			setProduto(prod);
+		concedido = acesso.concederAcesso(LoginFormController.getLogado().getAcesso(), absoluteName);
 
-			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-			Pane pane = loader.load();
+		if (concedido == true) {
 
-			ProdutoEditarFormController controller = loader.getController();
-			controller.setProdutoService(new ProdutoService());
-			controller.subscribeDataChangeListener(this);
+			try {
 
-			Main.setDialogScene(new Scene(pane));
-			Stage produtoStage = new Stage();
-			produtoStage.setTitle(Strings.getTitle());
-			produtoStage.setScene(Main.getDialogScene());
-			produtoStage.setResizable(false);
-			produtoStage.initModality(Modality.APPLICATION_MODAL);
-			produtoStage.initOwner(null);
+				setProduto(prod);
 
-			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
-			produtoStage.getIcons().add(applicationIcon);
+				FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+				Pane pane = loader.load();
 
-			produtoStage.showAndWait();
+				ProdutoEditarFormController controller = loader.getController();
+				controller.setProdutoService(new ProdutoService());
+				controller.subscribeDataChangeListener(this);
 
-		} catch (IOException e) {
+				Main.setDialogScene(new Scene(pane));
+				Stage produtoStage = new Stage();
+				produtoStage.setTitle(Strings.getTitle());
+				produtoStage.setScene(Main.getDialogScene());
+				produtoStage.setResizable(false);
+				produtoStage.initModality(Modality.APPLICATION_MODAL);
+				produtoStage.initOwner(null);
 
-			Alerts.showAlert("IO Exception", "Erro ao carregar a tela", e.getMessage(),
-					AlertType.ERROR);
+				Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
+				produtoStage.getIcons().add(applicationIcon);
+
+				produtoStage.showAndWait();
+
+			} catch (IOException e) {
+
+				Alerts.showAlert("IO Exception", "Erro ao carregar a tela", e.getMessage(), AlertType.ERROR);
+
+			}
+
+		} else {
+
+			Alerts.showAlert("Acesso negado", "Acesso não concedido ao usuário logado", null, AlertType.ERROR);
 
 		}
+
 	}
-	
+
 	private void createProdutoShowDialogForm(Produto prod, String absoluteName) {
 
 		try {
 
 			setProduto(prod);
-			
+
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 
 			ProdutoShowFormController controller = loader.getController();
 			controller.setProduto(produto);
-			
-			Main.setDialogScene(new Scene(pane));
-			Stage produtoStage = new Stage();
-			produtoStage.setTitle(Strings.getTitle());
-			produtoStage.setScene(Main.getDialogScene());
-			produtoStage.setResizable(false);
-			produtoStage.initModality(Modality.APPLICATION_MODAL);
-			produtoStage.initOwner(null);
-
-			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
-			produtoStage.getIcons().add(applicationIcon);
-
-			produtoStage.showAndWait();
-
-		} catch (IOException e) {
-
-			Alerts.showAlert("IO Exception", "Erro ao carregar a tela", e.getMessage(),
-					AlertType.ERROR);
-
-		}
-	}
-
-
-	private void createMovimentacaoDialogForm(Produto prod, String absoluteName) {
-
-		try {
-
-			setProduto(prod);
-
-			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-			Pane pane = loader.load();
-
-			MovimentacaoFormController controller = loader.getController();
-			controller.setProduto(produto);
-			controller.setMovimentacao(movimentacao);
-			controller.setMovimentacaoService(new MovimentacaoService());
-			controller.subscribeDataChangeListener(this);
 
 			Main.setDialogScene(new Scene(pane));
 			Stage produtoStage = new Stage();
@@ -593,7 +641,55 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		} catch (IOException e) {
 
 			Alerts.showAlert("IO Exception", "Erro ao carregar a tela", e.getMessage(), AlertType.ERROR);
+
 		}
+	}
+
+	private void createMovimentacaoDialogForm(Produto prod, String absoluteName) {
+
+		boolean concedido = false;
+		Acesso acesso = new Acesso();
+		concedido = acesso.concederAcesso(LoginFormController.getLogado().getAcesso(), absoluteName);
+
+		if (concedido == true) {
+
+			try {
+
+				setProduto(prod);
+
+				FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+				Pane pane = loader.load();
+
+				MovimentacaoFormController controller = loader.getController();
+				controller.setProduto(produto);
+				controller.setMovimentacao(movimentacao);
+				controller.setMovimentacaoService(new MovimentacaoService());
+				controller.subscribeDataChangeListener(this);
+
+				Main.setDialogScene(new Scene(pane));
+				Stage produtoStage = new Stage();
+				produtoStage.setTitle(Strings.getTitle());
+				produtoStage.setScene(Main.getDialogScene());
+				produtoStage.setResizable(false);
+				produtoStage.initModality(Modality.APPLICATION_MODAL);
+				produtoStage.initOwner(null);
+
+				Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
+				produtoStage.getIcons().add(applicationIcon);
+
+				produtoStage.showAndWait();
+
+			} catch (IOException e) {
+
+				Alerts.showAlert("IO Exception", "Erro ao carregar a tela", e.getMessage(), AlertType.ERROR);
+			}
+
+		} else {
+
+			Alerts.showAlert("Acesso negado", "Acesso não concedido ao usuário logado", null, AlertType.ERROR);
+
+		}
+
 	}
 
 	private void createUsuarioDialogForm(String absoluteName) {
@@ -645,8 +741,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 		} catch (IOException e) {
 
-			Alerts.showAlert("IO Exception", "Erro ao carregar a tela", e.getMessage(),
-					AlertType.ERROR);
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela", e.getMessage(), AlertType.ERROR);
 
 		}
 
@@ -672,7 +767,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 				}
 
 				setGraphic(button);
-				button.setOnAction(event -> createMovimentacaoDialogForm(prod, "/gui/MovimentacaoView.fxml"));
+				button.setOnAction(event -> createMovimentacaoDialogForm(prod, Strings.getMovimentacaoView()));
 
 			}
 		});
@@ -729,29 +824,44 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	}
 
 	private void removeEntity(Produto prod) {
-		Optional<ButtonType> result = Alerts.showConfirmation("Confirmação",
-				"Você quer deletar o produto " + prod.getNome() + " ?");
 
-		if (result.get() == ButtonType.OK) {
+		boolean concedido = false;
+		Acesso acesso = new Acesso();
+		concedido = acesso.concederAcesso(LoginFormController.getLogado().getAcesso(),
+				Strings.getExcluirProduto());
 
-			if (service == null) {
+		if (concedido == true) {
 
-				throw new IllegalThreadStateException("Service está nulo");
+			Optional<ButtonType> result = Alerts.showConfirmation("Confirmação",
+					"Você quer deletar o produto " + prod.getNome() + " ?");
+
+			if (result.get() == ButtonType.OK) {
+
+				if (service == null) {
+
+					throw new IllegalThreadStateException("Service está nulo");
+				}
+
+				try {
+
+					service.remove(prod);
+					listaProdutos = FXCollections.observableArrayList(service.findAll());
+					updateTableView();
+
+				} catch (DbIntegrityException e) {
+
+					Alerts.showAlert("Erro ao remover o produto " + prod.getNome() + " !", null, e.getMessage(),
+							AlertType.ERROR);
+
+				}
 			}
 
-			try {
+		} else {
 
-				service.remove(prod);
-				listaProdutos = FXCollections.observableArrayList(service.findAll());
-				updateTableView();
+			Alerts.showAlert("Acesso negado", "Acesso não concedido ao usuário logado", null, AlertType.ERROR);
 
-			} catch (DbIntegrityException e) {
-
-				Alerts.showAlert("Erro ao remover o produto " + prod.getNome() + " !", null, e.getMessage(),
-						AlertType.ERROR);
-
-			}
 		}
+
 	}
 
 	private void initShowButton() {
@@ -767,8 +877,10 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 				super.updateItem(prod, empty);
 
 				if (prod == null) {
+					
 					setGraphic(null);
 					return;
+					
 				}
 
 				setGraphic(button);

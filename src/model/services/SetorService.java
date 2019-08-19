@@ -41,14 +41,25 @@ public class SetorService {
 	}
 
 	public void remove(Setor setor) {
+		
 		dao.deleteById(setor.getIdSetor());
+		
 	}
 
 	public List<Setor> findAllId() {
+		
 		return dao.findAllId();
+		
 	}
 	
+	public Integer findNomeIdSetor(String nomeSetor) {
+		
+		return dao.findIdSetor(nomeSetor);
+		
+	}
+
 	public List<Setor> findAllNome() {
+		
 		return dao.findAllNome();
 	}
 	
