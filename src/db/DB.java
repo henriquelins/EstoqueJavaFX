@@ -33,9 +33,7 @@ public class DB {
 				Alerts.showAlert("Controle de Estoque", "Erro ao abrir o banco de dados",
 						e.getLocalizedMessage(), AlertType.ERROR);
 				
-				//throw new DbException(e.getMessage());
-
-			}
+				}
 		}
 
 		return conn;

@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import gui.PrincipalFormController;
 import gui.util.Alerts;
-import gui.util.Utils;
 import javafx.scene.control.ButtonType;
 import model.dao.DaoFactory;
 import model.dao.ProdutoDao;

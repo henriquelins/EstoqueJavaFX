@@ -95,13 +95,8 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 			Utils.fecharDialogAction();
 			notifyDataChangeListeners();
 
-		} else {
-
-			Alerts.showAlert("Produto", "Salvar", "Erro ao salvar o produto", AlertType.INFORMATION);
-			Utils.fecharDialogAction();
-
-		}
-
+		} 
+		
 	}
 
 	@FXML

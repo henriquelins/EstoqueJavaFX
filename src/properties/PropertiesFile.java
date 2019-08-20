@@ -10,12 +10,13 @@ import java.util.Properties;
 import javax.swing.JOptionPane;
 
 import db.DbException;
+import gui.util.Strings;
 
 public class PropertiesFile {
 
 	public static Properties loadPropertiesDB() {
 
-		try (FileInputStream fs = new FileInputStream("./properties/db.properties")) {
+		try (FileInputStream fs = new FileInputStream(Strings.getPropertiesBD())) {
 
 			Properties props = new Properties();
 			props.load(fs);
@@ -36,10 +37,10 @@ public class PropertiesFile {
 	   
 		try {
 			
-	    	FileInputStream arquivoIn = new FileInputStream("./properties/db.properties");
+	    	FileInputStream arquivoIn = new FileInputStream(Strings.getPropertiesBD());
 	    	propSalvar.load(arquivoIn);
 	    	arquivoIn.close();
-	        FileOutputStream arquivoOut = new FileOutputStream("./properties/db.properties");
+	        FileOutputStream arquivoOut = new FileOutputStream(Strings.getPropertiesBD());
 	        
 	        propSalvar.setProperty("dburl", dburl);
 	        propSalvar.setProperty("password", password);
@@ -65,7 +66,7 @@ public class PropertiesFile {
 
 		try {
 
-			props.load(props.getClass().getResourceAsStream("./properties/db.properties"));
+			props.load(props.getClass().getResourceAsStream(Strings.getPropertiesBD()));
 
 		} catch (IOException e1) {
 
@@ -113,7 +114,7 @@ public class PropertiesFile {
 
 	public static Properties loadPropertiesSocket() {
 
-		try (FileInputStream fs = new FileInputStream("./properties/socket.properties")) {
+		try (FileInputStream fs = new FileInputStream(Strings.getPropertiesSocket())) {
 
 			Properties props = new Properties();
 			props.load(fs);

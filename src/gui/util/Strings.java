@@ -47,6 +47,19 @@ public class Strings {
 
 	// Properties
 
+	
+	public static String getPropertiesBD() {
+
+		return "C://Temp/db.properties";
+
+	}
+	
+	public static String getPropertiesSocket() {
+
+		return "C://Temp/socket.properties";
+
+	}
+	
 	public static String getPropertiessocketPort() {
 
 		return "socketPort";
