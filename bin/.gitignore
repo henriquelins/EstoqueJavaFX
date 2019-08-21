@@ -3,7 +3,7 @@
 /db/
 /gui/
 /imagens/
-/lib/
 /model/
 /properties/
 /socket.properties
+/sql/

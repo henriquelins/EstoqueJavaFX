@@ -34,20 +34,23 @@ public class VisualizarFotoFormController implements Initializable {
 	private void initializeNodes() {
 
 		visualisarFoto();
-		
+
 	}
 
 	public void visualisarFoto() {
 
+
 		if (PrincipalFormController.getProduto().getFoto() == null) {
 
 			imageView.setImage(new Image(Strings.getSemFoto()));
+			
 
 		} else {
 
 			try {
-				
+
 				imageView.setImage(byteToImage(PrincipalFormController.getProduto().getFoto()));
+
 
 			} catch (IOException e) {
 
