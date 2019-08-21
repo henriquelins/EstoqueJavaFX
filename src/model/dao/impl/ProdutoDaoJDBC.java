@@ -135,20 +135,10 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			st.setBytes(7, produto.getFoto());
 			
 			st.executeUpdate();
-			
-			/*int rowsAffected = st.executeUpdate();
-
-			if (rowsAffected == 0) {
-
-				new DbException("Erro ao inserir o produto");
-
-			}*/
-
+		
 			conn.commit();
 
-		} catch (
-
-		SQLException e) {
+		} catch (SQLException e) {
 
 			try {
 
@@ -160,12 +150,12 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 
 				throw new DbException("Error trying to rollback. Cause by: " +
 				e.getLocalizedMessage());
+
 			}
 
 		} finally {
 
 			DB.closeStatement(st);
-
 		}
 	}
 
