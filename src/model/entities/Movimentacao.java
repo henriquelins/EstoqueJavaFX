@@ -16,11 +16,11 @@ public class Movimentacao implements Serializable {
 	private Date dataDaTransacao;
 	private int estoqueAtual;
 
-	public Movimentacao() {
-	}
+	public Movimentacao() {}
 
 	public Movimentacao(int idMovimentacao, Produto produto, Usuario usuario, String tipo, int valorMovimento,
 			String observacoesMovimentacao, int quantidadeAnterior, Date dataDaTransacao, int estoqueAtual) {
+		
 		this.idMovimentacao = idMovimentacao;
 		this.produto = produto;
 		this.usuario = usuario;
@@ -30,6 +30,7 @@ public class Movimentacao implements Serializable {
 		this.quantidadeAnterior = quantidadeAnterior;
 		this.dataDaTransacao = dataDaTransacao;
 		this.estoqueAtual = estoqueAtual;
+		
 	}
 
 	public int getIdMovimentacao() {

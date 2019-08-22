@@ -121,7 +121,7 @@ public class UsuarioDaoJDBC implements UsuarioDao {
 			st = conn.prepareStatement("DELETE FROM usuario WHERE id_usuario = ?");
 
 			st.setInt(1, id);
-						
+
 			int rowsAffected = st.executeUpdate();
 
 			if (rowsAffected == 0) {
@@ -129,7 +129,6 @@ public class UsuarioDaoJDBC implements UsuarioDao {
 				throw new DbException("Erro ao deletar o usuário");
 
 			}
-
 
 			conn.commit();
 

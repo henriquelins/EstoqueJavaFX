@@ -8,8 +8,7 @@ public class Setor implements Serializable {
 	private Integer idSetor;
 	private String nome;
 
-	public Setor() {
-	}
+	public Setor() {}
 
 	public Setor(Integer idSetor, String nome) {
 		this.idSetor = idSetor;

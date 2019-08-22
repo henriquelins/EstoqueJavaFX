@@ -105,7 +105,8 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 			} else {
 
-				Alerts.showAlert("Produto", "Editar", "Não houve alteração nos dados do produto!", AlertType.INFORMATION);
+				Alerts.showAlert("Produto", "Editar", "Não houve alteração nos dados do produto!",
+						AlertType.INFORMATION);
 
 			}
 
@@ -235,21 +236,6 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 
 	}
 
-	/*
-	 * private List<String> listaCategoria() {
-	 * 
-	 * CategoriaService categoriaService = new CategoriaService(); List<String>
-	 * listaCategoria = new ArrayList<>();
-	 * 
-	 * for (Categoria categoria : categoriaService.findIdSetor(id_setor)) {
-	 * 
-	 * listaCategoria.add(categoria.getNome()); }
-	 * 
-	 * return listaCategoria;
-	 * 
-	 * }
-	 */
-
 	@FXML
 	public void onBtVisualizarFotoAction(ActionEvent event) {
 
@@ -269,14 +255,14 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 	private void createVisualizarFotoDialogForm(String absoluteName) {
 
 		try {
+			
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			Pane pane = loader.load();
 
 			Produto prod = new Produto();
 			prod.setFoto(bytes);
 			PrincipalFormController.setProduto(prod);
-
-			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-			Pane pane = loader.load();
-
+			
 			Main.setDialogScene(new Scene(pane));
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle(Strings.getTitle());
@@ -289,6 +275,7 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 			produtoStage.getIcons().add(applicationIcon);
 
 			produtoStage.showAndWait();
+			
 
 		} catch (IOException e) {
 

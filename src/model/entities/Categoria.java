@@ -9,8 +9,7 @@ public class Categoria implements Serializable {
 	private String nome;
 	private Integer idSetor;
 
-	public Categoria() {
-	}
+	public Categoria() {}
 
 	public Categoria(Integer idCategoria, String nome, Integer idSetor) {
 
@@ -78,12 +77,12 @@ public class Categoria implements Serializable {
 				return false;
 		} else if (!nome.equals(other.nome))
 			return false;
-		return true;
+		return true;	
 	}
 
 	@Override
-	public String toString() {
-		return "Categoria [idCategoria=" + idCategoria + ", nome=" + nome + ", idSetor=" + idSetor + "]";
+	public String toString() {	
+		return "Categoria [idCategoria=" + idCategoria + ", nome=" + nome + ", idSetor=" + idSetor + "]";	
 	}
 
 }

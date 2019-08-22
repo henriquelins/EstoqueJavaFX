@@ -133,9 +133,14 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			st.setInt(5, produto.getQuantidade());
 			st.setInt(6, produto.getEstoqueMinimo());
 			st.setBytes(7, produto.getFoto());
-			
-			st.executeUpdate();
-		
+
+			int linhas = st.executeUpdate();
+
+			if (linhas == 0) {
+
+				throw new DbException("Erro ao inserir o produto!");
+			}
+
 			conn.commit();
 
 		} catch (SQLException e) {
@@ -143,13 +148,11 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			try {
 
 				conn.rollback();
-				throw new DbException("Transaction rolled back. Cause by: " +
-				e.getLocalizedMessage());
+				throw new DbException("Transaction rolled back. Cause by: " + e.getLocalizedMessage());
 
 			} catch (SQLException e1) {
 
-				throw new DbException("Error trying to rollback. Cause by: " +
-				e.getLocalizedMessage());
+				throw new DbException("Error trying to rollback. Cause by: " + e.getLocalizedMessage());
 
 			}
 
@@ -189,13 +192,11 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			try {
 
 				conn.rollback();
-				throw new DbException("Transaction rolled back. Cause by: " +
-				e.getLocalizedMessage());
+				throw new DbException("Transaction rolled back. Cause by: " + e.getLocalizedMessage());
 
 			} catch (SQLException e1) {
 
-				throw new DbException("Error trying to rollback. Cause by: " +
-				e.getLocalizedMessage());
+				throw new DbException("Error trying to rollback. Cause by: " + e.getLocalizedMessage());
 
 			}
 

@@ -29,9 +29,16 @@ public class SetorDaoJDBC implements SetorDao {
 
 			conn.setAutoCommit(false);
 
-			st = conn.prepareStatement("INSERT INTO setor  (nome) VALUES (?)");
+			st = conn.prepareStatement("INSERT INTO setor (nome) VALUES (?)");
 
 			st.setString(1, setor.getNome());
+			
+			int linhas = st.executeUpdate(); 
+			
+			if (linhas == 0) {
+				
+				throw new DbException("Erro ao inserir o setor!");
+			}
 
 			conn.commit();
 

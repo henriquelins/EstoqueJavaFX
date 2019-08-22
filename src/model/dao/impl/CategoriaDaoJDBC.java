@@ -34,7 +34,12 @@ public class CategoriaDaoJDBC implements CategoriaDao {
 			st.setString(1, categoria.getNome());
 			st.setInt(2, categoria.getIdSetor());
 
-			st.executeUpdate();
+			int linhas = st.executeUpdate();
+
+			if (linhas == 0) {
+
+				throw new DbException("Erro ao inserir a categoria!");
+			}
 
 			conn.commit();
 

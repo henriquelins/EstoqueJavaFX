@@ -220,7 +220,7 @@ public class CategoriaNovoFormController implements Initializable {
 			throw new IllegalStateException("Service nulo");
 		}
 
-		SetorService setorService = new SetorService();	
+		SetorService setorService = new SetorService();
 		setId_setor(setorService.findNomeIdSetor(getSetor()));
 
 		listaCategoria = FXCollections.observableArrayList(service.findIdSetor(id_setor));

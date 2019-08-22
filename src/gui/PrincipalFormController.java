@@ -57,7 +57,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	private ProdutoService service;
 
 	private Movimentacao movimentacao;
-
+		
 	@FXML
 	private MenuBar menuBarPrincipal;
 
@@ -334,8 +334,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 		Stage stage = (Stage) Main.getMainScene().getWindow();
 		tableViewProduto.prefHeightProperty().bind(stage.heightProperty());
-
-		labelLogado.setText(LoginFormController.usuarioLogado());
+		
 		service = new ProdutoService();
 		movimentacao = new Movimentacao();
 
@@ -678,7 +677,8 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 		boolean concedido = false;
 		Acesso acesso = new Acesso();
-
+		
+		
 		concedido = acesso.concederAcesso(LoginFormController.getLogado().getAcesso(),
 				Strings.getMovimentacaoListView());
 
@@ -947,6 +947,17 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		PrincipalFormController.pesquisarSetor = pesquisarSetor;
 
 	}
+	
+
+	public Label getLabelLogado() {
+		return labelLogado;
+	}
+
+	public void setLabelLogado(String logado) {
+		
+		this.labelLogado.setText(logado);
+		
+	}
 
 	public String status(Integer estoque_minimo, Integer quantidade) {
 
@@ -954,15 +965,15 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 		if (quantidade <= estoque_minimo) {
 
-			status = "Estoque baixo";
+			status = Strings.getStatus1();
 
 		} else if ((quantidade >= estoque_minimo * 3) || (quantidade <= estoque_minimo * 6)) {
 
-			status = "Estoque normal";
+			status = Strings.getStatus2();
 
 		} else {
 
-			status = "Estoque alto";
+			status = Strings.getStatus3();
 
 		}
 

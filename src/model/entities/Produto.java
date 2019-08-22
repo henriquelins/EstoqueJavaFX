@@ -15,8 +15,7 @@ public class Produto implements Serializable {
 	private int estoqueMinimo;
 	private byte[] foto;
 
-	public Produto() {
-	}
+	public Produto() {}
 
 	public Produto(Integer idProduto, String nome, String descricao, String setor, String categoria, int quantidade,
 			int estoqueMinimo, byte[] foto) {

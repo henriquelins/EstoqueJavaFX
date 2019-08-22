@@ -12,7 +12,6 @@ import gui.util.Strings;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -20,10 +19,7 @@ public class VisualizarFotoFormController implements Initializable {
 
 	@FXML
 	private ImageView imageView;
-
-	@FXML
-	private TextField txtEndereco;
-
+	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
@@ -68,5 +64,7 @@ public class VisualizarFotoFormController implements Initializable {
 
 		return image;
 	}
+
+	
 
 }

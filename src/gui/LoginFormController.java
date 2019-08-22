@@ -71,7 +71,7 @@ public class LoginFormController implements Initializable {
 
 			} catch (NullPointerException e) {
 
-				Alerts.showAlert("Login", null, e.getLocalizedMessage(), AlertType.ERROR);
+				Alerts.showAlert("Login", null , e.getLocalizedMessage(), AlertType.ERROR);
 
 			}
 
@@ -110,6 +110,7 @@ public class LoginFormController implements Initializable {
 		usuarioService = new UsuarioService();
 
 		labelTitle.setText(Strings.getTitleLogin());
+	
 
 	}
 
@@ -119,10 +120,13 @@ public class LoginFormController implements Initializable {
 
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			ScrollPane scrollPane = loader.load();
-
+			
+			PrincipalFormController controller = loader.getController();
+			controller.setLabelLogado(getLogado().usuarioLogado());
+		
 			scrollPane.setFitToHeight(true);
 			scrollPane.setFitToWidth(true);
-
+		
 			Stage principalStage = new Stage();
 			principalStage.setTitle(Strings.getTitle());
 			principalStage.setScene(new Scene(scrollPane));

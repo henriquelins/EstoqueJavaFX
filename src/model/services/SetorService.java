@@ -19,7 +19,8 @@ public class SetorService {
 
 		if (setor.getIdSetor() == null) {
 
-			Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você deseja salvar o setor " + setor.getNome()+ " ?");
+			Optional<ButtonType> result = Alerts.showConfirmation("Confirmação",
+					"Você deseja salvar o setor " + setor.getNome() + " ?");
 
 			if (result.get() == ButtonType.OK) {
 
@@ -29,7 +30,8 @@ public class SetorService {
 
 		} else {
 
-			Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você deseja editar o setor " + setor.getNome()+ " ?");
+			Optional<ButtonType> result = Alerts.showConfirmation("Confirmação",
+					"Você deseja editar o setor " + setor.getNome() + " ?");
 
 			if (result.get() == ButtonType.OK) {
 
@@ -41,26 +43,26 @@ public class SetorService {
 	}
 
 	public void remove(Setor setor) {
-		
+
 		dao.deleteById(setor.getIdSetor());
-		
+
 	}
 
 	public List<Setor> findAllId() {
-		
+
 		return dao.findAllId();
-		
+
 	}
-	
+
 	public Integer findNomeIdSetor(String nomeSetor) {
-		
+
 		return dao.findIdSetor(nomeSetor);
-		
+
 	}
 
 	public List<Setor> findAllNome() {
-		
+
 		return dao.findAllNome();
 	}
-	
+
 }

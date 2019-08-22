@@ -73,8 +73,8 @@ public class Main extends Application {
 
 		} else {
 
-			primaryStage.close();
-			carregarTela(primaryStage, Strings.getLoginView());
+			//primaryStage.close();
+			//login(primaryStage, Strings.getLoginView());
 
 		}
 
@@ -120,7 +120,7 @@ public class Main extends Application {
 			fadeOut.setOnFinished((e) -> {
 
 				primaryStage.close();
-				carregarTela(primaryStage, Strings.getLoginView());
+				login(primaryStage, Strings.getLoginView());
 
 			});
 
@@ -133,7 +133,7 @@ public class Main extends Application {
 
 	}
 
-	private void carregarTela(Stage primaryStage, String tela) {
+	private void login(Stage primaryStage, String tela) {
 
 		try {
 
@@ -200,6 +200,8 @@ public class Main extends Application {
 		Main.serverSocket = serverSocket;
 
 	}
+
+	// inicia o aplicativo
 
 	public static void main(String[] args) {
 

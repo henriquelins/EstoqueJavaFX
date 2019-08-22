@@ -47,19 +47,18 @@ public class Strings {
 
 	// Properties
 
-	
 	public static String getPropertiesBD() {
 
 		return "C://Temp/db.properties";
 
 	}
-	
+
 	public static String getPropertiesSocket() {
 
 		return "C://Temp/socket.properties";
 
 	}
-	
+
 	public static String getPropertiessocketPort() {
 
 		return "socketPort";
@@ -183,13 +182,32 @@ public class Strings {
 		return "/gui/VisualizarFotoView.fxml";
 
 	}
-	
-	//Extra
-	
+
+	// Extra
+
 	public static String getExcluirProduto() {
 
 		return "Excluir Produto";
 
 	}
+
+	public static String getStatus1() {
+
+		return "Estoque baixo";
+
+	}
+
+	public static String getStatus2() {
+
+		return "Estoque normal";
+
+	}
+	
+	public static String getStatus3() {
+
+		return "Estoque alto";
+
+	}
+
 
 }

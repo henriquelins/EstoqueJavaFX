@@ -114,15 +114,15 @@ public class ProdutoShowFormController implements Initializable {
 
 		if (quantidade <= estoque_minimo) {
 
-			status = "Estoque baixo";
+			status = Strings.getStatus1();
 
-		} else if ((quantidade >= estoque_minimo * 3) && (quantidade <= estoque_minimo * 6)) {
+		} else if ((quantidade >= estoque_minimo * 3) || (quantidade <= estoque_minimo * 6)) {
 
-			status = "Estoque normal";
+			status = Strings.getStatus2();
 
 		} else {
 
-			status = "Estoque alto";
+			status = Strings.getStatus3();
 
 		}
 

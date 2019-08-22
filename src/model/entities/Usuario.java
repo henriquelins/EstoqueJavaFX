@@ -11,8 +11,7 @@ public class Usuario implements Serializable {
 	private String senha;
 	private int acesso;
 
-	public Usuario() {
-	}
+	public Usuario() {}
 
 	public Usuario(Integer idUsuario, String nome, String login, String senha, int acesso) {
 

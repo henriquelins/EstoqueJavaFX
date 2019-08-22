@@ -48,9 +48,9 @@ public class UsuarioService {
 	}
 
 	public void remove(Usuario usuario) {
-		
+
 		dao.deleteById(usuario.getIdUsuario());
-		
+
 	}
 
 	public List<Usuario> findAll() {

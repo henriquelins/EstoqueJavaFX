@@ -27,13 +27,11 @@ public class DB {
 			}
 
 			catch (SQLException e) {
-				
-				System.out.println(e.getLocalizedMessage());
-				
-				Alerts.showAlert("Controle de Estoque", "Erro ao abrir o banco de dados",
-						e.getLocalizedMessage(), AlertType.ERROR);
-				
-				}
+
+				Alerts.showAlert("Controle de Estoque", "Erro ao abrir o banco de dados", e.getLocalizedMessage(),
+						AlertType.ERROR);
+
+			}
 		}
 
 		return conn;

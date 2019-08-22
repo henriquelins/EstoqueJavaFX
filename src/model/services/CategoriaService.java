@@ -19,7 +19,8 @@ public class CategoriaService {
 
 		if (categoria.getIdCategoria() == null) {
 
-			Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você deseja salvar a categoria " + categoria.getNome() + " ?");
+			Optional<ButtonType> result = Alerts.showConfirmation("Confirmação",
+					"Você deseja salvar a categoria " + categoria.getNome() + " ?");
 
 			if (result.get() == ButtonType.OK) {
 
@@ -29,7 +30,8 @@ public class CategoriaService {
 
 		} else {
 
-			Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você deseja editar a categoria " + categoria.getNome() + " ?");
+			Optional<ButtonType> result = Alerts.showConfirmation("Confirmação",
+					"Você deseja editar a categoria " + categoria.getNome() + " ?");
 
 			if (result.get() == ButtonType.OK) {
 
@@ -41,27 +43,27 @@ public class CategoriaService {
 	}
 
 	public void remove(Categoria categoria) {
-		
+
 		dao.deleteById(categoria.getIdCategoria());
-		
+
 	}
 
 	public List<Categoria> findAllId() {
-		
+
 		return dao.findAllId();
-		
-	}
-	
-	public List<Categoria> findAllNome() {
-		
-		return dao.findAllNome();
-		
+
 	}
 
-	public List<Categoria>  findIdSetor(int id_setor) {
-		
+	public List<Categoria> findAllNome() {
+
+		return dao.findAllNome();
+
+	}
+
+	public List<Categoria> findIdSetor(int id_setor) {
+
 		return dao.findIdSetor(id_setor);
-		
+
 	}
 
 }

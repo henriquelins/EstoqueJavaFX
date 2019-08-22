@@ -79,8 +79,8 @@ public class MovimentacaoService {
 	}
 
 	public List<Movimentacao> PesquisarNomeSetor(String pesquisarSetor) {
-		
+
 		return dao.findNomeSetor(pesquisarSetor);
-		
+
 	}
 }
