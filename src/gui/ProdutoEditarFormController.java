@@ -255,14 +255,14 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 	private void createVisualizarFotoDialogForm(String absoluteName) {
 
 		try {
-			
+
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 
 			Produto prod = new Produto();
 			prod.setFoto(bytes);
 			PrincipalFormController.setProduto(prod);
-			
+
 			Main.setDialogScene(new Scene(pane));
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle(Strings.getTitle());
@@ -275,7 +275,6 @@ public class ProdutoEditarFormController implements Initializable, DataChangeLis
 			produtoStage.getIcons().add(applicationIcon);
 
 			produtoStage.showAndWait();
-			
 
 		} catch (IOException e) {
 

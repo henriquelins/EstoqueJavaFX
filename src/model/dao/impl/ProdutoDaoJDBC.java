@@ -134,12 +134,7 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			st.setInt(6, produto.getEstoqueMinimo());
 			st.setBytes(7, produto.getFoto());
 
-			int linhas = st.executeUpdate();
-
-			if (linhas == 0) {
-
-				throw new DbException("Erro ao inserir o produto!");
-			}
+			st.executeUpdate();
 
 			conn.commit();
 

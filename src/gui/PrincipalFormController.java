@@ -57,7 +57,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	private ProdutoService service;
 
 	private Movimentacao movimentacao;
-		
+
 	@FXML
 	private MenuBar menuBarPrincipal;
 
@@ -334,7 +334,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 		Stage stage = (Stage) Main.getMainScene().getWindow();
 		tableViewProduto.prefHeightProperty().bind(stage.heightProperty());
-		
+
 		service = new ProdutoService();
 		movimentacao = new Movimentacao();
 
@@ -403,8 +403,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		boolean concedido = false;
 		Acesso acesso = new Acesso();
 
-		concedido = acesso.concederAcesso(LoginFormController.getLogado().getAcesso(),
-				Strings.getMovimentacaoListView());
+		concedido = acesso.concederAcesso(LoginFormController.getLogado().getAcesso(), absoluteName);
 
 		if (concedido == true) {
 
@@ -445,8 +444,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		boolean concedido = false;
 		Acesso acesso = new Acesso();
 
-		concedido = acesso.concederAcesso(LoginFormController.getLogado().getAcesso(),
-				Strings.getMovimentacaoListView());
+		concedido = acesso.concederAcesso(LoginFormController.getLogado().getAcesso(), absoluteName);
 
 		if (concedido == true) {
 
@@ -491,8 +489,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		boolean concedido = false;
 		Acesso acesso = new Acesso();
 
-		concedido = acesso.concederAcesso(LoginFormController.getLogado().getAcesso(),
-				Strings.getMovimentacaoListView());
+		concedido = acesso.concederAcesso(LoginFormController.getLogado().getAcesso(), absoluteName);
 
 		if (concedido == true) {
 
@@ -584,8 +581,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		boolean concedido = false;
 		Acesso acesso = new Acesso();
 
-		concedido = acesso.concederAcesso(LoginFormController.getLogado().getAcesso(),
-				Strings.getMovimentacaoListView());
+		concedido = acesso.concederAcesso(LoginFormController.getLogado().getAcesso(), absoluteName);
 
 		if (concedido == true) {
 
@@ -677,10 +673,8 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 		boolean concedido = false;
 		Acesso acesso = new Acesso();
-		
-		
-		concedido = acesso.concederAcesso(LoginFormController.getLogado().getAcesso(),
-				Strings.getMovimentacaoListView());
+
+		concedido = acesso.concederAcesso(LoginFormController.getLogado().getAcesso(), absoluteName);
 
 		if (concedido == true) {
 
@@ -718,41 +712,27 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 	private void createPaneDialogForm(String absoluteName) {
 
-		boolean concedido = false;
-		Acesso acesso = new Acesso();
+		try {
 
-		concedido = acesso.concederAcesso(LoginFormController.getLogado().getAcesso(),
-				Strings.getMovimentacaoListView());
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			Pane pane = loader.load();
 
-		if (concedido == true) {
+			Main.setDialogScene(new Scene(pane));
+			Stage produtoStage = new Stage();
+			produtoStage.setTitle(Strings.getTitle());
+			produtoStage.setScene(Main.getDialogScene());
+			produtoStage.setResizable(false);
+			produtoStage.initModality(Modality.APPLICATION_MODAL);
+			produtoStage.initOwner(null);
 
-			try {
+			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
+			produtoStage.getIcons().add(applicationIcon);
 
-				FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-				Pane pane = loader.load();
+			produtoStage.showAndWait();
 
-				Main.setDialogScene(new Scene(pane));
-				Stage produtoStage = new Stage();
-				produtoStage.setTitle(Strings.getTitle());
-				produtoStage.setScene(Main.getDialogScene());
-				produtoStage.setResizable(false);
-				produtoStage.initModality(Modality.APPLICATION_MODAL);
-				produtoStage.initOwner(null);
+		} catch (IOException e) {
 
-				Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
-				produtoStage.getIcons().add(applicationIcon);
-
-				produtoStage.showAndWait();
-
-			} catch (IOException e) {
-
-				Alerts.showAlert("IO Exception", "Erro ao carregar a tela", e.getMessage(), AlertType.ERROR);
-
-			}
-
-		} else {
-
-			Alerts.showAlert("Acesso negado", "Acesso não concedido ao usuário logado", null, AlertType.ERROR);
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela", e.getMessage(), AlertType.ERROR);
 
 		}
 
@@ -947,16 +927,15 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		PrincipalFormController.pesquisarSetor = pesquisarSetor;
 
 	}
-	
 
 	public Label getLabelLogado() {
 		return labelLogado;
 	}
 
 	public void setLabelLogado(String logado) {
-		
+
 		this.labelLogado.setText(logado);
-		
+
 	}
 
 	public String status(Integer estoque_minimo, Integer quantidade) {

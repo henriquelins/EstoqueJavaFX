@@ -4,47 +4,54 @@ public class Acesso {
 
 	public boolean concederAcesso(Integer acesso, String tela) {
 
-		boolean concedio = false;
+		boolean concedido = false;
 
 		if (acesso == 1 && tela.equalsIgnoreCase(Strings.getSetorNovoView())) {
 
-			concedio = true;
+			concedido = true;
 
 		} else if (acesso == 1 && tela.equalsIgnoreCase(Strings.getCategoriaNovoView())) {
 
-			concedio = true;
+			concedido = true;
 
 		} else if (acesso == 1 && tela.equalsIgnoreCase(Strings.getProdutoNovoView())) {
 
-			concedio = true;
+			concedido = true;
 
 		} else if (acesso == 1 && tela.equalsIgnoreCase(Strings.getProdutoEditarView())) {
 
-			concedio = true;
+			concedido = true;
+
+		} else if ((acesso == 1 && tela.equalsIgnoreCase(Strings.getProdutoShowView()))
+				|| (acesso == 2 && tela.equalsIgnoreCase(Strings.getProdutoShowView()))) {
+
+			concedido = true;
 
 		} else if (acesso == 1 && tela.equalsIgnoreCase(Strings.getExcluirProduto())) {
 
-			concedio = true;
+			concedido = true;
 
 		} else if (acesso == 1 && tela.equalsIgnoreCase(Strings.getUsuarioView())) {
 
-			concedio = true;
+			concedido = true;
 
-		} else if ((acesso == 1 && tela.equalsIgnoreCase(Strings.getMovimentacaoListView())) || (acesso == 2 && tela.equalsIgnoreCase(Strings.getMovimentacaoListView()))) {
+		} else if ((acesso == 1 && tela.equalsIgnoreCase(Strings.getMovimentacaoListView()))
+				|| (acesso == 2 && tela.equalsIgnoreCase(Strings.getMovimentacaoListView()))) {
 
-			concedio = true;
+			concedido = true;
 
-		} else if ((acesso == 1 && tela.equalsIgnoreCase(Strings.getMovimentacaoView())) || (acesso == 2 && tela.equalsIgnoreCase(Strings.getMovimentacaoView()))) {
+		} else if ((acesso == 1 && tela.equalsIgnoreCase(Strings.getMovimentacaoView()))
+				|| (acesso == 2 && tela.equalsIgnoreCase(Strings.getMovimentacaoView()))) {
 
-			concedio = true;
+			concedido = true;
 
 		} else {
 
-			concedio = false;
+			concedido = false;
 
 		}
 
-		return concedio;
+		return concedido;
 
 	}
 
