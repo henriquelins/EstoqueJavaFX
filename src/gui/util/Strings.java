@@ -9,17 +9,22 @@ public class Strings {
 
 	public static String getCase1choiceBoxAcesso1() {
 
-		return "1 - Administrador";
+		return "1 - ADMINISTRADOR";
 
 	}
 
 	public static String getCase1choiceBoxAcesso2() {
 
-		return "2 - Operador";
+		return "2 - OPERADOR";
 
 	}
 
 	// Label Titles
+
+	public static String getTitleLogSeguranca() {
+
+		return "Log de Segurança";
+	}
 
 	public static String getTitle() {
 
@@ -35,7 +40,7 @@ public class Strings {
 
 	public static String getTitleLogin() {
 
-		return "Login";
+		return "Login - Estoque";
 
 	}
 
@@ -46,16 +51,30 @@ public class Strings {
 	}
 
 	// Properties
+	
+	public static String getPropertiesBackup() {
+
+		return "backup.properties";
+
+	}
+	
+	public static String getPropertiesRestore() {
+	
+		return "restore.properties";
+
+	}
 
 	public static String getPropertiesBD() {
 
-		return "C://Temp/db.properties";
+		// return "C://Temp/db.properties";
+		return "db.properties";
 
 	}
 
 	public static String getPropertiesSocket() {
 
-		return "C://Temp/socket.properties";
+		//return "C://Temp/socket.properties";
+		return "socket.properties";
 
 	}
 
@@ -129,6 +148,12 @@ public class Strings {
 
 	}
 
+	public static String getMovimentacaoDoProdutoListView() {
+
+		return "/gui/MovimentacaoDoProdutoListView.fxml";
+
+	}
+
 	public static String getMovimentacaoListView() {
 
 		return "/gui/MovimentacaoListView.fxml";
@@ -164,6 +189,16 @@ public class Strings {
 		return "/gui/SetorNovoView.fxml";
 
 	}
+	
+	public static String getBackupBancoView() {
+
+		return "/gui/BackupBancoView.fxml";
+	}
+
+	public static String getLogSegurancaView() {
+
+		return "/gui/LogSegurancaView.fxml";
+	}
 
 	public static String getSobreView() {
 
@@ -187,27 +222,177 @@ public class Strings {
 
 	public static String getExcluirProduto() {
 
-		return "Excluir Produto";
+		return "EXCLUIR PRODUTO";
 
 	}
 
 	public static String getStatus1() {
 
-		return "Estoque baixo";
+		return "ESTOQUE BAIXO";
 
 	}
 
 	public static String getStatus2() {
 
-		return "Estoque normal";
+		return "ESTOQUE NORMAL";
+
+	}
+
+	public static String getStatus3() {
+
+		return "ESTOQUE ALTO";
+
+	}
+
+	public static String erroCarregarTela() {
+
+		return "Erro ao carregar a tela";
 
 	}
 	
-	public static String getStatus3() {
+	// LogSeguranca Messagens
 
-		return "Estoque alto";
+		public static String getLogMessage001() {
 
-	}
+			return "Login confirmado";
+
+		}
+
+		public static String getLogMessage002() {
+
+			return "Login não confirmado";
+		}
+
+		public static String getLogMessage003() {
+
+			return "Tela novo cliente";
+		}
+
+		public static String getLogMessage004() {
+
+			return "Exportar para excel";
+		}
+
+		public static String getLogMessage005() {
+
+			return "Tela nova Categoria";
+		}
+
+		public static String getLogMessage006() {
+
+			return "Tela nova Setor";
+		}
+
+		public static String getLogMessage007() {
+
+			return "Logout";
+		}
+
+		public static String getLogMessage008() {
+
+			return "Fechar programa";
+		}
+
+		public static String getLogMessage009() {
+
+			return "Tela novo usuário";
+		}
+
+		public static String getLogMessage010() {
+
+			return "Tela novo vendedor";
+
+		}
+
+		public static String getLogMessage011() {
+
+			return "Tela nova unidade";
+
+		}
+
+		public static String getLogMessage012() {
+
+			return "Tela nova produto";
+
+		}
+
+		public static String getLogMessage013() {
+
+			return "Tela ajuda";
+
+		}
+
+		public static String getLogMessage014() {
+
+			return "Tela ver movimentação";
+
+		}
+
+		public static String getLogMessage015() {
+
+			return "Tela movimentação";
+
+		}
+
+		public static String getLogMessage016() {
+
+			return "Tela editar produto";
+
+		}
+
+		public static String getLogMessage017() {
+
+			return "Tela excluir produto";
+
+		}
+
+		public static String getLogMessage018() {
+
+			return "Tela ver lançamento";
+
+		}
+
+		public static String getLogMessage019() {
+
+			return "Lançamento servico: ";
+
+		}
+
+		public static String getLogMessage020() {
+
+			return "Salvar servico: ";
+
+		}
+
+		public static String getLogMessage021() {
+
+			return "Editar servico: ";
+
+		}
+		
+		public static String getLogMessage022() {
+
+			return "Log de Segurança ";
+
+		}
+		
+		public static String getLogMessage023() {
+
+			return "Tela de Backup Banco";
+
+		}
+		
+		public static String getLogMessage024() {
+
+			return "Fazer backup do banco";
+
+		}
+		
+		public static String getLogMessage025() {
+
+			return "Fazer restauração do banco";
+
+		}
 
 
 }

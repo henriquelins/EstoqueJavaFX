@@ -12,15 +12,27 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1036.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.PrincipalFormController">
+<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="727.0" prefWidth="1383.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.PrincipalFormController">
    <content>
       <VBox alignment="CENTER" prefHeight="598.0" prefWidth="1021.0">
          <children>
             <MenuBar fx:id="menuBarPrincipal">
               <menus>
+                  <Menu mnemonicParsing="false" text="Arquivo">
+                     <items>
+                        <MenuItem fx:id="menuItemLogout" mnemonicParsing="false" onAction="#onMenuItemLogoutAction" text="Logout" />
+                        <MenuItem fx:id="menuItemSair" mnemonicParsing="false" onAction="#onMenuItemSairAction" text="Sair" />
+                     </items>
+                  </Menu>
                 <Menu mnemonicParsing="false" text="Cadastro">
                   <items>
                         <MenuItem fx:id="menuItemUsuario" mnemonicParsing="false" onAction="#onMenuItemUsuario" text="Usuários" />
@@ -29,51 +41,180 @@
                     <MenuItem fx:id="menuItemProduto" mnemonicParsing="false" onAction="#onMenuItemProduto" text="Novo Produto" />
                   </items>
                 </Menu>
-                  <Menu mnemonicParsing="false" text="Movimentação">
-                     <items>
-                        <MenuItem fx:id="menuItemMovimentacao" mnemonicParsing="false" onAction="#onMenuItemMovimentacao" text="Lista movimentação" />
-                     </items></Menu>
-                <Menu mnemonicParsing="false" text="Ajuda">
+                <Menu mnemonicParsing="false" text="Ferramentas">
                   <items>
-                    <MenuItem fx:id="menuItemSobre" mnemonicParsing="false" onAction="#onMenuItemSobre" text="Sobre" />
+                        <MenuItem fx:id="menuItemBackup" mnemonicParsing="false" onAction="#onMenuItemBackupAction" text="Backup" />
+                    <MenuItem fx:id="menuItemLog" mnemonicParsing="false" onAction="#onMenuItemLogAction" text="Log" />
                   </items>
                 </Menu>
+                  <Menu mnemonicParsing="false" text="Ajuda">
+                     <items>
+                        <MenuItem fx:id="menuItemSobre" mnemonicParsing="false" onAction="#onMenuItemSobre" text="Sobre" />
+                     </items>
+                  </Menu>
               </menus>
             </MenuBar>
             <ToolBar prefHeight="40.0" prefWidth="798.0">
               <items>
-                  <AnchorPane prefHeight="31.0" prefWidth="766.0">
+                  <AnchorPane prefHeight="31.0" prefWidth="1181.0">
                      <children>
-                      <Button fx:id="btPesquisar" alignment="TOP_CENTER" contentDisplay="CENTER" defaultButton="true" layoutX="280.0" layoutY="4.0" mnemonicParsing="false" onAction="#onBtPesquisarAction" prefHeight="25.0" prefWidth="90.0" text="Pesquisar" />
-                        <TextField fx:id="txtPesquisar" accessibleRole="IMAGE_VIEW" layoutX="9.0" layoutY="3.0" prefHeight="27.0" prefWidth="263.0" promptText="Pesquisar produtos...">
+                      <Button fx:id="btPesquisar" alignment="TOP_CENTER" contentDisplay="CENTER" defaultButton="true" layoutX="280.0" layoutY="3.0" mnemonicParsing="false" onAction="#onBtPesquisarAction" prefHeight="25.0" prefWidth="90.0" style="-fx-background-radius: 10;" text="PESQUISAR" />
+                        <TextField fx:id="txtPesquisar" accessibleRole="IMAGE_VIEW" layoutX="9.0" layoutY="3.0" prefHeight="27.0" prefWidth="263.0" promptText="Pesquisar produtos..." style="-fx-background-radius: 10;">
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets>
                         </TextField>
-                        <ComboBox fx:id="cbPesquisaSetor" layoutX="412.0" layoutY="4.0" onAction="#onCbPesquisarAction" prefHeight="25.0" prefWidth="150.0" promptText="Selecione o setor..." />
-                        <Button fx:id="btNovo" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="603.0" layoutY="5.0" mnemonicParsing="false" onAction="#onBtNovoAction" prefHeight="25.0" prefWidth="99.0" text="Novo Produto" />
+                        <ComboBox fx:id="cbPesquisaSetor" layoutX="398.0" layoutY="3.0" onAction="#onCbPesquisarAction" prefHeight="25.0" prefWidth="176.0" promptText="SELECIONE O SETOR..." style="-fx-background-radius: 10;" />
+                        <Button fx:id="buttonNovo" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="603.0" layoutY="3.0" mnemonicParsing="false" onAction="#onBtNovoAction" prefHeight="25.0" prefWidth="113.0" style="-fx-background-radius: 10;" text="NOVO PRODUTO" />
+                        <Button fx:id="buttonExportarParaExcel" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="748.0" layoutY="3.0" mnemonicParsing="false" onAction="#onBtExportarExcelAction" prefHeight="25.0" prefWidth="162.0" style="-fx-background-radius: 10;" text="EXPORTAR PARA EXCEL" />
                      </children>
                   </AnchorPane>
               </items>
             </ToolBar>
-            <TableView fx:id="tableViewProduto" prefHeight="492.0" prefWidth="1019.0" VBox.vgrow="SOMETIMES">
-              <columns>
-                <TableColumn fx:id="tableColumnId" editable="false" prefWidth="30.0" style="-fx-alignment: CENTER;" text="Id" />
-                  <TableColumn fx:id="tableColumnNome" editable="false" prefWidth="160.0" style="-fx-alignment: CENTER;" text="Nome" />
-                  <TableColumn fx:id="tableColumnDescricao" editable="false" prefWidth="300.0" style="-fx-alignment: CENTER;" text="Descrição" />
-                  <TableColumn fx:id="tableColumnSetor" prefWidth="120.0" style="-fx-alignment: CENTER;" text="Setor" />
-                  <TableColumn fx:id="tableColumnCategoria" prefWidth="200.0" style="-fx-alignment: CENTER;" text="Categoria" />
-                  <TableColumn fx:id="tableColumnQuantidade" editable="false" style="-fx-alignment: CENTER;" text="Saldo Atual" />
-                  <TableColumn fx:id="tableColumnStatus" editable="false" prefWidth="100.0" style="-fx-alignment: CENTER;" text="Status" />
-                  <TableColumn fx:id="tableColumnMOVIMENTACAO" prefWidth="114.0" style="-fx-alignment: CENTER;" />
-                  <TableColumn fx:id="tableColumnEDIT" prefWidth="60.0" style="-fx-alignment: CENTER;" />
-                  <TableColumn fx:id="tableColumnREMOVE" prefWidth="60.0" style="-fx-alignment: CENTER;" />
-                  <TableColumn fx:id="tableColumnSHOW" prefWidth="74.0" style="-fx-alignment: CENTER;" />
-              </columns>
-            </TableView>
+            <HBox alignment="TOP_CENTER" prefHeight="620.0" prefWidth="1966.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <TableView fx:id="tableViewProduto" onMouseClicked="#onMouseClickedAction" prefHeight="620.0" prefWidth="1118.0">
+                    <columns>
+                        <TableColumn fx:id="tableColumnIndex" editable="false" maxWidth="300.0" minWidth="20.0" prefWidth="300.0" style="-fx-alignment: CENTER;" text="#" />
+                      <TableColumn fx:id="tableColumnCodProduto" editable="false" maxWidth="500.0" minWidth="20.0" prefWidth="500.0" style="-fx-alignment: CENTER;" text="Cod. Produto" />
+                        <TableColumn fx:id="tableColumnNome" editable="false" maxWidth="1500.0" minWidth="20.0" prefWidth="1500.0" style="-fx-alignment: CENTER;" text="Nome do Produto" />
+                        <TableColumn fx:id="tableColumnStatus" editable="false" maxWidth="487.0" minWidth="50.0" prefWidth="487.0" style="-fx-alignment: CENTER;" text="Status" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+                  <GridPane prefHeight="620.0" prefWidth="751.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="620.0" prefWidth="661.0">
+                           <children>
+                              <AnchorPane prefHeight="349.0" prefWidth="751.0">
+                                 <children>
+                                    <Label fx:id="labelNome" layoutX="43.0" layoutY="48.0" prefHeight="24.0" prefWidth="405.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                       <padding>
+                                          <Insets left="6.0" />
+                                       </padding>
+                                    </Label>
+                                    <Label fx:id="labelSaldoAtual" layoutX="43.0" layoutY="192.0" prefHeight="24.0" prefWidth="190.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                       <padding>
+                                          <Insets left="6.0" />
+                                       </padding>
+                                    </Label>
+                                    <Label fx:id="labelDetalhes" layoutX="43.0" layoutY="239.0" prefHeight="24.0" prefWidth="405.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                       <padding>
+                                          <Insets left="6.0" />
+                                       </padding>
+                                    </Label>
+                                    <Label fx:id="labelStatus" layoutX="43.0" layoutY="287.0" prefHeight="24.0" prefWidth="405.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                       <padding>
+                                          <Insets left="6.0" />
+                                       </padding>
+                                    </Label>
+                                    <Label layoutX="43.0" layoutY="25.0" prefHeight="24.0" prefWidth="160.0" text="Nome do Produto">
+                                       <font>
+                                          <Font name="System Bold" size="13.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="43.0" layoutY="72.0" prefHeight="24.0" prefWidth="160.0" text="Setor">
+                                       <font>
+                                          <Font name="System Bold" size="13.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="43.0" layoutY="168.0" prefHeight="24.0" prefWidth="187.0" text="Estoque Atual">
+                                       <font>
+                                          <Font name="System Bold" size="13.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="43.0" layoutY="120.0" prefHeight="24.0" prefWidth="175.0" text="Categoria">
+                                       <font>
+                                          <Font name="System Bold" size="13.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="43.0" layoutY="216.0" prefHeight="24.0" prefWidth="239.0" text="Descrição">
+                                       <font>
+                                          <Font name="System Bold" size="13.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="43.0" layoutY="263.0" prefHeight="24.0" prefWidth="199.0" text="Status">
+                                       <font>
+                                          <Font name="System Bold" size="13.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="labelSetor" layoutX="43.0" layoutY="96.0" prefHeight="24.0" prefWidth="405.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-radius: LightGray�;">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                       <padding>
+                                          <Insets left="6.0" />
+                                       </padding>
+                                    </Label>
+                                    <Label fx:id="labelCategoria" layoutX="43.0" layoutY="144.0" prefHeight="24.0" prefWidth="405.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+                                       <padding>
+                                          <Insets left="6.0" />
+                                       </padding>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <HBox alignment="CENTER" layoutX="-1.0" layoutY="310.0" prefHeight="46.0" prefWidth="489.0" spacing="5.0">
+                                       <children>
+                                          <Button fx:id="buttonMovimentacao" mnemonicParsing="false" onAction="#onBtMovimentacaoAction" prefHeight="25.0" prefWidth="131.0" style="-fx-background-radius: 10;" text="MOVIMENTAÇÃO" />
+                                          <Button fx:id="buttonVerMovimento" mnemonicParsing="false" onAction="#onBtVerMovimentoAction" prefHeight="25.0" prefWidth="123.0" style="-fx-background-radius: 10;" text="VER MOVIMENTO" />
+                                          <Button fx:id="buttonEditar" mnemonicParsing="false" onAction="#onBtEditarAction" prefHeight="25.0" prefWidth="73.0" style="-fx-background-radius: 10;" text="EDITAR" />
+                                          <Button fx:id="buttonExcluir" mnemonicParsing="false" onAction="#onBtExcluirAction" prefHeight="25.0" prefWidth="72.0" style="-fx-background-radius: 10;" text="EXCLUIR" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </padding>
+                                    </HBox>
+                                    <Label fx:id="labelEstoqueMinimo" layoutX="256.0" layoutY="192.0" prefHeight="24.0" prefWidth="190.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+                                       <padding>
+                                          <Insets left="6.0" />
+                                       </padding>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="256.0" layoutY="168.0" prefHeight="24.0" prefWidth="187.0" text="Estoque Mínimo">
+                                       <font>
+                                          <Font name="System Bold" size="13.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="146.0" prefWidth="751.0" />
+                              <ImageView fx:id="imageViewProduto" cache="true" depthTest="ENABLE" fitHeight="259.0" fitWidth="752.0" pickOnBounds="true" preserveRatio="true">
+                                 <VBox.margin>
+                                    <Insets bottom="3.0" />
+                                 </VBox.margin></ImageView>
+                              <AnchorPane prefHeight="82.0" prefWidth="751.0" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </GridPane>
+               </children>
+            </HBox>
             <ToolBar prefHeight="40.0" prefWidth="200.0">
                <items>
-                  <Label fx:id="labelLogado" prefHeight="23.0" prefWidth="303.0">
+                  <Label fx:id="labelLogado" prefHeight="25.0" prefWidth="303.0">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>

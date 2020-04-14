@@ -6,6 +6,9 @@ import java.util.ResourceBundle;
 
 import db.DbIntegrityException;
 import gui.util.Alerts;
+import gui.util.Constraints;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,7 +20,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
+import model.entities.Produto;
 import model.entities.Setor;
 import model.services.SetorService;
 
@@ -50,7 +53,13 @@ public class SetorNovoFormController implements Initializable {
 	public TableView<Setor> tableViewSetor;
 
 	@FXML
-	private TableColumn<Setor, Integer> tableColumnId;
+	private TextField txtIdUsuario;
+
+	@FXML
+	private TableColumn<Produto, String> tableColumnIndex;
+
+	@FXML
+	private TableColumn<Setor, String> tableColumnId;
 
 	@FXML
 	private TableColumn<Setor, String> tableColumnNome;
@@ -104,7 +113,7 @@ public class SetorNovoFormController implements Initializable {
 			if (setor.getIdSetor() != null) {
 
 				Optional<ButtonType> result = Alerts.showConfirmation("Confirmação",
-						"Você deseja deletar o setor " + setor.getNome() + " ?");
+						"Você deseja deletar o setor " + setor.getNome().toUpperCase() + " ?");
 
 				if (result.get() == ButtonType.OK) {
 
@@ -143,6 +152,7 @@ public class SetorNovoFormController implements Initializable {
 
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	private void initializeNodes() {
 
 		showDetails(null);
@@ -150,8 +160,15 @@ public class SetorNovoFormController implements Initializable {
 		tableViewSetor.getSelectionModel().selectedItemProperty()
 				.addListener((observable, oldValue, newValue) -> showDetails(newValue));
 
-		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("idSetor"));
-		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("Nome"));
+		tableColumnIndex.setSortable(false);
+		tableColumnIndex.setCellValueFactory(column -> new ReadOnlyObjectWrapper<String>(
+				Constraints.tresDigitos(tableViewSetor.getItems().indexOf(column.getValue()) + 1)));
+
+		tableColumnId.setCellValueFactory(
+				(param) -> new SimpleStringProperty(Constraints.tresDigitos(param.getValue().getIdSetor())));
+
+		tableColumnNome
+				.setCellValueFactory((param) -> new SimpleStringProperty(param.getValue().getNome().toUpperCase()));
 
 		service = new SetorService();
 		setor = new Setor();
@@ -196,7 +213,7 @@ public class SetorNovoFormController implements Initializable {
 
 			}
 
-			setor.setNome(txtNome.getText());
+			setor.setNome(txtNome.getText().toUpperCase());
 
 		}
 
@@ -208,8 +225,8 @@ public class SetorNovoFormController implements Initializable {
 
 		if (setor != null) {
 
-			txtId.setText(String.valueOf(setor.getIdSetor()));
-			txtNome.setText(setor.getNome());
+			txtId.setText(Constraints.tresDigitos(setor.getIdSetor()));
+			txtNome.setText(setor.getNome().toUpperCase());
 			setSetor(setor);
 			setorComparar = this.setor;
 
@@ -238,7 +255,7 @@ public class SetorNovoFormController implements Initializable {
 
 			return ok;
 
-		} else if (this.setor.getNome().equals(setorComparar.getNome())) {
+		} else if (this.setor.getNome().equalsIgnoreCase(setorComparar.getNome())) {
 
 			ok = true;
 			return ok;

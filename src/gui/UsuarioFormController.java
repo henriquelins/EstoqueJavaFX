@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import db.DbIntegrityException;
 import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
+import gui.util.Constraints;
 import gui.util.Strings;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
@@ -27,6 +28,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import model.entities.Produto;
 import model.entities.Usuario;
 import model.services.UsuarioService;
 
@@ -79,7 +81,10 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 	public TableView<Usuario> tableViewUsuario;
 
 	@FXML
-	private TableColumn<Usuario, Integer> tableColumnId;
+	private TableColumn<Produto, String> tableColumnIndex;
+
+	@FXML
+	private TableColumn<Usuario, String> tableColumnId;
 
 	@FXML
 	private TableColumn<Usuario, String> tableColumnNome;
@@ -121,7 +126,7 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 			ok = compararCampos();
 
 			if (ok == false) {
-
+							
 				service.usuarioNovoOuEditar(usuario);
 				botoesFalso();
 				onDataChanged();
@@ -172,7 +177,7 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 			btSalvarUsuario.setVisible(true);
 
 			tableViewUsuario.setDisable(true);
-			
+
 			btNovoUsuario.setDisable(true);
 
 		} else {
@@ -205,7 +210,7 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 		txtLogin.setText("");
 		pswSenha.setText("");
 		pswRepetirSenha.setText("");
-		comboBoxAcesso.setValue("Selecione o tipo de acesso...");
+		comboBoxAcesso.setValue("SELECIONE O TIPO DE ACESSO...");
 
 		setUsuario(new Usuario());
 
@@ -234,11 +239,11 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 		if (btCancelarEditarUsuario.isVisible() != true) {
 
 			if (usuario != null) {
-				txtIdUsuario.setText(String.valueOf(usuario.getIdUsuario()));
-				txtNome.setText(usuario.getNome());
+				txtIdUsuario.setText(Constraints.tresDigitos(usuario.getIdUsuario()));
+				txtNome.setText(usuario.getNome().toUpperCase());
 				txtLogin.setText(usuario.getLogin());
-				pswSenha.setText(usuario.getSenha());
-				pswRepetirSenha.setText(usuario.getSenha());
+				pswSenha.setText("******");
+				pswRepetirSenha.setText("******");
 				comboBoxAcesso.setValue(selectChoiceBox(usuario.getAcesso()));
 
 				setUsuarioTabela(usuario);
@@ -294,24 +299,33 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	private void initializeNodes() {
 
 		labelTitle.setText(Strings.getTitleUsuario());
 
 		showUsuarioDetails(null);
 
-		tableViewUsuario.getSelectionModel().selectedItemProperty()
-				.addListener((observable, oldValue, newValue) -> showUsuarioDetails(newValue));
-
 		btCancelarEditarUsuario.setVisible(false);
 		btSalvarUsuario.setVisible(false);
 
-		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("idUsuario"));
-		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("Nome"));
+		tableColumnIndex.setSortable(false);
+		tableColumnIndex.setCellValueFactory(column -> new ReadOnlyObjectWrapper<String>(
+				Constraints.tresDigitos(tableViewUsuario.getItems().indexOf(column.getValue()) + 1)));
+
+		tableColumnId.setCellValueFactory(
+				(param) -> new SimpleStringProperty(Constraints.tresDigitos(param.getValue().getIdUsuario())));
+
+		tableColumnNome
+				.setCellValueFactory((param) -> new SimpleStringProperty(param.getValue().getNome().toUpperCase()));
+
 		tableColumnLogin.setCellValueFactory(new PropertyValueFactory<>("Login"));
 
 		tableColumnAcesso.setCellValueFactory(
 				(param) -> new SimpleStringProperty(selectChoiceBox(param.getValue().getAcesso()).substring(3)));
+
+		tableViewUsuario.getSelectionModel().selectedItemProperty()
+				.addListener((observable, oldValue, newValue) -> showUsuarioDetails(newValue));
 
 		service = new UsuarioService();
 		usuarioTabela = new Usuario();
@@ -381,7 +395,7 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 			pswRepetirSenha.requestFocus();
 			usuario = null;
 
-		} else if (comboBoxAcesso.getSelectionModel().getSelectedItem().equals("Selecione o tipo de acesso...")) {
+		} else if (comboBoxAcesso.getSelectionModel().getSelectedItem().equals("SELECIONE O TIPO DE ACESSO...")) {
 
 			Alerts.showAlert("Novo Usuário", "Campo obrigatório", "Selecione o acesso!", AlertType.INFORMATION);
 
@@ -400,7 +414,7 @@ public class UsuarioFormController implements Initializable, DataChangeListener 
 
 			}
 
-			usuario.setNome(txtNome.getText());
+			usuario.setNome(txtNome.getText().toUpperCase());
 			usuario.setLogin(txtLogin.getText());
 			usuario.setSenha(pswSenha.getText());
 			usuario.setAcesso(selectAcesso(comboBoxAcesso.getSelectionModel().getSelectedItem()));

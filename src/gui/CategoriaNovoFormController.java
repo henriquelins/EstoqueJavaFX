@@ -8,6 +8,9 @@ import java.util.ResourceBundle;
 
 import db.DbIntegrityException;
 import gui.util.Alerts;
+import gui.util.Constraints;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,8 +23,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import model.entities.Categoria;
+import model.entities.Produto;
 import model.entities.Setor;
 import model.services.CategoriaService;
 import model.services.SetorService;
@@ -62,7 +65,10 @@ public class CategoriaNovoFormController implements Initializable {
 	public TableView<Categoria> tableViewCategoria;
 
 	@FXML
-	private TableColumn<Categoria, Integer> tableColumnId;
+	private TableColumn<Produto, String> tableColumnIndex;
+
+	@FXML
+	private TableColumn<Categoria, String> tableColumnId;
 
 	@FXML
 	private TableColumn<Categoria, String> tableColumnNome;
@@ -121,7 +127,7 @@ public class CategoriaNovoFormController implements Initializable {
 			if (categoria.getIdCategoria() != null) {
 
 				Optional<ButtonType> result = Alerts.showConfirmation("Confirmação",
-						"Você deseja deletar a categoria " + categoria.getNome() + " ?");
+						"Você deseja deletar a categoria " + categoria.getNome().toUpperCase() + " ?");
 
 				if (result.get() == ButtonType.OK) {
 
@@ -155,7 +161,7 @@ public class CategoriaNovoFormController implements Initializable {
 		}
 
 		SetorService setorService = new SetorService();
-		setSetor(comboBoxSetor.getSelectionModel().getSelectedItem());
+		setSetor(comboBoxSetor.getSelectionModel().getSelectedItem().toUpperCase());
 		setId_setor(setorService.findNomeIdSetor(getSetor()));
 
 		listaCategoria = FXCollections.observableArrayList(service.findIdSetor(id_setor));
@@ -189,7 +195,7 @@ public class CategoriaNovoFormController implements Initializable {
 
 		for (Setor setor : setorService.findAllNome()) {
 
-			listaSetor.add(setor.getNome());
+			listaSetor.add(setor.getNome().toUpperCase());
 
 		}
 
@@ -197,6 +203,7 @@ public class CategoriaNovoFormController implements Initializable {
 
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	private void initializeNodes() {
 
 		comboBoxSetor.setItems(FXCollections.observableArrayList(listaSetor()));
@@ -206,8 +213,15 @@ public class CategoriaNovoFormController implements Initializable {
 		tableViewCategoria.getSelectionModel().selectedItemProperty()
 				.addListener((observable, oldValue, newValue) -> showDetails(newValue));
 
-		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("idCategoria"));
-		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("Nome"));
+		tableColumnIndex.setSortable(false);
+		tableColumnIndex.setCellValueFactory(column -> new ReadOnlyObjectWrapper<String>(
+				Constraints.tresDigitos(tableViewCategoria.getItems().indexOf(column.getValue()) + 1)));
+
+		tableColumnId.setCellValueFactory(
+				(param) -> new SimpleStringProperty(Constraints.tresDigitos(param.getValue().getIdCategoria())));
+
+		tableColumnNome
+				.setCellValueFactory((param) -> new SimpleStringProperty(param.getValue().getNome().toUpperCase()));
 
 		service = new CategoriaService();
 		categoria = new Categoria();
@@ -252,7 +266,7 @@ public class CategoriaNovoFormController implements Initializable {
 
 			}
 
-			categoria.setNome(txtNome.getText());
+			categoria.setNome(txtNome.getText().toUpperCase());
 			categoria.setIdSetor(getId_setor());
 
 		}
@@ -265,8 +279,8 @@ public class CategoriaNovoFormController implements Initializable {
 
 		if (categoria != null) {
 
-			txtId.setText(String.valueOf(categoria.getIdCategoria()));
-			txtNome.setText(categoria.getNome());
+			txtId.setText(Constraints.tresDigitos(categoria.getIdCategoria()));
+			txtNome.setText(categoria.getNome().toUpperCase());
 			setCategoria(categoria);
 			categoriaComparar = this.categoria;
 
@@ -295,7 +309,7 @@ public class CategoriaNovoFormController implements Initializable {
 
 			return ok;
 
-		} else if (this.categoria.getNome().equals(categoriaComparar.getNome())) {
+		} else if (this.categoria.getNome().equalsIgnoreCase(categoriaComparar.getNome())) {
 
 			ok = true;
 			return ok;

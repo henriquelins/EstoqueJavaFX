@@ -6,20 +6,20 @@ import java.util.Date;
 public class Movimentacao implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private int idMovimentacao;
+	private Integer idMovimentacao;
 	private Produto produto;
 	private Usuario usuario;
 	private String tipo;
-	private int valorMovimento;
+	private Integer valorMovimento;
 	private String observacoesMovimentacao;
-	private int quantidadeAnterior;
+	private Integer quantidadeAnterior;
 	private Date dataDaTransacao;
-	private int estoqueAtual;
+	private Integer estoqueAtual;
 
 	public Movimentacao() {}
 
-	public Movimentacao(int idMovimentacao, Produto produto, Usuario usuario, String tipo, int valorMovimento,
-			String observacoesMovimentacao, int quantidadeAnterior, Date dataDaTransacao, int estoqueAtual) {
+	public Movimentacao(Integer idMovimentacao, Produto produto, Usuario usuario, String tipo, Integer valorMovimento,
+			String observacoesMovimentacao, Integer quantidadeAnterior, Date dataDaTransacao, Integer estoqueAtual) {
 		
 		this.idMovimentacao = idMovimentacao;
 		this.produto = produto;

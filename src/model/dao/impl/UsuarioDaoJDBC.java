@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import criptografia.Criptografar;
 import db.DB;
 import db.DbException;
 import model.dao.UsuarioDao;
@@ -22,92 +23,141 @@ public class UsuarioDaoJDBC implements UsuarioDao {
 
 	}
 
-	@Override
-	public void insert(Usuario usuario) {
+	// método inserir
 
-		PreparedStatement st = null;
+		@Override
+		public void insert(Usuario usuario) {
 
-		try {
-
-			conn.setAutoCommit(false);
-
-			st = conn.prepareStatement(
-					"INSERT INTO usuario " + "(nome_usuario, login, senha, acesso) " + "VALUES " + "(?, ?, ?, ?)");
-
-			st.setString(1, usuario.getNome());
-			st.setString(2, usuario.getLogin());
-			st.setString(3, usuario.getSenha());
-			st.setInt(4, usuario.getAcesso());
-
-			int rowsAffected = st.executeUpdate();
-
-			if (rowsAffected == 0) {
-
-				new DbException("Erro ao inserir o usuário");
-
-			}
-
-			conn.commit();
-
-		} catch (SQLException e) {
+			PreparedStatement st = null; 
 
 			try {
 
-				conn.rollback();
-				throw new DbException("Transaction rolled back. Cause by: " + e.getLocalizedMessage());
+				usuario = new Criptografar().adicionarCriptografia(usuario);
 
-			} catch (SQLException e1) {
+				conn.setAutoCommit(false);
 
-				throw new DbException("Error trying to rollback. Cause by: " + e.getLocalizedMessage());
+				st = conn.prepareStatement(
+						"INSERT INTO usuario " + "(nome_usuario, login, senha, acesso) " + "VALUES " + "(?, ?, ?, ?)");
+
+				st.setString(1, usuario.getNome().toUpperCase());
+				st.setString(2, usuario.getLogin());
+				st.setString(3, usuario.getSenha());
+				st.setInt(4, usuario.getAcesso());
+
+				int rowsAffected = st.executeUpdate();
+
+				if (rowsAffected == 0) {
+
+					new DbException("Erro ao inserir o usuário");
+
+				}
+
+				conn.commit();
+
+			} catch (SQLException e) {
+
+				try {
+
+					conn.rollback();
+					throw new DbException("Transação rolled back. Causada por: " + e.getLocalizedMessage());
+
+				} catch (SQLException e1) {
+
+					throw new DbException("Erro ao tentar rollback. Causada por: " + e.getLocalizedMessage());
+
+				}
+
+			} finally {
+
+				DB.closeStatement(st);
+
 			}
-
-		} finally {
-
-			DB.closeStatement(st);
-
 		}
-	}
 
-	@Override
-	public void update(Usuario usuario) {
+		// método atualizar
 
-		PreparedStatement st = null;
+		@Override
+		public void update(Usuario usuario) {
 
-		try {
+			PreparedStatement st = null;
+			
+			
+			if (usuario.getLogin().equalsIgnoreCase("******")) {
 
-			conn.setAutoCommit(false);
+				try {
 
-			st = conn.prepareStatement(
-					"UPDATE usuario SET nome_usuario = ?, login = ?, senha = ?, acesso = ? WHERE id_usuario = ?");
+					conn.setAutoCommit(false);
 
-			st.setString(1, usuario.getNome());
-			st.setString(2, usuario.getLogin());
-			st.setString(3, usuario.getSenha());
-			st.setInt(4, usuario.getAcesso());
-			st.setInt(5, usuario.getIdUsuario());
+					st = conn.prepareStatement(
+							"UPDATE usuario SET nome_usuario = ?, login = ?, acesso = ? WHERE id_usuario = ?");
 
-			st.executeUpdate();
+					st.setString(1, usuario.getNome().toUpperCase());
+					st.setString(2, usuario.getLogin());
+					st.setInt(3, usuario.getAcesso());
+					st.setInt(4, usuario.getIdUsuario());
 
-			conn.commit();
+					st.executeUpdate();
 
-		} catch (SQLException e) {
+					conn.commit();
 
-			try {
+				} catch (SQLException e) {
 
-				conn.rollback();
-				throw new DbException("Transaction rolled back. Cause by: " + e.getLocalizedMessage());
+					try {
 
-			} catch (SQLException e1) {
+						conn.rollback();
+						throw new DbException("Transação rolled back. Causada por: " + e.getLocalizedMessage());
 
-				throw new DbException("Error trying to rollback. Cause by: " + e.getLocalizedMessage());
+					} catch (SQLException e1) {
+
+						throw new DbException("Erro ao tentar rollback. Causada por: " + e.getLocalizedMessage());
+
+					}
+
+				}
+
+			} else {
+
+				try {
+
+					conn.setAutoCommit(false);
+					
+					usuario = new Criptografar().adicionarCriptografia(usuario);
+
+					st = conn.prepareStatement(
+							"UPDATE usuario SET nome_usuario = ?, login = ?, senha = ?, acesso = ? WHERE id_usuario = ?");
+
+					st.setString(1, usuario.getNome().toUpperCase());
+					st.setString(2, usuario.getLogin());
+					st.setString(3, usuario.getSenha());
+					st.setInt(4, usuario.getAcesso());
+					st.setInt(5, usuario.getIdUsuario());
+
+					st.executeUpdate();
+
+					conn.commit();
+
+				} catch (SQLException e) {
+
+					try {
+
+						conn.rollback();
+						throw new DbException("Transação rolled back. Causada por: " + e.getLocalizedMessage());
+
+					} catch (SQLException e1) {
+
+						throw new DbException("Erro ao tentar rollback. Causada por: " + e.getLocalizedMessage());
+
+					}
+
+				} finally {
+
+					DB.closeStatement(st);
+
+				}
+
 			}
-
-		} finally {
-
-			DB.closeStatement(st);
-
 		}
-	}
+
 
 	@Override
 	public void deleteById(Integer id) {
@@ -257,51 +307,71 @@ public class UsuarioDaoJDBC implements UsuarioDao {
 		}
 	}
 
-	@Override
-	public Usuario login(Usuario usuario) {
+	// método login
 
-		PreparedStatement st = null;
-		ResultSet rs = null;
-		Usuario logado = null;
+		@Override
+		public Usuario login(Usuario usuario) {
 
-		try {
-
-			conn.setAutoCommit(false);
-
-			st = conn.prepareStatement("SELECT * FROM usuario WHERE login = ? AND senha = ?");
-			st.setString(1, usuario.getLogin());
-			st.setString(2, usuario.getSenha());
-			rs = st.executeQuery();
-
-			while (rs.next()) {
-
-				logado = instantiateUsuario(rs);
-
-			}
-
-			conn.commit();
-
-			return logado;
-
-		} catch (SQLException e) {
+			PreparedStatement st = null;
+			ResultSet rs = null;
+			Usuario logado = null;
+			boolean autenticado = false;
 
 			try {
 
-				conn.rollback();
-				throw new DbException("Transaction rolled back. Cause by: " + e.getLocalizedMessage());
+				conn.setAutoCommit(false);
 
-			} catch (SQLException e1) {
+				st = conn.prepareStatement("SELECT * FROM usuario WHERE login = ?");
+				st.setString(1, usuario.getLogin());
+				rs = st.executeQuery();
 
-				throw new DbException("Error trying to rollback. Cause by: " + e.getLocalizedMessage());
+				while (rs.next()) {
+
+					logado = instantiateUsuario(rs);
+
+				}
+
+				if (!logado.equals(null)) {
+
+					autenticado = new Criptografar().autenticar(usuario, logado);
+
+					if (autenticado == true) {
+
+						logado.setSenha(usuario.getSenha());
+
+						return logado;
+
+					}
+
+				} else {
+
+					return null;
+
+				}
+
+				conn.commit();
+
+			} catch (SQLException e) {
+
+				try {
+
+					conn.rollback();
+					throw new DbException("Transação rolled back. Causada por: " + e.getLocalizedMessage());
+
+				} catch (SQLException e1) {
+
+					throw new DbException("Erro ao tentar rollback. Causada por: " + e.getLocalizedMessage());
+
+				}
+
+			} finally {
+
+				DB.closeStatement(st);
+				DB.closeResultSet(rs);
 
 			}
 
-		} finally {
-
-			DB.closeStatement(st);
-			DB.closeResultSet(rs);
+			return null;
 
 		}
-	}
-
 }

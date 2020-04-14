@@ -19,7 +19,7 @@ public class VisualizarFotoFormController implements Initializable {
 
 	@FXML
 	private ImageView imageView;
-	
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
@@ -35,17 +35,15 @@ public class VisualizarFotoFormController implements Initializable {
 
 	public void visualisarFoto() {
 
-
-		if (PrincipalFormController.getProduto().getFoto() == null) {
+		if (PrincipalFormController.getBytes() == null) {
 
 			imageView.setImage(new Image(Strings.getSemFoto()));
-			
 
 		} else {
 
 			try {
 
-				imageView.setImage(byteToImage(PrincipalFormController.getProduto().getFoto()));
+				imageView.setImage(byteToImage(PrincipalFormController.getBytes()));
 
 
 			} catch (IOException e) {
@@ -64,7 +62,5 @@ public class VisualizarFotoFormController implements Initializable {
 
 		return image;
 	}
-
-	
 
 }

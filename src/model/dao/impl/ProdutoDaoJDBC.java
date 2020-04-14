@@ -291,7 +291,7 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 
 			conn.setAutoCommit(false);
 
-			st = conn.prepareStatement("SELECT * FROM produto where nome_produto like ? order by id_produto");
+			st = conn.prepareStatement("SELECT * FROM produto where nome_produto ilike ? order by id_produto");
 			st.setString(1, "%" + nomeProduto + "%");
 			rs = st.executeQuery();
 
@@ -340,7 +340,7 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			conn.setAutoCommit(false);
 
 			st = conn.prepareStatement("SELECT * FROM produto where setor = ? order by id_produto");
-			st.setString(1, nomeSetor);
+			st.setString(1, nomeSetor.toUpperCase());
 			rs = st.executeQuery();
 
 			List<Produto> list = new ArrayList<>();

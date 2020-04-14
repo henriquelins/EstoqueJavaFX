@@ -13,11 +13,11 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="352.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.SetorNovoFormController">
    <children>
-      <ToolBar prefHeight="40.0" prefWidth="200.0">
+      <ToolBar prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: gray;">
         <items>
             <AnchorPane prefHeight="30.0" prefWidth="570.0">
                <children>
-                  <Label layoutX="66.0" layoutY="-1.0" prefHeight="27.0" prefWidth="338.0" text="Cadastro de setor">
+                  <Label layoutX="63.0" layoutY="-1.0" prefHeight="27.0" prefWidth="341.0" text="Cadastro de Setores" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -26,25 +26,38 @@
             </AnchorPane>
         </items>
       </ToolBar>
-      <AnchorPane prefHeight="300.0" prefWidth="600.0">
+      <AnchorPane prefHeight="317.0" prefWidth="600.0">
          <children>
-            <Label layoutX="154.0" layoutY="20.0" text="Setor" />
-            <TextField fx:id="txtNome" layoutX="154.0" layoutY="41.0" prefHeight="25.0" prefWidth="366.0" />
-            <Label layoutX="74.0" layoutY="20.0" text="Id" />
-            <TextField fx:id="txtId" editable="false" layoutX="74.0" layoutY="41.0" prefHeight="25.0" prefWidth="63.0" />
-            <ScrollPane layoutX="74.0" layoutY="78.0" prefHeight="148.0" prefWidth="447.0">
+            <Label layoutX="134.0" layoutY="20.0" prefHeight="20.0" prefWidth="405.0" text="Setor">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font></Label>
+            <TextField fx:id="txtNome" layoutX="134.0" layoutY="41.0" prefHeight="30.0" prefWidth="405.0" style="-fx-background-radius: 10;">
+               <font>
+                  <Font size="14.0" />
+               </font></TextField>
+            <Label layoutX="68.0" layoutY="20.0" prefHeight="20.0" prefWidth="51.0" text="Código">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font></Label>
+            <TextField fx:id="txtId" editable="false" layoutX="68.0" layoutY="41.0" prefHeight="30.0" prefWidth="51.0" style="-fx-background-radius: 10;">
+               <font>
+                  <Font size="14.0" />
+               </font></TextField>
+            <ScrollPane layoutX="69.0" layoutY="85.0" prefHeight="156.0" prefWidth="468.0">
                <content>
-                  <TableView fx:id="tableViewSetor" accessibleRole="IMAGE_VIEW" prefHeight="146.0" prefWidth="445.0">
+                  <TableView fx:id="tableViewSetor" accessibleRole="IMAGE_VIEW" prefHeight="154.0" prefWidth="466.0">
                     <columns>
-                      <TableColumn fx:id="tableColumnId" prefWidth="44.0" text="Id" />
-                      <TableColumn fx:id="tableColumnNome" prefWidth="358.0" text="Setor" />
+                        <TableColumn fx:id="tableColumnIndex" prefWidth="44.0" text="#" />
+                      <TableColumn fx:id="tableColumnId" prefWidth="50.0" text="Código" />
+                      <TableColumn fx:id="tableColumnNome" prefWidth="352.0" text="Setor" />
                     </columns>
                   </TableView>
                </content>
             </ScrollPane>
-            <Button fx:id="btExcluir" layoutX="470.0" layoutY="254.0" mnemonicParsing="false" onAction="#onBtExcluirAction" text="Excluir" />
-            <Button fx:id="btSalvar" layoutX="410.0" layoutY="254.0" mnemonicParsing="false" onAction="#onBtSalvarAction" text="Salvar" />
-            <Button fx:id="btNovo" layoutX="354.0" layoutY="254.0" mnemonicParsing="false" onAction="#onBtNovoAction" text="Novo" />
+            <Button fx:id="btExcluir" layoutX="466.0" layoutY="254.0" mnemonicParsing="false" onAction="#onBtExcluirAction" prefHeight="30.0" prefWidth="70.0" style="-fx-background-radius: 10;" text="EXCLUIR" />
+            <Button fx:id="btSalvar" layoutX="389.0" layoutY="254.0" mnemonicParsing="false" onAction="#onBtSalvarAction" prefHeight="30.0" prefWidth="70.0" style="-fx-background-radius: 10;" text="SALVAR" />
+            <Button fx:id="btNovo" layoutX="312.0" layoutY="254.0" mnemonicParsing="false" onAction="#onBtNovoAction" prefHeight="30.0" prefWidth="70.0" style="-fx-background-radius: 10;" text="NOVO" />
          </children>
       </AnchorPane>
    </children>

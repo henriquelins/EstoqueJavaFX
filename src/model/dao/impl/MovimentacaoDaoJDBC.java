@@ -1,6 +1,7 @@
 package model.dao.impl;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -205,7 +206,7 @@ public class MovimentacaoDaoJDBC implements MovimentacaoDao {
 
 	@Override
 	public List<Movimentacao> findNomeProduto(String nomeProduto) {
-		
+
 		PreparedStatement st = null;
 		ResultSet rs = null;
 
@@ -231,7 +232,7 @@ public class MovimentacaoDaoJDBC implements MovimentacaoDao {
 				listaMovimentacao.add(mov);
 
 			}
-			
+
 			conn.commit();
 
 			return listaMovimentacao;
@@ -246,7 +247,7 @@ public class MovimentacaoDaoJDBC implements MovimentacaoDao {
 			} catch (SQLException e1) {
 
 				throw new DbException("Error trying to rollback. Cause by: " + e.getLocalizedMessage());
-				
+
 			}
 
 		} finally {
@@ -259,7 +260,7 @@ public class MovimentacaoDaoJDBC implements MovimentacaoDao {
 
 	@Override
 	public List<Movimentacao> findNomeSetor(String pesquisarSetor) {
-		
+
 		PreparedStatement st = null;
 		ResultSet rs = null;
 
@@ -306,7 +307,61 @@ public class MovimentacaoDaoJDBC implements MovimentacaoDao {
 			DB.closeStatement(st);
 
 		}
-		
+
+	}
+
+	@Override
+	public List<Movimentacao> verMovimentacao(Date dataInicial, Date dataFinal, int id_produto) {
+
+		PreparedStatement st = null;
+		ResultSet rs = null;
+
+		try {
+
+			conn.setAutoCommit(false);
+
+			st = conn.prepareStatement("SELECT * FROM movimentacao as mv inner join produto pr on mv.id_produto = pr.id_produto inner join usuario as us on mv.id_usuario = us.id_usuario WHERE data_da_transacao between ? and ? and mv.id_produto = ? order by mv.id_movimentacao");
+			st.setDate(1, dataInicial);
+			st.setDate(2, dataFinal);
+			st.setInt(3, id_produto);
+			rs = st.executeQuery();
+
+			List<Movimentacao> listaMovimentacao = new ArrayList<>();
+
+			while (rs.next()) {
+
+				Produto prod = instantiateProduto(rs);
+				Usuario user = instantiateUsuario(rs);
+
+				Movimentacao mov = instantiateMovimentacao(rs, prod, user);
+				listaMovimentacao.add(mov);
+
+			}
+
+			conn.commit();
+
+			return listaMovimentacao;
+
+		} catch (SQLException e) {
+
+			try {
+
+				conn.rollback();
+				throw new DbException("Transação rolled back. Causada por: " + e.getLocalizedMessage());
+
+			} catch (SQLException e1) {
+
+				throw new DbException("Erro ao tentar rollback. Causada por: " + e.getLocalizedMessage());
+
+			}
+
+		} finally {
+
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+
+		}
+
 	}
 
 }

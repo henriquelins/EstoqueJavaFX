@@ -22,6 +22,10 @@ public class Acesso {
 
 			concedido = true;
 
+		}  else if (acesso == 1 && tela.equalsIgnoreCase(Strings.getLogSegurancaView())) {
+
+			concedido = true;
+
 		} else if ((acesso == 1 && tela.equalsIgnoreCase(Strings.getProdutoShowView()))
 				|| (acesso == 2 && tela.equalsIgnoreCase(Strings.getProdutoShowView()))) {
 
@@ -35,8 +39,17 @@ public class Acesso {
 
 			concedido = true;
 
+		} else if (acesso == 1 && tela.equalsIgnoreCase(Strings.getBackupBancoView())) {
+
+			concedido = true;
+
 		} else if ((acesso == 1 && tela.equalsIgnoreCase(Strings.getMovimentacaoListView()))
 				|| (acesso == 2 && tela.equalsIgnoreCase(Strings.getMovimentacaoListView()))) {
+
+			concedido = true;
+
+		} else if ((acesso == 1 && tela.equalsIgnoreCase(Strings.getMovimentacaoDoProdutoListView()))
+				|| (acesso == 2 && tela.equalsIgnoreCase(Strings.getMovimentacaoDoProdutoListView()))) {
 
 			concedido = true;
 

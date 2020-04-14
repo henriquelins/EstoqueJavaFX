@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
+import gui.util.Utils;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,13 +17,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import model.entities.Movimentacao;
 import model.entities.Produto;
 import model.services.MovimentacaoService;
-import model.services.ProdutoService;
 
 public class MovimentacaoFormController implements Initializable, DataChangeListener {
 
@@ -38,23 +37,26 @@ public class MovimentacaoFormController implements Initializable, DataChangeList
 	Produto produto;
 
 	@FXML
-	private Label labelNome;
+	private TextField textFieldNome;
 
 	@FXML
-	private Label labelEstoqueAtual;
+	private TextField textFieldEstoqueAtual;
 
 	@FXML
 	private ComboBox<String> comboBoxTipoDeSaida;
 
 	@FXML
-	private TextField txtQuantidade;
+	private TextField textFieldQuantidade;
 
 	@FXML
 	private TextArea txtAreaObservacoes;
 
 	@FXML
-	private Button btnSalvarMovimentacao;
+	private Button buttonSalvar;
 
+	@FXML
+	private Button buttonVoltar;
+	
 	@FXML
 	public void onBtnSalvarMovimentacaoAction(ActionEvent event) {
 
@@ -63,12 +65,22 @@ public class MovimentacaoFormController implements Initializable, DataChangeList
 		if (movimentacao != null) {
 
 			movimentacaoService.movimentacaoSaidaOuEntrada(movimentacao);
-			ProdutoService produtoService = new ProdutoService();
-			produtoService.findById(PrincipalFormController.getProduto().getIdProduto());
-			updateFormData2();
 			notifyDataChangeListeners();
+			Utils.currentStage(event).close();
 
+		} else {
+			
+			Alerts.showAlert("Movimentação do Produto", "Erro ao abrir o objeto movimento", "Objeto nulo",
+					AlertType.INFORMATION);
+			
 		}
+	}
+
+	@FXML
+	public void onBtnVoltarMovimentacaoAction(ActionEvent event) {
+
+		Utils.currentStage(event).close();
+
 	}
 
 	// Adiciona a lista um ouvinte, quando há uma modificação
@@ -109,8 +121,8 @@ public class MovimentacaoFormController implements Initializable, DataChangeList
 	private List<String> listaTipos() {
 
 		List<String> listaTipos = new ArrayList<>();
-		listaTipos.add("Entrada de produtos (+)");
-		listaTipos.add("Saída de produtos (-)");
+		listaTipos.add("ENTRADA DE PRODUTOS (+)");
+		listaTipos.add("SAÍDA DE PRODUTOS (-)");
 
 		return listaTipos;
 
@@ -126,14 +138,15 @@ public class MovimentacaoFormController implements Initializable, DataChangeList
 
 		comboBoxTipoDeSaida.setItems(FXCollections.observableArrayList(listaTipos()));
 
-		labelNome.setText(PrincipalFormController.getProduto().getNome());
-		labelEstoqueAtual.setText(String.valueOf(PrincipalFormController.getProduto().getQuantidade()));
+		textFieldNome.setText(PrincipalFormController.getProduto().getNome().toUpperCase());
+		textFieldEstoqueAtual
+				.setText(Constraints.tresDigitos(PrincipalFormController.getProduto().getQuantidade()) + " Unidade(s)");
 
 		movimentacaoService = new MovimentacaoService();
 		movimentacao = new Movimentacao();
 		produto = new Produto();
 
-		Constraints.setTextFieldInteger(txtQuantidade);
+		Constraints.setTextFieldInteger(textFieldQuantidade);
 
 		updateFormData();
 
@@ -152,11 +165,11 @@ public class MovimentacaoFormController implements Initializable, DataChangeList
 
 			mov = null;
 
-		} else if (txtQuantidade.getText() == null || txtQuantidade.getText().trim().equals("")) {
+		} else if (textFieldQuantidade.getText() == null || textFieldQuantidade.getText().trim().equals("")) {
 
 			Alerts.showAlert("Saída Produto", null, "Digite a quantidade do produto", AlertType.INFORMATION);
 
-			txtQuantidade.requestFocus();
+			textFieldQuantidade.requestFocus();
 
 			mov = null;
 
@@ -175,10 +188,10 @@ public class MovimentacaoFormController implements Initializable, DataChangeList
 
 			mov.setProduto(PrincipalFormController.getProduto());
 			mov.setUsuario(LoginFormController.getLogado());
-			mov.setTipo(String.valueOf(comboBoxTipoDeSaida.getSelectionModel().getSelectedItem()));
-			mov.setValorMovimento(Integer.valueOf(txtQuantidade.getText()));
-			mov.setObservacoesMovimentacao(txtAreaObservacoes.getText());
-			mov.setQuantidadeAnterior(Integer.valueOf(labelEstoqueAtual.getText()));
+			mov.setTipo(String.valueOf(comboBoxTipoDeSaida.getSelectionModel().getSelectedItem().toUpperCase()));
+			mov.setValorMovimento(Integer.valueOf(textFieldQuantidade.getText()));
+			mov.setObservacoesMovimentacao(txtAreaObservacoes.getText().toUpperCase());
+			mov.setQuantidadeAnterior(Integer.valueOf(textFieldEstoqueAtual.getText().replaceAll("\\D", "")));
 			mov.setDataDaTransacao(data);
 
 		}
@@ -189,19 +202,21 @@ public class MovimentacaoFormController implements Initializable, DataChangeList
 
 	public void updateFormData() {
 
-		labelNome.setText(PrincipalFormController.getProduto().getNome());
-		labelEstoqueAtual.setText(String.valueOf(PrincipalFormController.getProduto().getQuantidade()));
+		textFieldNome.setText(PrincipalFormController.getProduto().getNome().toUpperCase());
+		textFieldEstoqueAtual
+				.setText(Constraints.tresDigitos(PrincipalFormController.getProduto().getQuantidade()) + " Unidade(s)");
 
 	}
 
 	public void updateFormData2() {
 
-		labelNome.setText(PrincipalFormController.getProduto().getNome());
-		labelEstoqueAtual.setText(String.valueOf(PrincipalFormController.getProduto().getQuantidade()));
-		txtQuantidade.setText("");
-		txtQuantidade.requestFocus();
+		textFieldNome.setText(PrincipalFormController.getProduto().getNome().toUpperCase());
+		textFieldEstoqueAtual
+				.setText(Constraints.tresDigitos(PrincipalFormController.getProduto().getQuantidade()) + " Unidade(s)");
+		textFieldQuantidade.setText("");
+		textFieldQuantidade.requestFocus();
 		txtAreaObservacoes.setText("");
-		comboBoxTipoDeSaida.setValue("Selecione...");
+		comboBoxTipoDeSaida.setValue("SELECIONE...");
 
 	}
 

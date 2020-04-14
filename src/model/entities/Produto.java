@@ -11,14 +11,14 @@ public class Produto implements Serializable {
 	private String descricao;
 	private String setor;
 	private String categoria;
-	private int quantidade;
-	private int estoqueMinimo;
+	private Integer quantidade;
+	private Integer estoqueMinimo;
 	private byte[] foto;
 
 	public Produto() {}
 
-	public Produto(Integer idProduto, String nome, String descricao, String setor, String categoria, int quantidade,
-			int estoqueMinimo, byte[] foto) {
+	public Produto(Integer idProduto, String nome, String descricao, String setor, String categoria, Integer quantidade,
+			Integer estoqueMinimo, byte[] foto) {
 
 		this.idProduto = idProduto;
 		this.nome = nome;

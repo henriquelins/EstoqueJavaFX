@@ -1,26 +1,22 @@
 package gui;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import gui.forms.Forms;
 import gui.util.Alerts;
 import gui.util.Strings;
 import gui.util.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.Image;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import model.entities.Usuario;
+import model.services.LogSegurancaService;
 import model.services.UsuarioService;
 
 public class LoginFormController implements Initializable {
@@ -36,42 +32,60 @@ public class LoginFormController implements Initializable {
 	private PasswordField pswSenha;
 
 	@FXML
-	private Button btOK;
+	private Button buttonLogin;
+	
+	@FXML
+	private Button buttonFechar;
 
 	@FXML
 	private Label labelTitle;
+	
+	@FXML
+	public void onButtonFecharAction(ActionEvent event) {
+		
+		System.exit(0);
+		
+	}
 
 	@FXML
-	public void onBtOKAction(ActionEvent event) {
+	public void onButtonLoginAction(ActionEvent event) {
 
 		Usuario usuario = new Usuario();
 		usuario = getFormData();
 
-		if (usuario.getLogin() != null && usuario.getSenha() != null) {
-
-			setLogado(usuarioService.login(usuario));
+		if (usuario.getLogin() != null && usuario.getSenha() != null) { 
 
 			try {
+
+				setLogado(usuarioService.login(usuario));
 
 				if (logado != null) {
 
 					Utils.currentStage(event).close();
+					new Forms().principalForm(logado, Strings.getPrincipalView());
 
-					createPrincipalForm(Strings.getPrincipalView());
+					new LogSegurancaService().novoLogSeguranca(logado.getNome(), Strings.getLogMessage001());
 
 				} else {
-
+					
 					Alerts.showAlert("Login", null, "Login não confirmado", AlertType.ERROR);
 
 					txtLogin.setText("");
 					pswSenha.setText("");
 					txtLogin.requestFocus();
-
+					
+					new LogSegurancaService().novoLogSeguranca("Não logado", Strings.getLogMessage002());
 				}
 
 			} catch (NullPointerException e) {
 
-				Alerts.showAlert("Login", null , e.getLocalizedMessage(), AlertType.ERROR);
+				Alerts.showAlert("Login", null, "Login não confirmado", AlertType.ERROR);
+
+				txtLogin.setText("");
+				pswSenha.setText("");
+				txtLogin.requestFocus();
+				
+				new LogSegurancaService().novoLogSeguranca("Não logado", Strings.getLogMessage002());
 
 			}
 
@@ -93,7 +107,7 @@ public class LoginFormController implements Initializable {
 
 	public static String usuarioLogado() {
 
-		return logado.usuarioLogado();
+		return logado.toUsuarioLogado();
 
 	}
 
@@ -110,41 +124,6 @@ public class LoginFormController implements Initializable {
 		usuarioService = new UsuarioService();
 
 		labelTitle.setText(Strings.getTitleLogin());
-	
-
-	}
-
-	private void createPrincipalForm(String absoluteName) {
-
-		try {
-
-			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-			ScrollPane scrollPane = loader.load();
-			
-			PrincipalFormController controller = loader.getController();
-			controller.setLabelLogado(getLogado().usuarioLogado());
-		
-			scrollPane.setFitToHeight(true);
-			scrollPane.setFitToWidth(true);
-		
-			Stage principalStage = new Stage();
-			principalStage.setTitle(Strings.getTitle());
-			principalStage.setScene(new Scene(scrollPane));
-
-			principalStage.setResizable(true);
-			principalStage.setMaximized(true);
-
-			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
-			principalStage.getIcons().add(applicationIcon);
-
-			principalStage.show();
-
-		} catch (IOException e) {
-
-			Alerts.showAlert("IO Exception", "Erro ao carregar a tela principal", e.getCause().toString(),
-					AlertType.ERROR);
-
-		}
 
 	}
 

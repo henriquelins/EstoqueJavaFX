@@ -3,6 +3,7 @@ package model.services;
 import java.util.List;
 import java.util.Optional;
 
+import gui.LoginFormController;
 import gui.util.Alerts;
 import javafx.scene.control.ButtonType;
 import model.dao.DaoFactory;
@@ -25,6 +26,9 @@ public class SetorService {
 			if (result.get() == ButtonType.OK) {
 
 				dao.insert(setor);
+				
+				new LogSegurancaService().novoLogSeguranca(LoginFormController.getLogado().getNome(),
+						"Setor criado: " + setor.getNome().toUpperCase());
 
 			}
 
@@ -36,6 +40,10 @@ public class SetorService {
 			if (result.get() == ButtonType.OK) {
 
 				dao.update(setor);
+				
+				new LogSegurancaService().novoLogSeguranca(LoginFormController.getLogado().getNome(),
+						"Setor editado: " + setor.getNome().toUpperCase());
+
 
 			}
 
@@ -45,6 +53,10 @@ public class SetorService {
 	public void remove(Setor setor) {
 
 		dao.deleteById(setor.getIdSetor());
+		
+		new LogSegurancaService().novoLogSeguranca(LoginFormController.getLogado().getNome(),
+				"Setor excluido: " + setor.getNome().toUpperCase());
+
 
 	}
 

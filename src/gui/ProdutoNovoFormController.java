@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import application.Main;
+import application.EstoqueJavaFxMain;
 import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
@@ -92,11 +92,13 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 		if (PrincipalFormController.getProduto() != null) {
 
 			produtoService.produtoNovoOuEditar(PrincipalFormController.getProduto());
-			Utils.fecharDialogAction();
 			notifyDataChangeListeners();
+			Utils.currentStage(event).close();
 
-		} 
-		
+			bytes = null;
+
+		}
+
 	}
 
 	@FXML
@@ -160,14 +162,14 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 		SetorService setorService = new SetorService();
 		CategoriaService categoriaService = new CategoriaService();
 
-		setSetor(comboBoxSetor.getSelectionModel().getSelectedItem());
+		setSetor(comboBoxSetor.getSelectionModel().getSelectedItem().toUpperCase());
 		setId_setor(setorService.findNomeIdSetor(getSetor()));
 
 		List<String> listaCategoria = new ArrayList<>();
 
 		for (Categoria categoria : FXCollections.observableArrayList(categoriaService.findIdSetor(id_setor))) {
 
-			listaCategoria.add(categoria.getNome());
+			listaCategoria.add(categoria.getNome().toUpperCase());
 		}
 
 		comboBoxCategoria.setItems(FXCollections.observableArrayList(listaCategoria));
@@ -189,6 +191,8 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 	public void onBtVisualizarFotoAction(ActionEvent event) {
 
 		try {
+			
+			PrincipalFormController.setBytes(getBytes());
 
 			createVisualizarFotoDialogForm(Strings.getVisualizarFotoView());
 
@@ -205,17 +209,17 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 		try {
 
-			Produto prod = new Produto();
-			prod.setFoto(bytes);
-			PrincipalFormController.setProduto(prod);
-
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 
-			Main.setDialogScene(new Scene(pane));
+			Produto prod = new Produto();
+			prod.setFoto(getBytes());
+			PrincipalFormController.setProduto(prod);
+
+			EstoqueJavaFxMain.setDialogScene(new Scene(pane));
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle(Strings.getTitle());
-			produtoStage.setScene(Main.getDialogScene());
+			produtoStage.setScene(EstoqueJavaFxMain.getDialogScene());
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);
@@ -265,7 +269,7 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 		for (Setor setor : setorService.findAllNome()) {
 
-			listaSetor.add(setor.getNome());
+			listaSetor.add(setor.getNome().toUpperCase());
 		}
 
 		return listaSetor;
@@ -348,12 +352,12 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 
 		} else {
 
-			prod.setNome(txtNome.getText());
+			prod.setNome(txtNome.getText().toUpperCase());
 			prod.setQuantidade(Integer.valueOf(txtQuantidade.getText()));
 			prod.setEstoqueMinimo(Integer.valueOf(txtEstoqueMinimo.getText()));
-			prod.setSetor(String.valueOf(comboBoxSetor.getSelectionModel().getSelectedItem()));
-			prod.setCategoria(String.valueOf(comboBoxCategoria.getSelectionModel().getSelectedItem()));
-			prod.setDescricao(txtAreaDescricao.getText());
+			prod.setSetor(String.valueOf(comboBoxSetor.getSelectionModel().getSelectedItem().toUpperCase()));
+			prod.setCategoria(String.valueOf(comboBoxCategoria.getSelectionModel().getSelectedItem().toUpperCase()));
+			prod.setDescricao(txtAreaDescricao.getText().toUpperCase());
 			prod.setFoto(bytes);
 
 		}

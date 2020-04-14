@@ -1,13 +1,17 @@
 package gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import exportarXLS.ExportarListaMovimentacaoDoProdutoXLS;
 import gui.util.Alerts;
+import gui.util.Constraints;
+import gui.util.Strings;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,19 +20,20 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import jxl.write.WriteException;
 import model.entities.Movimentacao;
-import model.entities.Setor;
+import model.entities.Produto;
+import model.services.LogSegurancaService;
 import model.services.MovimentacaoService;
-import model.services.SetorService;
 
 public class MovimentacaoListFormController implements Initializable {
 
-	private MovimentacaoService service;
+	private MovimentacaoService movimentacaoService;
 
 	private static ObservableList<Movimentacao> listaMovimentação;
 
@@ -36,37 +41,28 @@ public class MovimentacaoListFormController implements Initializable {
 	public TableView<Movimentacao> tableViewMovimentacao;
 
 	@FXML
-	private TextField txtPesquisar;
+	private Button buttonPesquisar;
 
 	@FXML
-	private Button btPesquisar;
-
-	@FXML
-	private TableColumn<Movimentacao, Integer> tableColumnId;
-
-	@FXML
-	private TableColumn<Movimentacao, String> tableColumnProduto;
-
-	@FXML
-	private TableColumn<Movimentacao, String> tableColumnSetor;
-
-	@FXML
-	private TableColumn<Movimentacao, String> tableColumnUsuario;
+	private TableColumn<Movimentacao, String> tableColumnIndex;
 
 	@FXML
 	private TableColumn<Movimentacao, String> tableColumnTipo;
 
 	@FXML
-	private TableColumn<Movimentacao, Integer> tableColumnEstoqueAnterior;
+	private TableColumn<Movimentacao, String> tableColumnEstoqueAnterior;
 
 	@FXML
-	private TableColumn<Movimentacao, Integer> tableColumnValorDoMovimentacao;
+	private TableColumn<Movimentacao, String> tableColumnValorDoMovimentacao;
 
 	@FXML
 	private TableColumn<Movimentacao, String> tableColumnEstoqueAtual;
 
 	@FXML
 	private TableColumn<Movimentacao, String> tableColumnObservacoes;
+
+	@FXML
+	private TableColumn<Movimentacao, String> tableColumnUsuario;
 
 	@FXML
 	private TableColumn<Movimentacao, String> tableColumnDataDaMovimentacao;
@@ -76,42 +72,58 @@ public class MovimentacaoListFormController implements Initializable {
 	static String pesquisarSetor;
 
 	@FXML
-	private ComboBox<String> cbPesquisaSetor;
+	private Label labelProdutoMovimentado;
 
-	public void setMovimentacaoService(MovimentacaoService service) {
+	@FXML
+	private DatePicker datePickerDataInicial;
 
-		this.service = service;
+	@FXML
+	private DatePicker datePickerDataFinal;
+
+	@FXML
+	private Button buttonExportarParaExcel;
+
+	private Produto produto;
+
+	public void setMovimentacaoService(MovimentacaoService movimentacaoService) {
+
+		this.movimentacaoService = movimentacaoService;
 
 	}
 
 	@FXML
 	public void onBtPesquisarAction(ActionEvent event) {
 
-		setPesquisarProduto("");
-		setPesquisarSetor("");
+		limparTable();
 
-		if (txtPesquisar.getText() == null || txtPesquisar.getText().trim().equals("")) {
+		if (datePickerDataInicial.getValue() == null || datePickerDataFinal.getValue() == null) {
 
-			Alerts.showAlert("Pesquisar produto", "Campo obrigatório para pesquisar", "Digite o nome do produto",
+			Alerts.showAlert("Ver lançamento", "Campo obrigatório", "Digite ou selecione a data", AlertType.ERROR);
+
+		} else if (datePickerDataFinal.getValue().isBefore(datePickerDataInicial.getValue())) {
+
+			Alerts.showAlert("Ver lançamento", "Campo obrigatório", "A data final não pode ser maior que a inicial",
 					AlertType.ERROR);
 
 		} else {
 
-			setPesquisarProduto(txtPesquisar.getText());
+			new LogSegurancaService().novoLogSeguranca(LoginFormController.getLogado().getNome().toUpperCase(),
+					"Movimentação do produto: " + produto.getNome().toUpperCase() + " - "
+							+ Constraints.setLocalDateToDateSql(datePickerDataInicial.getValue()) + " até "
+							+ Constraints.setLocalDateToDateSql(datePickerDataFinal.getValue()));
 
-			listaPesquisa();
+			listaPesquisa(datePickerDataInicial, datePickerDataFinal, getProduto().getIdProduto());
 
 			if (listaMovimentação.isEmpty() == true) {
 
-				Alerts.showAlert("Pesquisar produto", "Lista vazia", "O produto não foi encontrado", AlertType.ERROR);
+				Alerts.showAlert("Ver lançamento", "Lista vazia", "Selecione outras datas para pesquisar",
+						AlertType.ERROR);
 
-				updateTableView();
-				updatePesquisa();
+				limparDate();
 
 			} else {
 
 				updateTableView();
-				updatePesquisa();
 
 			}
 
@@ -120,78 +132,49 @@ public class MovimentacaoListFormController implements Initializable {
 	}
 
 	@FXML
-	public void onCbPesquisarAction(ActionEvent event) {
+	public void onBtExportarExcelAction(ActionEvent event) {
 
-		setPesquisarProduto("");
-		setPesquisarSetor("");
+		ExportarListaMovimentacaoDoProdutoXLS exportarXLS = new ExportarListaMovimentacaoDoProdutoXLS();
 
-		if (cbPesquisaSetor.getSelectionModel().getSelectedItem() == null
-				|| cbPesquisaSetor.getSelectionModel().getSelectedItem().equals("Selecione o setor...")) {
+		String caminho = "C:/temp/listaMovimentacaoDoProduto.xls";
 
-			Alerts.showAlert("Pesquisar setor", "Campo obrigatório para pesquisar", "Selecione o setor",
-					AlertType.ERROR);
+		try {
 
-		} else {
+			if (tableViewMovimentacao.getItems().isEmpty() != true) {
 
-			setPesquisarSetor(cbPesquisaSetor.getSelectionModel().getSelectedItem());
+				try {
 
-			if (getPesquisarSetor().equals("Todos")) {
+					exportarXLS.exportarListaMovimentacaoDoProdutoXLS(caminho, listaMovimentação,
+							produto.getNome().toUpperCase(), datePickerDataInicial.getValue(),
+							datePickerDataFinal.getValue());
 
-				listaTodos();
+					new LogSegurancaService().novoLogSeguranca(LoginFormController.getLogado().getNome().toUpperCase(),
+							Strings.getLogMessage004());
 
-				if (listaMovimentação.isEmpty() == true) {
+				} catch (WriteException e) {
 
-					Alerts.showAlert("Pesquisar setor", "Lista vazia", "Produtos não encontrados", AlertType.ERROR);
+					Alerts.showAlert("Exportar lista", "Erro ao criar o arquivo!", "Exportar para Excel ",
+							AlertType.ERROR);
 
-					updateTableView();
-					updatePesquisa();
+				} catch (IOException e) {
 
-				} else {
-
-					updateTableView();
-					updatePesquisa();
+					Alerts.showAlert("Exportar lista", "Feche o arquivo primeiro!", "Exportar para Excel ",
+							AlertType.ERROR);
 
 				}
 
 			} else {
 
-				listaCbSetor();
-
-				if (listaMovimentação.isEmpty() == true) {
-
-					Alerts.showAlert("Pesquisar setor", "Lista vazia", "O setor não foi encontrado", AlertType.ERROR);
-
-					updateTableView();
-					updatePesquisa();
-
-				} else {
-
-					updateTableView();
-					updatePesquisa();
-
-				}
+				Alerts.showAlert("Exportar lista", "Lista vazia", "Exportar para Excel ", AlertType.ERROR);
 
 			}
 
+		} catch (java.lang.NullPointerException e) {
+
+			Alerts.showAlert("Exportar lista", "Lista vazia " + e.getLocalizedMessage(), "Exportar para Excel ",
+					AlertType.ERROR);
+
 		}
-
-		cbPesquisaSetor.setPromptText("Selecione o setor...");
-
-	}
-
-	private List<String> listaSetor() {
-
-		SetorService setorService = new SetorService();
-		List<String> listaSetor = new ArrayList<>();
-
-		listaSetor.add("Todos");
-
-		for (Setor setor : setorService.findAllNome()) {
-
-			listaSetor.add(setor.getNome());
-		}
-
-		return listaSetor;
 
 	}
 
@@ -204,76 +187,43 @@ public class MovimentacaoListFormController implements Initializable {
 
 	private void initializeNodes() {
 
-		cbPesquisaSetor.setItems(FXCollections.observableArrayList(listaSetor()));
-
-		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("idMovimentacao"));
-
-		tableColumnProduto
-				.setCellValueFactory((param) -> new SimpleStringProperty(param.getValue().getProduto().getNome()));
-
-		tableColumnSetor
-				.setCellValueFactory((param) -> new SimpleStringProperty(param.getValue().getProduto().getSetor()));
-
-		tableColumnUsuario
-				.setCellValueFactory((param) -> new SimpleStringProperty(param.getValue().getUsuario().getNome()));
+		tableColumnIndex.setSortable(false);
+		tableColumnIndex.setCellValueFactory(column -> new ReadOnlyObjectWrapper<String>(
+				Constraints.tresDigitos(tableViewMovimentacao.getItems().indexOf(column.getValue()) + 1)));
 
 		tableColumnTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
-		tableColumnEstoqueAnterior.setCellValueFactory(new PropertyValueFactory<>("quantidadeAnterior"));
-		tableColumnValorDoMovimentacao.setCellValueFactory(new PropertyValueFactory<>("valorMovimento"));
-		tableColumnEstoqueAtual.setCellValueFactory(new PropertyValueFactory<>("estoqueAtual"));
-		tableColumnObservacoes.setCellValueFactory(new PropertyValueFactory<>("observacoesMovimentacao"));
+		tableColumnEstoqueAnterior.setCellValueFactory(
+				(param) -> new SimpleStringProperty(Constraints.tresDigitos(param.getValue().getQuantidadeAnterior())));
+		tableColumnValorDoMovimentacao.setCellValueFactory(
+				(param) -> new SimpleStringProperty(Constraints.tresDigitos(param.getValue().getValorMovimento())));
+		tableColumnEstoqueAtual.setCellValueFactory(
+				(param) -> new SimpleStringProperty(Constraints.tresDigitos(param.getValue().getEstoqueAtual())));
+		tableColumnObservacoes.setCellValueFactory(
+				(param) -> new SimpleStringProperty(param.getValue().getObservacoesMovimentacao().toUpperCase()));
 
 		DateFormat formatBR = new SimpleDateFormat("dd/MM/YYYY");
+
+		tableColumnUsuario.setCellValueFactory(
+				(param) -> new SimpleStringProperty(param.getValue().getUsuario().getNome().toUpperCase()));
 
 		tableColumnDataDaMovimentacao.setCellValueFactory(
 				(param) -> new SimpleStringProperty(formatBR.format(param.getValue().getDataDaTransacao())));
 
-		service = new MovimentacaoService();
+		movimentacaoService = new MovimentacaoService();
 
 	}
 
 	public void updateTableView() {
 
-		if (service == null) {
+		if (movimentacaoService == null) {
 
 			throw new IllegalStateException("Service está nulo");
 
-		}
+		} else {
 
-		try {
-
-			if (!getPesquisarProduto().equals("")) {
-
-				listaPesquisa();
-
-			} else if (!getPesquisarSetor().equals("")) {
-
-				if (getPesquisarSetor().equals("Todos")) {
-
-					listaTodos();
-
-				} else {
-
-					listaCbSetor();
-
-				}
-
-			}
-
-		} catch (NullPointerException e) {
-
-			listaTodos();
+			tableViewMovimentacao.setItems(listaMovimentação);
 
 		}
-
-		tableViewMovimentacao.setItems(listaMovimentação);
-
-	}
-
-	public void updatePesquisa() {
-
-		txtPesquisar.setText("");
-		txtPesquisar.requestFocus();
 
 	}
 
@@ -293,21 +243,49 @@ public class MovimentacaoListFormController implements Initializable {
 		MovimentacaoListFormController.pesquisarSetor = pesquisarSetor;
 	}
 
-	private List<Movimentacao> listaPesquisa() {
+	private List<Movimentacao> listaPesquisa(DatePicker datePickerDataInicial, DatePicker datePickerDataFinal,
+			int id_produto) {
 
-		return listaMovimentação = FXCollections.observableArrayList(service.PesquisarNomeProduto(pesquisarProduto));
-
-	}
-
-	private List<Movimentacao> listaTodos() {
-
-		return listaMovimentação = FXCollections.observableArrayList(service.findAll());
+		return listaMovimentação = FXCollections.observableArrayList(
+				movimentacaoService.verMovimentacao(Constraints.setLocalDateToDateSql(datePickerDataInicial.getValue()),
+						Constraints.setLocalDateToDateSql(datePickerDataFinal.getValue()), id_produto));
 
 	}
 
-	private List<Movimentacao> listaCbSetor() {
+	public Produto getProduto() {
+		return produto;
+	}
 
-		return listaMovimentação = FXCollections.observableArrayList(service.PesquisarNomeSetor(pesquisarSetor));
+	public void setProduto(Produto produto) {
+		this.produto = produto;
+	}
+
+	public void carregarCampos(Produto produto) {
+
+		if (movimentacaoService != null) {
+
+			labelProdutoMovimentado.setText("Movimentação do Produto: " + produto.getNome().toUpperCase());
+
+		} else {
+
+			labelProdutoMovimentado.setText("Movimentação");
+
+		}
+
+		setProduto(produto);
+
+	}
+
+	public void limparDate() {
+
+		datePickerDataInicial.setValue(null);
+		datePickerDataFinal.setValue(null);
+
+	}
+
+	public void limparTable() {
+
+		tableViewMovimentacao.setItems(null);
 
 	}
 

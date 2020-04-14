@@ -3,6 +3,7 @@ package model.services;
 import java.util.List;
 import java.util.Optional;
 
+import gui.LoginFormController;
 import gui.util.Alerts;
 import javafx.scene.control.ButtonType;
 import model.dao.CategoriaDao;
@@ -25,6 +26,10 @@ public class CategoriaService {
 			if (result.get() == ButtonType.OK) {
 
 				dao.insert(categoria);
+				
+				new LogSegurancaService().novoLogSeguranca(LoginFormController.getLogado().getNome(),
+						"Categoria criada: " + categoria.getNome().toUpperCase());
+
 
 			}
 
@@ -36,6 +41,9 @@ public class CategoriaService {
 			if (result.get() == ButtonType.OK) {
 
 				dao.update(categoria);
+				
+				new LogSegurancaService().novoLogSeguranca(LoginFormController.getLogado().getNome(),
+						"Categoria editada: " + categoria.getNome().toUpperCase());
 
 			}
 
@@ -45,6 +53,9 @@ public class CategoriaService {
 	public void remove(Categoria categoria) {
 
 		dao.deleteById(categoria.getIdCategoria());
+		
+		new LogSegurancaService().novoLogSeguranca(LoginFormController.getLogado().getNome(),
+				"Categoria excluída: " + categoria.getNome().toUpperCase());
 
 	}
 

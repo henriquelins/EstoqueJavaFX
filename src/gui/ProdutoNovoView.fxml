@@ -12,11 +12,11 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="352.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ProdutoNovoFormController">
    <children>
-      <ToolBar prefHeight="40.0" prefWidth="200.0">
+      <ToolBar prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: gray;">
         <items>
             <AnchorPane prefHeight="30.0" prefWidth="512.0">
                <children>
-                  <Label layoutX="25.0" layoutY="1.0" text="Novo Produto">
+                  <Label layoutX="25.0" layoutY="1.0" text="Novo Produto" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -25,25 +25,61 @@
             </AnchorPane>
         </items>
       </ToolBar>
-      <AnchorPane prefHeight="300.0" prefWidth="600.0">
+      <AnchorPane prefHeight="318.0" prefWidth="600.0">
          <children>
-            <Label layoutX="112.0" layoutY="20.0" text="Nome" />
-            <TextField fx:id="txtIdProduto" editable="false" layoutX="34.0" layoutY="45.0" prefHeight="25.0" prefWidth="63.0" />
-            <TextField fx:id="txtNome" layoutX="112.0" layoutY="45.0" prefHeight="25.0" prefWidth="268.0" />
-            <Label layoutX="486.0" layoutY="20.0" text="Estoq. mínimo" />
-            <TextField fx:id="txtQuantidade" layoutX="393.0" layoutY="45.0" prefHeight="25.0" prefWidth="80.0" />
-            <TextField fx:id="txtEstoqueMinimo" layoutX="486.0" layoutY="45.0" prefHeight="25.0" prefWidth="80.0" />
-            <ComboBox fx:id="comboBoxSetor" layoutX="34.0" layoutY="105.0" onAction="#onSelectComboBoxSetorAction" prefHeight="25.0" prefWidth="196.0" promptText="Selecione o setor..." />
-            <ComboBox fx:id="comboBoxCategoria" layoutX="34.0" layoutY="166.0" prefHeight="25.0" prefWidth="196.0" promptText="Selecione a categoria..." />
-            <TextArea fx:id="txtAreaDescricao" layoutX="256.0" layoutY="106.0" prefHeight="87.0" prefWidth="311.0" />
-            <Button fx:id="btVisualizarFoto" layoutX="456.0" layoutY="232.0" mnemonicParsing="false" onAction="#onBtVisualizarFotoAction" prefHeight="25.0" prefWidth="111.0" text="Visualizar foto" />
-            <Label layoutX="256.0" layoutY="83.0" text="Descrição" />
-            <Label layoutX="34.0" layoutY="20.0" text="Id" />
-            <Label layoutX="34.0" layoutY="83.0" text="Setor" />
-            <Label layoutX="34.0" layoutY="142.0" text="Categoria" />
-            <Label layoutX="391.0" layoutY="20.0" text="Quantidade" />
-          <Button fx:id="btSalvarProduto" layoutX="515.0" layoutY="274.0" mnemonicParsing="false" onAction="#onBtSalvarProdutoAction" prefHeight="25.0" prefWidth="52.0" text="Salvar" />
-            <Button fx:id="btFotoProduto" layoutX="337.0" layoutY="232.0" mnemonicParsing="false" onAction="#onBtFotoProdutoAction" prefHeight="25.0" prefWidth="111.0" text="Buscar Foto" />
+            <Label layoutX="112.0" layoutY="20.0" text="Nome">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font></Label>
+            <TextField fx:id="txtIdProduto" editable="false" layoutX="34.0" layoutY="45.0" prefHeight="25.0" prefWidth="63.0" style="-fx-background-radius: 10;">
+               <font>
+                  <Font size="14.0" />
+               </font></TextField>
+            <TextField fx:id="txtNome" layoutX="112.0" layoutY="45.0" prefHeight="25.0" prefWidth="268.0" style="-fx-background-radius: 10;">
+               <font>
+                  <Font size="14.0" />
+               </font></TextField>
+            <Label layoutX="486.0" layoutY="20.0" text="Estoq. mínimo">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font></Label>
+            <TextField fx:id="txtQuantidade" layoutX="393.0" layoutY="45.0" prefHeight="25.0" prefWidth="80.0" style="-fx-background-radius: 10;">
+               <font>
+                  <Font size="14.0" />
+               </font></TextField>
+            <TextField fx:id="txtEstoqueMinimo" layoutX="486.0" layoutY="45.0" prefHeight="25.0" prefWidth="80.0" style="-fx-background-radius: 10;">
+               <font>
+                  <Font size="14.0" />
+               </font></TextField>
+            <ComboBox fx:id="comboBoxSetor" layoutX="34.0" layoutY="105.0" onAction="#onSelectComboBoxSetorAction" prefHeight="25.0" prefWidth="196.0" promptText="SELECIONE O SETOR..." style="-fx-background-radius: 10;" />
+            <ComboBox fx:id="comboBoxCategoria" layoutX="34.0" layoutY="166.0" prefHeight="25.0" prefWidth="196.0" promptText="SELECIONE A CATEGORIA..." style="-fx-background-radius: 10;" />
+            <TextArea fx:id="txtAreaDescricao" layoutX="256.0" layoutY="106.0" prefHeight="87.0" prefWidth="311.0">
+               <font>
+                  <Font size="14.0" />
+               </font></TextArea>
+            <Button fx:id="btVisualizarFoto" layoutX="437.0" layoutY="221.0" mnemonicParsing="false" onAction="#onBtVisualizarFotoAction" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 10;" text="VISUALIZAR FOTO" />
+            <Label layoutX="256.0" layoutY="83.0" text="Descrição">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font></Label>
+            <Label layoutX="34.0" layoutY="20.0" text="Código">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font></Label>
+            <Label layoutX="34.0" layoutY="83.0" text="Setor">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font></Label>
+            <Label layoutX="34.0" layoutY="142.0" text="Categoria">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font></Label>
+            <Label layoutX="391.0" layoutY="20.0" text="Quantidade">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font></Label>
+          <Button fx:id="btSalvarProduto" layoutX="483.0" layoutY="261.0" mnemonicParsing="false" onAction="#onBtSalvarProdutoAction" prefHeight="30.0" prefWidth="87.0" style="-fx-background-radius: 10;" text="SALVAR" />
+            <Button fx:id="btFotoProduto" layoutX="318.0" layoutY="221.0" mnemonicParsing="false" onAction="#onBtFotoProdutoAction" prefHeight="30.0" prefWidth="111.0" style="-fx-background-radius: 10;" text="BUSCAR FOTO" />
          </children>
       </AnchorPane>
    </children>

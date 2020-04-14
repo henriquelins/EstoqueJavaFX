@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="509.0" prefWidth="1064.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MovimentacaoDoProdutoListFormController">
+   <content>
+      <VBox prefHeight="500.0" prefWidth="1039.0">
+         <children>
+            <ToolBar prefHeight="23.0" prefWidth="1039.0" style="-fx-background-color: gray;">
+              <items>
+                  <Label fx:id="labelMovimentoDoProduto" prefHeight="25.0" prefWidth="604.0" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+              </items>
+            </ToolBar>
+            <ToolBar prefHeight="49.0" prefWidth="1039.0">
+               <items>
+                  <AnchorPane prefHeight="60.0" prefWidth="1002.0">
+                     <children>
+                        <Button fx:id="buttonPesquisar" alignment="BASELINE_CENTER" contentDisplay="CENTER" defaultButton="true" layoutX="259.0" layoutY="17.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0" style="-fx-background-radius: 10;" text="PESQUISAR" />
+                        <DatePicker fx:id="datePickerDataInicial" layoutX="7.0" layoutY="17.0" prefHeight="30.0" prefWidth="110.0" promptText="Data inicial" />
+                        <DatePicker fx:id="datePickerDataFinal" layoutX="132.0" layoutY="17.0" prefHeight="30.0" prefWidth="110.0" promptText="Data final" />
+                        <Button fx:id="buttonExportarParaExcel" layoutX="370.0" layoutY="17.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="154.0" style="-fx-background-radius: 10;" text="EXPORTAR PARA EXCEL" />
+                     </children>
+                  </AnchorPane>
+               </items>
+            </ToolBar>
+            <TableView fx:id="tableViewMovimentacao" prefHeight="432.0" prefWidth="800.0" VBox.vgrow="SOMETIMES">
+              <columns>
+                  <TableColumn fx:id="tableColumnIndex" prefWidth="40.0" style="-fx-alignment: CENTER;" text="#" />
+                  <TableColumn fx:id="tableColumnTipo" prefWidth="150.0" style="-fx-alignment: CENTER;" text="Movimentação" />
+                  <TableColumn fx:id="tableColumnEstoqueAnterior" minWidth="0.0" prefWidth="120.0" style="-fx-alignment: CENTER;" text="Estoque anterior" />
+                  <TableColumn fx:id="tableColumnValorDoMovimentacao" prefWidth="150.0" style="-fx-alignment: CENTER;" text="Valor da movimentação" />
+                  <TableColumn fx:id="tableColumnEstoqueAtual" prefWidth="150.0" style="-fx-alignment: CENTER;" text="Estoque atual" />
+                  <TableColumn fx:id="tableColumnObservacoes" style="-fx-alignment: CENTER;" text="Observações" />
+                  <TableColumn fx:id="tableColumnUsuario" prefWidth="150.0" style="-fx-alignment: CENTER;" text="Usuário" />
+                  <TableColumn fx:id="tableColumnDataDaMovimentacao" prefWidth="150.0" style="-fx-alignment: CENTER;" text="Data do movimentação" />
+              </columns>
+            </TableView>
+            <ToolBar prefHeight="40.0" prefWidth="200.0">
+               <items>
+                  <AnchorPane prefHeight="30.0" prefWidth="1022.0" />
+               </items></ToolBar>
+         </children>
+      </VBox>
+   </content>
+</ScrollPane>

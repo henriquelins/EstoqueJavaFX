@@ -31,7 +31,7 @@ public class SetorDaoJDBC implements SetorDao {
 
 			st = conn.prepareStatement("INSERT INTO setor (nome) VALUES (?)");
 
-			st.setString(1, setor.getNome());
+			st.setString(1, setor.getNome().toUpperCase());
 			
 			int linhas = st.executeUpdate(); 
 			
@@ -73,7 +73,7 @@ public class SetorDaoJDBC implements SetorDao {
 
 			st = conn.prepareStatement("UPDATE setor SET nome = ? WHERE id_setor = ?");
 
-			st.setString(1, setor.getNome());
+			st.setString(1, setor.getNome().toUpperCase());
 			st.setInt(2, setor.getIdSetor());
 
 			st.executeUpdate();
@@ -212,7 +212,7 @@ public class SetorDaoJDBC implements SetorDao {
 		
 		Setor setor = new Setor();
 		setor.setIdSetor(rs.getInt("id_setor"));
-		setor.setNome(rs.getString("nome"));
+		setor.setNome(rs.getString("nome").toUpperCase());
 		return setor;
 		
 	}
@@ -227,7 +227,7 @@ public class SetorDaoJDBC implements SetorDao {
 		try {
 
 			st = conn.prepareStatement("SELECT id_setor FROM setor where nome = ?");
-			st.setString(1, nomeSetor);
+			st.setString(1, nomeSetor.toUpperCase());
 
 			rs = st.executeQuery();
 

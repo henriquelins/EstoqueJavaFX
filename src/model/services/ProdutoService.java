@@ -3,6 +3,7 @@ package model.services;
 import java.util.List;
 import java.util.Optional;
 
+import gui.LoginFormController;
 import gui.PrincipalFormController;
 import gui.util.Alerts;
 import javafx.scene.control.ButtonType;
@@ -25,22 +26,29 @@ public class ProdutoService {
 		if (produto.getIdProduto() == null) {
 
 			Optional<ButtonType> result = Alerts.showConfirmation("Confirmação",
-					"Você deseja salvar o novo  " + produto.getNome() + " ?");
+					"Você deseja salvar o novo produto " + produto.getNome().toUpperCase() + " ?");
 
 			if (result.get() == ButtonType.OK) {
 
 				dao.insert(produto);
+				
+				new LogSegurancaService().novoLogSeguranca(LoginFormController.getLogado().getNome(),
+						"Produto criado: " + produto.getNome().toUpperCase());
 
 			}
 
 		} else {
 
 			Optional<ButtonType> result = Alerts.showConfirmation("Confirmação",
-					"Você deseja salvar a edição do produto " + produto.getNome() + " ?");
+					"Você deseja salvar a edição do produto " + produto.getNome().toUpperCase() + " ?");
 
 			if (result.get() == ButtonType.OK) {
 
 				dao.update(produto);
+				
+				new LogSegurancaService().novoLogSeguranca(LoginFormController.getLogado().getNome(),
+						"Produto editado: " + produto.getNome().toUpperCase());
+
 
 			}
 
@@ -51,6 +59,10 @@ public class ProdutoService {
 	public void remove(Produto produto) {
 
 		dao.deleteById(produto.getIdProduto());
+		
+		new LogSegurancaService().novoLogSeguranca(LoginFormController.getLogado().getNome(),
+				"Produto excluído: " + produto.getNome().toUpperCase());
+
 
 	}
 

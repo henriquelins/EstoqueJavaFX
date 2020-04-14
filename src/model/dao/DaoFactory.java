@@ -2,6 +2,7 @@ package model.dao;
 
 import db.DB;
 import model.dao.impl.CategoriaDaoJDBC;
+import model.dao.impl.LogSegurancaDaoJDBC;
 import model.dao.impl.MovimentacaoDaoJDBC;
 import model.dao.impl.ProdutoDaoJDBC;
 import model.dao.impl.SetorDaoJDBC;
@@ -36,6 +37,12 @@ public class DaoFactory {
 	public static CategoriaDao createCategoriaDao() {
 
 		return new CategoriaDaoJDBC(DB.getConnection());
+
+	}
+
+	public static LogSegurancaDao createLogSegurancaDao() {
+
+		return new LogSegurancaDaoJDBC(DB.getConnection());
 
 	}
 

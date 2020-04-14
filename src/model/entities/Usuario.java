@@ -9,11 +9,11 @@ public class Usuario implements Serializable {
 	private String nome;
 	private String login;
 	private String senha;
-	private int acesso;
+	private Integer acesso;
 
 	public Usuario() {}
 
-	public Usuario(Integer idUsuario, String nome, String login, String senha, int acesso) {
+	public Usuario(Integer idUsuario, String nome, String login, String senha, Integer acesso) {
 
 		this.idUsuario = idUsuario;
 		this.nome = nome;
@@ -119,8 +119,8 @@ public class Usuario implements Serializable {
 				+ ", acesso=" + acesso + "]";
 	}
 	
-	public String usuarioLogado() {
-		return "Usuario logado - " + nome + " :)";
+	public String toUsuarioLogado() {
+		return "Bem vindo: " + nome + " ";
 	}
 
 }

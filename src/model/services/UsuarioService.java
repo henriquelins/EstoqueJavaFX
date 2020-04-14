@@ -3,6 +3,7 @@ package model.services;
 import java.util.List;
 import java.util.Optional;
 
+import gui.LoginFormController;
 import gui.util.Alerts;
 import javafx.scene.control.ButtonType;
 import model.dao.DaoFactory;
@@ -28,9 +29,11 @@ public class UsuarioService {
 					"Você deseja salvar o usuário " + usuario.getNome() + " ?");
 
 			if (result.get() == ButtonType.OK) {
-
+				
 				dao.insert(usuario);
-
+				
+				new LogSegurancaService().novoLogSeguranca(LoginFormController.getLogado().getNome(),
+						"Usuário criado: " + usuario.getNome().toUpperCase());
 			}
 
 		} else {
@@ -41,6 +44,9 @@ public class UsuarioService {
 			if (result.get() == ButtonType.OK) {
 
 				dao.update(usuario);
+				
+				new LogSegurancaService().novoLogSeguranca(LoginFormController.getLogado().getNome(),
+						"Usuário editado: " + usuario.getNome().toUpperCase());
 
 			}
 
@@ -50,6 +56,8 @@ public class UsuarioService {
 	public void remove(Usuario usuario) {
 
 		dao.deleteById(usuario.getIdUsuario());
+		new LogSegurancaService().novoLogSeguranca(LoginFormController.getLogado().getNome(),
+				"Usuário excluído: " + usuario.getNome().toUpperCase());
 
 	}
 

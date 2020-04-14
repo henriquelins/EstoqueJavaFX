@@ -21,6 +21,28 @@ public class DB {
 			try {
 
 				String url = PropertiesFile.loadPropertiesDB().getProperty("dburl");
+				conn = DriverManager.getConnection(url, PropertiesFile.loadPropertiesDB());
+
+			}
+
+			catch (SQLException e) {
+
+				Alerts.showAlert("Controle de Saldo", "Erro ao abrir o banco de dados", e.getLocalizedMessage(),
+						AlertType.ERROR);
+			}
+
+		}
+
+		return conn;
+	}
+
+	public static Connection getConnectionTeste() {
+
+		if (conn == null) {
+
+			try {
+
+				String url = PropertiesFile.loadPropertiesDB().getProperty("dburl");
 
 				conn = DriverManager.getConnection(url, PropertiesFile.loadPropertiesDB());
 
@@ -28,8 +50,9 @@ public class DB {
 
 			catch (SQLException e) {
 
-				Alerts.showAlert("Controle de Estoque", "Erro ao abrir o banco de dados", e.getLocalizedMessage(),
-						AlertType.ERROR);
+				// Alerts.showAlert("Controle de Saldo", "Erro ao abrir o banco de dados",
+				// e.getLocalizedMessage(),
+				// AlertType.ERROR);
 
 			}
 		}
