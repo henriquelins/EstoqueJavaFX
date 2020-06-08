@@ -11,7 +11,7 @@ import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
 
-import application.EstoqueJavaFxMain;
+import application.SCE1Main;
 import db.DbIntegrityException;
 import exportarXLS.ExportarListaProdutosEstoqueXLS;
 import gui.forms.Forms;
@@ -181,6 +181,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	static String pesquisarSetor;
 
 	// Evento clique na linha da tabela
+
 	@FXML
 	public void onMouseClickedAction(MouseEvent event) {
 
@@ -200,9 +201,6 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 				labelStatus.setText(status(produto.getEstoqueMinimo(), produto.getQuantidade()));
 				labelDetalhes.setText(produto.getDescricao().toUpperCase());
 
-				new LogSegurancaService().novoLogSeguranca(usuario.getNome(),
-						"Produto: " + produto.getNome().toUpperCase());
-
 				if (produto.getFoto() == null) {
 
 					imageViewProduto.setImage(new Image(Strings.getSemFoto()));
@@ -219,6 +217,9 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 					}
 
 				}
+
+				new LogSegurancaService().novoLogSeguranca(usuario.getNome(),
+						"Produto: " + produto.getNome().toUpperCase());
 
 			} else {
 
@@ -363,8 +364,12 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	public void onBtNovoAction(ActionEvent event) {
 
 		new LogSegurancaService().novoLogSeguranca(usuario.getNome(), Strings.getLogMessage012());
-
 		createProdutoDialogForm(Strings.getProdutoNovoView());
+		
+		apagarDetalhes();
+		tableViewProduto.setItems(null);
+		
+		limparCbPesquisaSetor();
 
 	}
 
@@ -668,7 +673,8 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 								service.remove(produto);
 								apagarDetalhes();
 								tableViewProduto.setItems(null);
-								cbPesquisaSetor.getSelectionModel().selectFirst();
+								
+								limparCbPesquisaSetor();
 
 							} catch (DbIntegrityException e) {
 
@@ -700,14 +706,14 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	@FXML
 	public void onBtPesquisarAction(ActionEvent event) {
 
+		limparCbPesquisaSetor();
+
 		if (txtPesquisar.getText() == null || txtPesquisar.getText().trim().equals("")) {
 
 			Alerts.showAlert("Pesquisar produto", "Campo obrigatório para pesquisar", "Digite o nome do produto",
 					AlertType.ERROR);
 
 		} else {
-
-			cbPesquisaSetor.getSelectionModel().selectFirst();
 
 			setPesquisarProduto(txtPesquisar.getText());
 
@@ -747,11 +753,9 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 	public void onCbPesquisarAction(ActionEvent event) {
 
 		if (cbPesquisaSetor.getSelectionModel().getSelectedItem() == null
-				|| cbPesquisaSetor.getSelectionModel().getSelectedItem().equals("SELECIONE O SETOR...")) {
+				|| cbPesquisaSetor.getSelectionModel().getSelectedItem().trim().equals("")) {
 
-			// Alerts.showAlert("Pesquisar setor", "Campo obrigatório para pesquisar",
-			// "Selecione o setor",
-			// AlertType.ERROR);
+			limparCbPesquisaSetor();
 
 		} else {
 
@@ -775,6 +779,8 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 					updateTableView();
 					apagarDetalhes();
 
+					limparCbPesquisaSetor();
+
 				} else {
 
 					updateTableView();
@@ -786,6 +792,8 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 				tableViewProduto.setItems(null);
 				apagarDetalhes();
 
+				limparCbPesquisaSetor();
+
 			} else {
 
 				listaCbSetor();
@@ -796,6 +804,8 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 					updateTableView();
 					apagarDetalhes();
+
+					limparCbPesquisaSetor();
 
 				} else {
 
@@ -832,7 +842,6 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		SetorService setorService = new SetorService();
 		List<String> listaSetor = new ArrayList<>();
 
-		listaSetor.add("SELECIONE O SETOR...");
 		listaSetor.add("TODOS");
 		listaSetor.add("LIMPAR");
 
@@ -844,6 +853,11 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 		return listaSetor;
 
+	}
+
+	private void limparCbPesquisaSetor() {
+		cbPesquisaSetor.getSelectionModel().clearSelection();
+		cbPesquisaSetor.setItems(FXCollections.observableArrayList(listaSetor()));
 	}
 
 	@Override
@@ -868,7 +882,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 		tableColumnStatus.setCellValueFactory((param) -> new SimpleStringProperty(
 				status(param.getValue().getEstoqueMinimo(), param.getValue().getQuantidade())));
 
-		Stage stage = (Stage) EstoqueJavaFxMain.getMainScene().getWindow();
+		Stage stage = (Stage) SCE1Main.getMainScene().getWindow();
 		tableViewProduto.prefHeightProperty().bind(stage.heightProperty());
 
 		service = new ProdutoService();
@@ -926,10 +940,10 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 				FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 				VBox pane = loader.load();
 
-				EstoqueJavaFxMain.setDialogScene(new Scene(pane));
+				SCE1Main.setDialogScene(new Scene(pane));
 				Stage produtoStage = new Stage();
 				produtoStage.setTitle(Strings.getTitle());
-				produtoStage.setScene(EstoqueJavaFxMain.getDialogScene());
+				produtoStage.setScene(SCE1Main.getDialogScene());
 				produtoStage.setResizable(false);
 				produtoStage.initModality(Modality.APPLICATION_MODAL);
 				produtoStage.initOwner(null);
@@ -976,10 +990,10 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 				pane.setFitToHeight(true);
 				pane.setFitToWidth(true);
 
-				EstoqueJavaFxMain.setDialogScene(new Scene(pane));
+				SCE1Main.setDialogScene(new Scene(pane));
 				Stage produtoStage = new Stage();
 				produtoStage.setTitle(Strings.getTitle());
-				produtoStage.setScene(EstoqueJavaFxMain.getDialogScene());
+				produtoStage.setScene(SCE1Main.getDialogScene());
 				produtoStage.setResizable(true);
 				produtoStage.setMaximized(true);
 				produtoStage.initModality(Modality.APPLICATION_MODAL);
@@ -1023,10 +1037,10 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 				controller.setProdutoService(new ProdutoService());
 				controller.subscribeDataChangeListener(this);
 
-				EstoqueJavaFxMain.setDialogScene(new Scene(pane));
+				SCE1Main.setDialogScene(new Scene(pane));
 				Stage produtoStage = new Stage();
 				produtoStage.setTitle(Strings.getTitle());
-				produtoStage.setScene(EstoqueJavaFxMain.getDialogScene());
+				produtoStage.setScene(SCE1Main.getDialogScene());
 				produtoStage.setResizable(false);
 				produtoStage.initModality(Modality.APPLICATION_MODAL);
 				produtoStage.initOwner(null);
@@ -1071,10 +1085,10 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 				controller.setProdutoService(new ProdutoService());
 				controller.subscribeDataChangeListener(this);
 
-				EstoqueJavaFxMain.setDialogScene(new Scene(pane));
+				SCE1Main.setDialogScene(new Scene(pane));
 				Stage produtoStage = new Stage();
 				produtoStage.setTitle(Strings.getTitle());
-				produtoStage.setScene(EstoqueJavaFxMain.getDialogScene());
+				produtoStage.setScene(SCE1Main.getDialogScene());
 				produtoStage.setResizable(false);
 				produtoStage.initModality(Modality.APPLICATION_MODAL);
 				produtoStage.initOwner(null);
@@ -1117,7 +1131,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 				Scene scene = new Scene(root);
 				// scene.setFill(Color.TRANSPARENT);
 
-				EstoqueJavaFxMain.setMainScene(scene);
+				SCE1Main.setMainScene(scene);
 
 				MovimentacaoFormController controller = loader.getController();
 				controller.setProduto(produto);
@@ -1127,7 +1141,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 				Stage produtoStage = new Stage();
 				produtoStage.setTitle(Strings.getTitle());
-				produtoStage.setScene(EstoqueJavaFxMain.getMainScene());
+				produtoStage.setScene(SCE1Main.getMainScene());
 				produtoStage.setResizable(false);
 				produtoStage.initModality(Modality.APPLICATION_MODAL);
 				produtoStage.initOwner(null);
@@ -1167,10 +1181,10 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 				FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 				BorderPane pane = loader.load();
 
-				EstoqueJavaFxMain.setDialogScene(new Scene(pane));
+				SCE1Main.setDialogScene(new Scene(pane));
 				Stage produtoStage = new Stage();
 				produtoStage.setTitle(Strings.getTitle());
-				produtoStage.setScene(EstoqueJavaFxMain.getDialogScene());
+				produtoStage.setScene(SCE1Main.getDialogScene());
 				produtoStage.setResizable(false);
 				produtoStage.initModality(Modality.APPLICATION_MODAL);
 				produtoStage.initOwner(null);
@@ -1202,10 +1216,10 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 
-			EstoqueJavaFxMain.setDialogScene(new Scene(pane));
+			SCE1Main.setDialogScene(new Scene(pane));
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle(Strings.getTitle());
-			produtoStage.setScene(EstoqueJavaFxMain.getDialogScene());
+			produtoStage.setScene(SCE1Main.getDialogScene());
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);

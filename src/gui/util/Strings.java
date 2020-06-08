@@ -51,15 +51,15 @@ public class Strings {
 	}
 
 	// Properties
-	
+
 	public static String getPropertiesBackup() {
 
 		return "backup.properties";
 
 	}
-	
+
 	public static String getPropertiesRestore() {
-	
+
 		return "restore.properties";
 
 	}
@@ -73,7 +73,7 @@ public class Strings {
 
 	public static String getPropertiesSocket() {
 
-		//return "C://Temp/socket.properties";
+		// return "C://Temp/socket.properties";
 		return "socket.properties";
 
 	}
@@ -189,7 +189,7 @@ public class Strings {
 		return "/gui/SetorNovoView.fxml";
 
 	}
-	
+
 	public static String getBackupBancoView() {
 
 		return "/gui/BackupBancoView.fxml";
@@ -249,150 +249,149 @@ public class Strings {
 		return "Erro ao carregar a tela";
 
 	}
-	
+
 	// LogSeguranca Messagens
 
-		public static String getLogMessage001() {
+	public static String getLogMessage001() {
 
-			return "Login confirmado";
+		return "Login confirmado";
 
-		}
+	}
 
-		public static String getLogMessage002() {
+	public static String getLogMessage002() {
 
-			return "Login não confirmado";
-		}
+		return "Login não confirmado";
+	}
 
-		public static String getLogMessage003() {
+	public static String getLogMessage003() {
 
-			return "Tela novo cliente";
-		}
+		return "Tela novo cliente";
+	}
 
-		public static String getLogMessage004() {
+	public static String getLogMessage004() {
 
-			return "Exportar para excel";
-		}
+		return "Exportar para excel";
+	}
 
-		public static String getLogMessage005() {
+	public static String getLogMessage005() {
 
-			return "Tela nova Categoria";
-		}
+		return "Tela nova Categoria";
+	}
 
-		public static String getLogMessage006() {
+	public static String getLogMessage006() {
 
-			return "Tela nova Setor";
-		}
+		return "Tela nova Setor";
+	}
 
-		public static String getLogMessage007() {
+	public static String getLogMessage007() {
 
-			return "Logout";
-		}
+		return "Logout";
+	}
 
-		public static String getLogMessage008() {
+	public static String getLogMessage008() {
 
-			return "Fechar programa";
-		}
+		return "Fechar programa";
+	}
 
-		public static String getLogMessage009() {
+	public static String getLogMessage009() {
 
-			return "Tela novo usuário";
-		}
+		return "Tela novo usuário";
+	}
 
-		public static String getLogMessage010() {
+	public static String getLogMessage010() {
 
-			return "Tela novo vendedor";
+		return "Tela novo vendedor";
 
-		}
+	}
 
-		public static String getLogMessage011() {
+	public static String getLogMessage011() {
 
-			return "Tela nova unidade";
+		return "Tela nova unidade";
 
-		}
+	}
 
-		public static String getLogMessage012() {
+	public static String getLogMessage012() {
 
-			return "Tela nova produto";
+		return "Tela nova produto";
 
-		}
+	}
 
-		public static String getLogMessage013() {
+	public static String getLogMessage013() {
 
-			return "Tela ajuda";
+		return "Tela ajuda";
 
-		}
+	}
 
-		public static String getLogMessage014() {
+	public static String getLogMessage014() {
 
-			return "Tela ver movimentação";
+		return "Tela ver movimentação";
 
-		}
+	}
 
-		public static String getLogMessage015() {
+	public static String getLogMessage015() {
 
-			return "Tela movimentação";
+		return "Tela movimentação";
 
-		}
+	}
 
-		public static String getLogMessage016() {
+	public static String getLogMessage016() {
 
-			return "Tela editar produto";
+		return "Tela editar produto";
 
-		}
+	}
 
-		public static String getLogMessage017() {
+	public static String getLogMessage017() {
 
-			return "Tela excluir produto";
+		return "Tela excluir produto";
 
-		}
+	}
 
-		public static String getLogMessage018() {
+	public static String getLogMessage018() {
 
-			return "Tela ver lançamento";
+		return "Tela ver lançamento";
 
-		}
+	}
 
-		public static String getLogMessage019() {
+	public static String getLogMessage019() {
 
-			return "Lançamento servico: ";
+		return "Lançamento servico: ";
 
-		}
+	}
 
-		public static String getLogMessage020() {
+	public static String getLogMessage020() {
 
-			return "Salvar servico: ";
+		return "Salvar servico: ";
 
-		}
+	}
 
-		public static String getLogMessage021() {
+	public static String getLogMessage021() {
 
-			return "Editar servico: ";
+		return "Editar servico: ";
 
-		}
-		
-		public static String getLogMessage022() {
+	}
 
-			return "Log de Segurança ";
+	public static String getLogMessage022() {
 
-		}
-		
-		public static String getLogMessage023() {
+		return "Log de Segurança ";
 
-			return "Tela de Backup Banco";
+	}
 
-		}
-		
-		public static String getLogMessage024() {
+	public static String getLogMessage023() {
 
-			return "Fazer backup do banco";
+		return "Tela de Backup Banco";
 
-		}
-		
-		public static String getLogMessage025() {
+	}
 
-			return "Fazer restauração do banco";
+	public static String getLogMessage024() {
 
-		}
+		return "Fazer backup do banco";
 
+	}
+
+	public static String getLogMessage025() {
+
+		return "Fazer restauração do banco";
+
+	}
 
 }

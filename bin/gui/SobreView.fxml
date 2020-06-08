@@ -27,7 +27,7 @@
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="313.0" prefWidth="600.0">
          <children>
             <ImageView fx:id="imageView" fitHeight="233.0" fitWidth="232.0" layoutX="21.0" layoutY="43.0" pickOnBounds="true" preserveRatio="true" />
-            <TextArea editable="false" layoutX="283.0" layoutY="43.0" prefHeight="233.0" prefWidth="285.0" text="Versão do Produto&#10;EstoqueJavaFX 1.0&#10;Data: 22-07-2019&#10;&#10;&#10;Sistema operacional&#10;Windows 10, amd64, 10.0&#10;&#10;&#10;&#10;Copyright (c) 2019, Henrique Lins, Conecta LTDA.">
+            <TextArea editable="false" layoutX="283.0" layoutY="43.0" prefHeight="233.0" prefWidth="285.0" text="Versão do Produto&#10;EstoqueJavaFX 1.0&#10;Data: 01-05-2020&#10;&#10;&#10;&#10;Sistema operacional&#10;Windows 7, Windows 10&#10;&#10;&#10;&#10;Copyright (c) 2020, Desenvolvedor Henrique Lins.">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>

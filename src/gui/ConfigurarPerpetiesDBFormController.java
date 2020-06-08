@@ -9,7 +9,7 @@ import java.sql.Connection;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import application.EstoqueJavaFxMain;
+import application.SCE1Main;
 import db.DB;
 import gui.forms.Forms;
 import gui.util.Alerts;
@@ -91,10 +91,10 @@ public class ConfigurarPerpetiesDBFormController implements Initializable {
 
 			try {
 
-				EstoqueJavaFxMain.setPortSocket(Integer.parseInt(
+				SCE1Main.setPortSocket(Integer.parseInt(
 						PropertiesFile.loadPropertiesSocket().getProperty(Strings.getPropertiessocketPort())));
-				EstoqueJavaFxMain.setServerSocket(new ServerSocket(EstoqueJavaFxMain.getPortSocket()));
-				EstoqueJavaFxMain.setSocket(new Socket(InetAddress.getLocalHost().getHostAddress(), EstoqueJavaFxMain.getPortSocket()));
+				SCE1Main.setServerSocket(new ServerSocket(SCE1Main.getPortSocket()));
+				SCE1Main.setSocket(new Socket(InetAddress.getLocalHost().getHostAddress(), SCE1Main.getPortSocket()));
 
 				try {
 

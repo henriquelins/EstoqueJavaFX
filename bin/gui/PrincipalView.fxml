@@ -13,6 +13,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -27,29 +28,56 @@
          <children>
             <MenuBar fx:id="menuBarPrincipal">
               <menus>
-                  <Menu mnemonicParsing="false" text="Arquivo">
+                  <Menu text="_Arquivo">
                      <items>
-                        <MenuItem fx:id="menuItemLogout" mnemonicParsing="false" onAction="#onMenuItemLogoutAction" text="Logout" />
-                        <MenuItem fx:id="menuItemSair" mnemonicParsing="false" onAction="#onMenuItemSairAction" text="Sair" />
+                        <MenuItem fx:id="menuItemLogout" onAction="#onMenuItemLogoutAction" text="_Logout">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="L" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                        <MenuItem fx:id="menuItemSair" onAction="#onMenuItemSairAction" text="_Sair">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
                      </items>
                   </Menu>
-                <Menu mnemonicParsing="false" text="Cadastro">
+                <Menu text="_Cadastro">
                   <items>
-                        <MenuItem fx:id="menuItemUsuario" mnemonicParsing="false" onAction="#onMenuItemUsuario" text="Usuários" />
-                        <MenuItem fx:id="menuItemSetor" mnemonicParsing="false" onAction="#onMenuItemSetor" text="Setor" />
-                        <MenuItem fx:id="menuItemCategoria" mnemonicParsing="false" onAction="#onMenuItemCategoria" text="Categoria" />
-                    <MenuItem fx:id="menuItemProduto" mnemonicParsing="false" onAction="#onMenuItemProduto" text="Novo Produto" />
+                        <MenuItem fx:id="menuItemUsuario" onAction="#onMenuItemUsuario" text="_Usuários">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="U" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                        <MenuItem fx:id="menuItemSetor" onAction="#onMenuItemSetor" text="Seto_r">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="R" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                        <MenuItem fx:id="menuItemCategoria" onAction="#onMenuItemCategoria" text="_Categoria">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="C" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                    <MenuItem fx:id="menuItemProduto" onAction="#onMenuItemProduto" text="_Produto">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="P" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
                   </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Ferramentas">
+                <Menu text="_Ferramentas">
                   <items>
-                        <MenuItem fx:id="menuItemBackup" mnemonicParsing="false" onAction="#onMenuItemBackupAction" text="Backup" />
-                    <MenuItem fx:id="menuItemLog" mnemonicParsing="false" onAction="#onMenuItemLogAction" text="Log" />
+                        <MenuItem fx:id="menuItemBackup" onAction="#onMenuItemBackupAction" text="_Backup">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="B" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                    <MenuItem fx:id="menuItemLog" onAction="#onMenuItemLogAction" text="Lo_g">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="G" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
                   </items>
                 </Menu>
-                  <Menu mnemonicParsing="false" text="Ajuda">
+                  <Menu text="_Ajuda">
                      <items>
-                        <MenuItem fx:id="menuItemSobre" mnemonicParsing="false" onAction="#onMenuItemSobre" text="Sobre" />
+                        <MenuItem fx:id="menuItemSobre" onAction="#onMenuItemSobre" text="S_obre">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
                      </items>
                   </Menu>
               </menus>
@@ -58,7 +86,7 @@
               <items>
                   <AnchorPane prefHeight="31.0" prefWidth="1181.0">
                      <children>
-                      <Button fx:id="btPesquisar" alignment="TOP_CENTER" contentDisplay="CENTER" defaultButton="true" layoutX="280.0" layoutY="3.0" mnemonicParsing="false" onAction="#onBtPesquisarAction" prefHeight="25.0" prefWidth="90.0" style="-fx-background-radius: 10;" text="PESQUISAR" />
+                      <Button fx:id="btPesquisar" accessibleRole="IMAGE_VIEW" alignment="TOP_CENTER" contentDisplay="CENTER" defaultButton="true" layoutX="280.0" layoutY="3.0" onAction="#onBtPesquisarAction" prefHeight="25.0" prefWidth="90.0" style="-fx-background-radius: 10;" text="PESQUISAR" />
                         <TextField fx:id="txtPesquisar" accessibleRole="IMAGE_VIEW" layoutX="9.0" layoutY="3.0" prefHeight="27.0" prefWidth="263.0" promptText="Pesquisar produtos..." style="-fx-background-radius: 10;">
                            <opaqueInsets>
                               <Insets />

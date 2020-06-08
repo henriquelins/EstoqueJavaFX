@@ -19,14 +19,11 @@ public class DB {
 		if (conn == null) {
 
 			try {
-
 				String url = PropertiesFile.loadPropertiesDB().getProperty("dburl");
 				conn = DriverManager.getConnection(url, PropertiesFile.loadPropertiesDB());
-
 			}
 
 			catch (SQLException e) {
-
 				Alerts.showAlert("Controle de Saldo", "Erro ao abrir o banco de dados", e.getLocalizedMessage(),
 						AlertType.ERROR);
 			}
@@ -41,19 +38,14 @@ public class DB {
 		if (conn == null) {
 
 			try {
-
 				String url = PropertiesFile.loadPropertiesDB().getProperty("dburl");
 
 				conn = DriverManager.getConnection(url, PropertiesFile.loadPropertiesDB());
-
 			}
 
 			catch (SQLException e) {
-
-				// Alerts.showAlert("Controle de Saldo", "Erro ao abrir o banco de dados",
-				// e.getLocalizedMessage(),
-				// AlertType.ERROR);
-
+				Alerts.showAlert("Controle de Saldo", "Erro ao abrir o banco de dados", e.getLocalizedMessage(),
+						AlertType.ERROR);
 			}
 		}
 

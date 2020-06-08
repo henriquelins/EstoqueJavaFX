@@ -6,6 +6,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class Alerts {
@@ -17,6 +18,8 @@ public class Alerts {
 		alert.setTitle(title);
 		alert.setHeaderText(header);
 		alert.setContentText(content);
+		
+		alert.initModality(Modality.APPLICATION_MODAL);
 
 		Stage dialogStage = (Stage) alert.getDialogPane().getScene().getWindow();
 		dialogStage.getIcons().add(new Image(Strings.getIcone()));

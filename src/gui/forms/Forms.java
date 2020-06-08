@@ -2,7 +2,7 @@ package gui.forms;
 
 import java.io.IOException;
 
-import application.EstoqueJavaFxMain;
+import application.SCE1Main;
 import gui.ConfigurarPerpetiesDBFormController;
 import gui.PrincipalFormController;
 import gui.util.Alerts;
@@ -26,7 +26,6 @@ import model.entities.Usuario;
 public class Forms {
 
 	// Todas são telas simples sem DataChangeList
-
 	// forms tela splash
 
 	public void splashForm(String tela) throws IOException {
@@ -63,11 +62,8 @@ public class Forms {
 			fadeIn.play();
 
 			// Depois de fade in, inicia o fade out
-			fadeIn.setOnFinished((e) -> {
 
-				fadeOut.play();
-
-			});
+			fadeOut.play();
 
 			// Depois do fade out, carrega a tela inicial - login
 			fadeOut.setOnFinished((e) -> {
@@ -77,7 +73,9 @@ public class Forms {
 
 			});
 
-		} catch (IOException ex) {
+		} catch (
+
+		IOException ex) {
 
 			Alerts.showAlert("Controle de Estoque", "Erro ao abrir o splash", ex.getLocalizedMessage(),
 					AlertType.ERROR);
@@ -97,11 +95,11 @@ public class Forms {
 			Scene scene = new Scene(root);
 			scene.setFill(Color.TRANSPARENT);
 
-			EstoqueJavaFxMain.setMainScene(scene);
+			SCE1Main.setMainScene(scene);
 
 			Stage principalStage = new Stage();
 			principalStage.setTitle(Strings.getTitle());
-			principalStage.setScene(EstoqueJavaFxMain.getMainScene());
+			principalStage.setScene(SCE1Main.getMainScene());
 			principalStage.setResizable(false);
 
 			principalStage.initStyle(StageStyle.TRANSPARENT);
@@ -185,7 +183,7 @@ public class Forms {
 		}
 
 	}
-	
+
 	public void LogSegurancaForm(String tela) {
 
 		try {
@@ -211,7 +209,7 @@ public class Forms {
 		}
 
 	}
-	
+
 	public void BackupBancoForm(String tela) {
 
 		try {

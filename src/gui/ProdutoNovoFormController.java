@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import application.EstoqueJavaFxMain;
+import application.SCE1Main;
 import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
@@ -216,10 +216,10 @@ public class ProdutoNovoFormController implements Initializable, DataChangeListe
 			prod.setFoto(getBytes());
 			PrincipalFormController.setProduto(prod);
 
-			EstoqueJavaFxMain.setDialogScene(new Scene(pane));
+			SCE1Main.setDialogScene(new Scene(pane));
 			Stage produtoStage = new Stage();
 			produtoStage.setTitle(Strings.getTitle());
-			produtoStage.setScene(EstoqueJavaFxMain.getDialogScene());
+			produtoStage.setScene(SCE1Main.getDialogScene());
 			produtoStage.setResizable(false);
 			produtoStage.initModality(Modality.APPLICATION_MODAL);
 			produtoStage.initOwner(null);

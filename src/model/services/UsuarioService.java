@@ -64,4 +64,10 @@ public class UsuarioService {
 	public List<Usuario> findAll() {
 		return dao.findAll();
 	}
+	
+	public Usuario find(int id) {
+		
+		return dao.findById(id);
+	}
+	
 }

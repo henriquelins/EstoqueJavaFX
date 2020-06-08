@@ -17,9 +17,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
+import model.entities.Usuario;
+import model.services.UsuarioService;
 import properties.PropertiesFile;
 
-public class EstoqueJavaFxMain extends Application {
+public class SCE1Main extends Application {
 
 	// Tela cheia
 	public static Scene mainScene;
@@ -32,8 +34,6 @@ public class EstoqueJavaFxMain extends Application {
 	private static ServerSocket serverSocket;
 
 	private static int portSocket = 10050;
-	
-	//public static String style = "/application/darktheme.css";
 
 	@Override
 	public void start(Stage primaryStage) throws SQLException {
@@ -44,35 +44,24 @@ public class EstoqueJavaFxMain extends Application {
 		if (conn != null) {
 
 			try {
-
 				// impede que seja criada uma nova instância do programa
 				portSocket = Integer
 						.parseInt(PropertiesFile.loadPropertiesSocket().getProperty(Strings.getPropertiessocketPort()));
 				setServerSocket(new ServerSocket(portSocket));
 				setSocket(new Socket(InetAddress.getLocalHost().getHostAddress(), portSocket));
-
 				try {
-
 					// Define o Style
 					// setUserAgentStylesheet(STYLESHEET_CASPIAN);
 					setUserAgentStylesheet(STYLESHEET_MODENA);
-
-					//Application.setUserAgentStylesheet(getClass().getResource(style).toExternalForm());
-
 					new Forms().splashForm(Strings.getSplashView());
-
 				} catch (Exception e) {
-
 					Alerts.showAlert("Controle de Estoque", "Erro ao abrir a tela", e.getLocalizedMessage(),
 							AlertType.ERROR);
-
 				}
 
 			} catch (IOException e) {
-
 				Alerts.showAlert("Controle de Estoque", "Erro ao abrir o programa",
 						"Já existe uma instância do programa aberta!", AlertType.ERROR);
-
 			}
 
 		} else {
@@ -81,9 +70,7 @@ public class EstoqueJavaFxMain extends Application {
 					"Você deseja configurar as propriedades do banco de dados ?");
 
 			if (result.get() == ButtonType.OK) {
-
 				new Forms().ConfigurarPerpetiesDBForm(Strings.getConfigurarPerpetiesDBView());
-
 			}
 
 		}
@@ -95,7 +82,7 @@ public class EstoqueJavaFxMain extends Application {
 	}
 
 	public static void setMainScene(Scene mainScene) {
-		EstoqueJavaFxMain.mainScene = mainScene;
+		SCE1Main.mainScene = mainScene;
 	}
 
 	public static Scene getDialogScene() {
@@ -103,7 +90,7 @@ public class EstoqueJavaFxMain extends Application {
 	}
 
 	public static void setDialogScene(Scene dialogScene) {
-		EstoqueJavaFxMain.dialogScene = dialogScene;
+		SCE1Main.dialogScene = dialogScene;
 	}
 
 	public static Socket getSocket() {
@@ -111,9 +98,7 @@ public class EstoqueJavaFxMain extends Application {
 	}
 
 	public static void setSocket(Socket socket) {
-
-		EstoqueJavaFxMain.socket = socket;
-
+		SCE1Main.socket = socket;
 	}
 
 	public static ServerSocket getServerSocket() {
@@ -121,9 +106,7 @@ public class EstoqueJavaFxMain extends Application {
 	}
 
 	public static void setServerSocket(ServerSocket serverSocket) {
-
-		EstoqueJavaFxMain.serverSocket = serverSocket;
-
+		SCE1Main.serverSocket = serverSocket;
 	}
 
 	public static int getPortSocket() {
@@ -131,14 +114,27 @@ public class EstoqueJavaFxMain extends Application {
 	}
 
 	public static void setPortSocket(int portSocket) {
-		EstoqueJavaFxMain.portSocket = portSocket;
+		SCE1Main.portSocket = portSocket;
 	}
-	
+
 	// inicia o aplicativo
 
 	public static void main(String[] args) {
-
+		iniciar();
+		
 		launch(args);
+	}
+	
+	private static void iniciar() {
+
+		Usuario usuario = new UsuarioService().find(1);
+
+		if (usuario == null) {
+
+			usuario = new Usuario(null, "ADMINISTRADOR", "adm", "11", 1);			
+			new UsuarioService().usuarioNovoOuEditar(usuario);
+
+		}
 
 	}
 

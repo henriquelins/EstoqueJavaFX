@@ -22,7 +22,7 @@ public class Acesso {
 
 			concedido = true;
 
-		}  else if (acesso == 1 && tela.equalsIgnoreCase(Strings.getLogSegurancaView())) {
+		} else if (acesso == 1 && tela.equalsIgnoreCase(Strings.getLogSegurancaView())) {
 
 			concedido = true;
 

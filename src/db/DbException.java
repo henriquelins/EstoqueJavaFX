@@ -11,7 +11,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class DbException extends RuntimeException {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	public DbException(String msg) {
@@ -19,10 +19,9 @@ public class DbException extends RuntimeException {
 		super(msg);
 
 		Alerts.showAlert("Controle de Estoque", "DbException - Erro ao acessar o Bando de Dados", msg, AlertType.ERROR);
-		 
+
 	}
 
-	
 	public void DbExceptionBanco() {
 
 		try {
@@ -44,8 +43,6 @@ public class DbException extends RuntimeException {
 					AlertType.ERROR);
 
 		}
-
-		
 
 	}
 }

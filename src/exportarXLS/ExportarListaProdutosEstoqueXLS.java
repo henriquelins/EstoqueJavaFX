@@ -57,9 +57,9 @@ public class ExportarListaProdutosEstoqueXLS {
 
 		// MESCLAR CÉLULAS: colunaInicial, linhaInicial, colunaFinal, linhaFinal
 		sheet.mergeCells(0, 0, 7, 0);
-				
+
 		addCaption(sheet, 0, 0, "Lista de Produtos");
-		
+
 		addCaption(sheet, 0, 1, "#");
 		addCaption(sheet, 1, 1, "Nome Produto");
 		addCaption(sheet, 2, 1, "Setor");
