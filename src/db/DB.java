@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
+import application.SCE1Main;
 import gui.util.Alerts;
 import javafx.scene.control.Alert.AlertType;
 import properties.PropertiesFile;
@@ -43,9 +43,10 @@ public class DB {
 				conn = DriverManager.getConnection(url, PropertiesFile.loadPropertiesDB());
 			}
 
-			catch (SQLException e) {
-				Alerts.showAlert("Controle de Saldo", "Erro ao abrir o banco de dados", e.getLocalizedMessage(),
-						AlertType.ERROR);
+			catch (SQLException e) {	
+				
+				SCE1Main.erro = e.getLocalizedMessage();
+				
 			}
 		}
 

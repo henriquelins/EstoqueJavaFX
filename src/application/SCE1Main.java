@@ -14,8 +14,8 @@ import gui.util.Alerts;
 import gui.util.Strings;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import model.entities.Usuario;
 import model.services.UsuarioService;
@@ -24,6 +24,9 @@ import properties.PropertiesFile;
 public class SCE1Main extends Application {
 
 	// Tela cheia
+	
+	public static String erro;
+	
 	public static Scene mainScene;
 
 	// Tela diálogo
@@ -33,7 +36,9 @@ public class SCE1Main extends Application {
 
 	private static ServerSocket serverSocket;
 
-	private static int portSocket = 10050;
+	private static int portSocket;
+
+	// public static String style = "/application/darktheme.css";
 
 	@Override
 	public void start(Stage primaryStage) throws SQLException {
@@ -44,37 +49,50 @@ public class SCE1Main extends Application {
 		if (conn != null) {
 
 			try {
+
 				// impede que seja criada uma nova instância do programa
 				portSocket = Integer
 						.parseInt(PropertiesFile.loadPropertiesSocket().getProperty(Strings.getPropertiessocketPort()));
 				setServerSocket(new ServerSocket(portSocket));
 				setSocket(new Socket(InetAddress.getLocalHost().getHostAddress(), portSocket));
+
 				try {
+					iniciar();
+
 					// Define o Style
 					// setUserAgentStylesheet(STYLESHEET_CASPIAN);
 					setUserAgentStylesheet(STYLESHEET_MODENA);
+
+					// Application.setUserAgentStylesheet(getClass().getResource(style).toExternalForm());
+
 					new Forms().splashForm(Strings.getSplashView());
+
 				} catch (Exception e) {
+
 					Alerts.showAlert("Controle de Estoque", "Erro ao abrir a tela", e.getLocalizedMessage(),
 							AlertType.ERROR);
+
 				}
 
 			} catch (IOException e) {
+
 				Alerts.showAlert("Controle de Estoque", "Erro ao abrir o programa",
 						"Já existe uma instância do programa aberta!", AlertType.ERROR);
+
 			}
 
 		} else {
-
+			
 			Optional<ButtonType> result = Alerts.showConfirmation("Erro ao abrir o banco de dados",
-					"Você deseja configurar as propriedades do banco de dados ?");
+					"Erro: " + erro +" .Você deseja configurar as propriedades do banco de dados ?");
 
 			if (result.get() == ButtonType.OK) {
+				
 				new Forms().ConfigurarPerpetiesDBForm(Strings.getConfigurarPerpetiesDBView());
+				
 			}
-
+			
 		}
-
 	}
 
 	public static Scene getMainScene() {
@@ -120,18 +138,18 @@ public class SCE1Main extends Application {
 	// inicia o aplicativo
 
 	public static void main(String[] args) {
-		iniciar();
-		
+		// iniciar();
+
 		launch(args);
 	}
-	
+
 	private static void iniciar() {
 
 		Usuario usuario = new UsuarioService().find(1);
 
 		if (usuario == null) {
 
-			usuario = new Usuario(null, "ADMINISTRADOR", "adm", "11", 1);			
+			usuario = new Usuario(null, "ADMINISTRADOR", "adm", "11", 1);
 			new UsuarioService().usuarioNovoOuEditar(usuario);
 
 		}
