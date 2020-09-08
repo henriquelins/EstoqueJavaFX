@@ -13,7 +13,7 @@ import properties.PropertiesFile;
 public class DB {
 
 	private static Connection conn = null;
-
+	
 	public static Connection getConnection() {
 
 		if (conn == null) {
@@ -24,7 +24,7 @@ public class DB {
 			}
 
 			catch (SQLException e) {
-				Alerts.showAlert("Controle de Saldo", "Erro ao abrir o banco de dados", e.getLocalizedMessage(),
+				Alerts.showAlert("Controle de Estoque", "Erro ao abrir o banco de dados", e.getLocalizedMessage(),
 						AlertType.ERROR);
 			}
 
@@ -33,25 +33,28 @@ public class DB {
 		return conn;
 	}
 
-	public static Connection getConnectionTeste() {
-
-		if (conn == null) {
+	public Connection getConnectionTeste() {
+		
+		Connection conn_teste = null;
+		
+		if (conn_teste == null) {
 
 			try {
 				String url = PropertiesFile.loadPropertiesDB().getProperty("dburl");
-
-				conn = DriverManager.getConnection(url, PropertiesFile.loadPropertiesDB());
+				conn_teste = DriverManager.getConnection(url, PropertiesFile.loadPropertiesDB());
 			}
 
-			catch (SQLException e) {	
-				
+			catch (SQLException e) {
+
 				SCE1Main.erro = e.getLocalizedMessage();
-				
+
 			}
 		}
 
-		return conn;
+		return conn_teste;
 	}
+
+	
 
 	public static void closeConnection() {
 

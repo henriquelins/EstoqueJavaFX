@@ -32,6 +32,9 @@ import model.services.LogSegurancaService;
 import model.services.MovimentacaoService;
 
 public class MovimentacaoListFormController implements Initializable {
+	
+	@FXML
+	private Label labelLogado;
 
 	private MovimentacaoService movimentacaoService;
 
@@ -258,6 +261,16 @@ public class MovimentacaoListFormController implements Initializable {
 
 	public void setProduto(Produto produto) {
 		this.produto = produto;
+	}
+	
+	public Label getLabelLogado() {
+		return labelLogado;
+	}
+
+	public void setLabelLogado(String logado) {
+
+		this.labelLogado.setText(logado);
+
 	}
 
 	public void carregarCampos(Produto produto) {

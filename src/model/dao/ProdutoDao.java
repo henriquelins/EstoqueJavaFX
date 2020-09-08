@@ -14,5 +14,6 @@ public interface ProdutoDao {
 	List<Produto> findAll();
 	List<Produto> findNomeProduto(String nomeProduto);
 	List<Produto> findNomeSetor(String nomeSetor);
+	List<Produto> findEstoqueBaixo();
 	
 }

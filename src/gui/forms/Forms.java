@@ -1,9 +1,11 @@
 package gui.forms;
 
 import java.io.IOException;
+import java.util.List;
 
 import application.SCE1Main;
 import gui.ConfigurarPerpetiesDBFormController;
+import gui.LembreteFormController;
 import gui.PrincipalFormController;
 import gui.util.Alerts;
 import gui.util.Strings;
@@ -21,6 +23,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import model.entities.Produto;
 import model.entities.Usuario;
 
 public class Forms {
@@ -28,6 +31,59 @@ public class Forms {
 	// Todas são telas simples sem DataChangeList
 	// forms tela splash
 
+	/*
+	 * public void splashForm(String tela) throws IOException {
+	 * 
+	 * try {
+	 * 
+	 * StackPane pane = FXMLLoader.load(getClass().getResource(tela));
+	 * 
+	 * Scene scene = new Scene(pane); scene.setFill(Color.TRANSPARENT);
+	 * 
+	 * Stage primaryStage = new Stage(); primaryStage.setScene(scene);
+	 * primaryStage.setResizable(false);
+	 * primaryStage.initStyle(StageStyle.TRANSPARENT);
+	 * 
+	 * Image applicationIcon = new
+	 * Image(getClass().getResourceAsStream(Strings.getIcone()));
+	 * primaryStage.getIcons().add(applicationIcon);
+	 * 
+	 * primaryStage.show();
+	 * 
+	 * // Carrega a tela splash com fade in effect FadeTransition fadeIn = new
+	 * FadeTransition(Duration.seconds(3), pane); fadeIn.setFromValue(0);
+	 * fadeIn.setToValue(2); fadeIn.setCycleCount(1);
+	 * 
+	 * // Termina a tela splash com fade out effect FadeTransition fadeOut = new
+	 * FadeTransition(Duration.seconds(3), pane); fadeOut.setFromValue(2);
+	 * fadeOut.setToValue(0); fadeOut.setCycleCount(1);
+	 * 
+	 * fadeIn.play();
+	 * 
+	 * // Depois de fade in, inicia o fade out
+	 * 
+	 * fadeOut.play();
+	 * 
+	 * // Depois do fade out, carrega a tela inicial - login
+	 * fadeOut.setOnFinished((e) -> {
+	 * 
+	 * primaryStage.close(); loginForm(Strings.getLoginView());
+	 * 
+	 * });
+	 * 
+	 * } catch (
+	 * 
+	 * IOException ex) {
+	 * 
+	 * Alerts.showAlert("Controle de Estoque", "Erro ao abrir o splash",
+	 * ex.getLocalizedMessage(), AlertType.ERROR);
+	 * 
+	 * }
+	 * 
+	 * }
+	 */
+
+	// forms tela splash
 	public void splashForm(String tela) throws IOException {
 
 		try {
@@ -37,51 +93,51 @@ public class Forms {
 			Scene scene = new Scene(pane);
 			scene.setFill(Color.TRANSPARENT);
 
-			Stage primaryStage = new Stage();
-			primaryStage.setScene(scene);
-			primaryStage.setResizable(false);
-			primaryStage.initStyle(StageStyle.TRANSPARENT);
+			Stage stage = new Stage();
+			stage.setScene(scene);
+			stage.setResizable(false);
+			stage.initStyle(StageStyle.TRANSPARENT);
 
 			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
-			primaryStage.getIcons().add(applicationIcon);
+			stage.getIcons().add(applicationIcon);
 
-			primaryStage.show();
+			stage.show();
 
 			// Carrega a tela splash com fade in effect
-			FadeTransition fadeIn = new FadeTransition(Duration.seconds(3), pane);
+			FadeTransition fadeIn = new FadeTransition(Duration.seconds(4), pane);
 			fadeIn.setFromValue(0);
-			fadeIn.setToValue(2);
+			fadeIn.setToValue(3);
 			fadeIn.setCycleCount(1);
 
 			// Termina a tela splash com fade out effect
-			FadeTransition fadeOut = new FadeTransition(Duration.seconds(3), pane);
-			fadeOut.setFromValue(2);
+			FadeTransition fadeOut = new FadeTransition(Duration.seconds(4), pane);
+			fadeOut.setFromValue(3);
 			fadeOut.setToValue(0);
 			fadeOut.setCycleCount(1);
 
 			fadeIn.play();
 
 			// Depois de fade in, inicia o fade out
+			fadeIn.setOnFinished((e) -> {
 
-			fadeOut.play();
+				fadeOut.play();
+
+			});
 
 			// Depois do fade out, carrega a tela inicial - login
 			fadeOut.setOnFinished((e) -> {
 
-				primaryStage.close();
+				stage.close();
 				loginForm(Strings.getLoginView());
 
 			});
 
-		} catch (
+		} catch (IOException ex) {
 
-		IOException ex) {
-
-			Alerts.showAlert("Controle de Estoque", "Erro ao abrir o splash", ex.getLocalizedMessage(),
+			Alerts.showAlert("Controle de Estoque", "Erro ao carregar o splash", ex.getLocalizedMessage(),
 					AlertType.ERROR);
 
 		}
-
 	}
 
 	// forms tela login
@@ -139,6 +195,8 @@ public class Forms {
 			primaryStage.setScene(PrincipalFormController.getPrincipalFormScene());
 
 			primaryStage.setResizable(true);
+			primaryStage.setMaximized(true);
+			
 			primaryStage.setMaximized(true);
 
 			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
@@ -222,6 +280,36 @@ public class Forms {
 			primaryStage.setScene(new Scene(pane));
 			primaryStage.setResizable(false);
 			primaryStage.initModality(Modality.APPLICATION_MODAL);
+
+			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
+			primaryStage.getIcons().add(applicationIcon);
+
+			primaryStage.showAndWait();
+
+		} catch (IOException e) {
+
+			Alerts.showAlert("IO Exception", "Erro ao carregar a tela", e.getCause().toString(), AlertType.ERROR);
+
+		}
+
+	}
+	
+	public void LembreteForm(String tela, List <Produto> listaLembrete) {
+
+		try {
+
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(tela));
+			VBox pane = loader.load();
+			
+			LembreteFormController controller = loader.getController();
+			controller.carregarCampos(listaLembrete);
+
+			Stage primaryStage = new Stage();
+			primaryStage.setTitle(Strings.getTitle());
+			primaryStage.setScene(new Scene(pane));
+			primaryStage.setResizable(false);
+			primaryStage.initModality(Modality.APPLICATION_MODAL);
+			
 
 			Image applicationIcon = new Image(getClass().getResourceAsStream(Strings.getIcone()));
 			primaryStage.getIcons().add(applicationIcon);

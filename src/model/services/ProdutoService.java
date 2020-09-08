@@ -14,6 +14,7 @@ import model.entities.Produto;
 public class ProdutoService {
 
 	private ProdutoDao dao = DaoFactory.createProdutoDao();
+	
 
 	public List<Produto> findAll() {
 
@@ -82,6 +83,12 @@ public class ProdutoService {
 	public List<Produto> PesquisarNomeSetor(String nomeSetor) {
 
 		return dao.findNomeSetor(nomeSetor);
+
+	}
+	
+	public List<Produto> PesquisarEstoqueBaixo() {
+
+		return dao.findEstoqueBaixo();
 
 	}
 

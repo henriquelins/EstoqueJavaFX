@@ -24,9 +24,9 @@ import properties.PropertiesFile;
 public class SCE1Main extends Application {
 
 	// Tela cheia
-	
+
 	public static String erro;
-	
+
 	public static Scene mainScene;
 
 	// Tela diálogo
@@ -38,15 +38,25 @@ public class SCE1Main extends Application {
 
 	private static int portSocket;
 
+	private static boolean banco = false;
+
 	// public static String style = "/application/darktheme.css";
 
 	@Override
 	public void start(Stage primaryStage) throws SQLException {
 
-		Connection conn = null;
-		conn = DB.getConnectionTeste();
+		boolean conexao = false;
+		
+		try {
+			
+			conexao = testarConexao();
+			
+		} catch (Exception e1) {
+			
+			conexao = false;
+		}
 
-		if (conn != null) {
+		if (conexao) {
 
 			try {
 
@@ -65,6 +75,7 @@ public class SCE1Main extends Application {
 
 					// Application.setUserAgentStylesheet(getClass().getResource(style).toExternalForm());
 
+					// setBanco(true);
 					new Forms().splashForm(Strings.getSplashView());
 
 				} catch (Exception e) {
@@ -82,17 +93,18 @@ public class SCE1Main extends Application {
 			}
 
 		} else {
-			
+
 			Optional<ButtonType> result = Alerts.showConfirmation("Erro ao abrir o banco de dados",
-					"Erro: " + erro +" .Você deseja configurar as propriedades do banco de dados ?");
+					"Erro: " + erro + ". Você deseja configurar as propriedades do banco de dados?");
 
 			if (result.get() == ButtonType.OK) {
-				
+
 				new Forms().ConfigurarPerpetiesDBForm(Strings.getConfigurarPerpetiesDBView());
-				
+
 			}
-			
+
 		}
+
 	}
 
 	public static Scene getMainScene() {
@@ -135,7 +147,13 @@ public class SCE1Main extends Application {
 		SCE1Main.portSocket = portSocket;
 	}
 
-	// inicia o aplicativo
+	public static boolean isBanco() {
+		return banco;
+	}
+
+	public static void setBanco(boolean banco) {
+		SCE1Main.banco = banco;
+	}
 
 	public static void main(String[] args) {
 		// iniciar();
@@ -143,6 +161,7 @@ public class SCE1Main extends Application {
 		launch(args);
 	}
 
+	// inicia o aplicativo
 	private static void iniciar() {
 
 		Usuario usuario = new UsuarioService().find(1);
@@ -153,6 +172,23 @@ public class SCE1Main extends Application {
 			new UsuarioService().usuarioNovoOuEditar(usuario);
 
 		}
+
+	}
+
+	// testar conexão
+	public static boolean testarConexao() throws Exception {
+
+		boolean conexao = false;
+		Connection connection = new DB().getConnectionTeste();
+
+		if (connection != null) {
+
+			conexao = true;
+		}
+
+		connection.close();
+
+		return conexao;
 
 	}
 

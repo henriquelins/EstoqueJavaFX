@@ -25,11 +25,11 @@
       </ToolBar>
       <AnchorPane prefHeight="574.0" prefWidth="885.0">
          <children>
-            <TextArea fx:id="textAreaLogSeguranca" layoutX="41.0" layoutY="31.0" prefHeight="480.0" prefWidth="800.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="44.0" AnchorPane.rightAnchor="44.0" AnchorPane.topAnchor="30.0">
+            <TextArea fx:id="textAreaLogSeguranca" editable="false" layoutX="41.0" layoutY="31.0" prefHeight="480.0" prefWidth="800.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="44.0" AnchorPane.rightAnchor="44.0" AnchorPane.topAnchor="30.0">
                <font>
                   <Font name="System Bold" size="10.0" />
                </font></TextArea>
-            <Button fx:id="buttonFechar" layoutX="752.0" layoutY="530.0" mnemonicParsing="false" onAction="#onButtonFecharAction" prefHeight="30.0" prefWidth="89.0" style="-fx-background-radius: 10;" text="FECHAR" />
+            <Button fx:id="buttonFechar" defaultButton="true" layoutX="752.0" layoutY="530.0" mnemonicParsing="false" onAction="#onButtonFecharAction" prefHeight="30.0" prefWidth="89.0" style="-fx-background-radius: 10;" text="FECHAR" />
          </children>
       </AnchorPane>
    </children>

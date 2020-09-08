@@ -63,6 +63,8 @@ import model.services.SetorService;
 
 public class PrincipalFormController implements Initializable, DataChangeListener {
 
+	private static List<Produto> listaLembrete;
+
 	private static Scene PrincipalFormScene;
 
 	private static byte[] bytes;
@@ -365,10 +367,10 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 		new LogSegurancaService().novoLogSeguranca(usuario.getNome(), Strings.getLogMessage012());
 		createProdutoDialogForm(Strings.getProdutoNovoView());
-		
+
 		apagarDetalhes();
 		tableViewProduto.setItems(null);
-		
+
 		limparCbPesquisaSetor();
 
 	}
@@ -519,7 +521,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 								new LogSegurancaService().novoLogSeguranca(usuario.getNome(),
 										Strings.getLogMessage014());
 
-								createMovimentacaoListDialogForm(produto, Strings.getMovimentacaoListView());
+								createMovimentacaoListDialogForm(usuario, produto, Strings.getMovimentacaoListView());
 
 							}
 
@@ -673,7 +675,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 								service.remove(produto);
 								apagarDetalhes();
 								tableViewProduto.setItems(null);
-								
+
 								limparCbPesquisaSetor();
 
 							} catch (DbIntegrityException e) {
@@ -890,6 +892,20 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 		cbPesquisaSetor.setItems(FXCollections.observableArrayList(listaSetor()));
 
+		listaLembrete = service.PesquisarEstoqueBaixo();
+
+		try {
+
+			if (!listaLembrete.isEmpty()) {
+
+				new Forms().LembreteForm(Strings.getLembreteView(), listaLembrete);
+
+			}
+
+		} catch (NullPointerException e) {
+
+		}
+
 	}
 
 	public void updateTableView() {
@@ -968,7 +984,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 	}
 
-	private void createMovimentacaoListDialogForm(Produto produto, String absoluteName) {
+	private void createMovimentacaoListDialogForm(Usuario usuario, Produto produto, String absoluteName) {
 
 		boolean concedido = false;
 		Acesso acesso = new Acesso();
@@ -984,6 +1000,7 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 				MovimentacaoListFormController controller = loader.getController();
 				controller.setMovimentacaoService(new MovimentacaoService());
+				controller.setLabelLogado(usuario.toUsuarioLogado());
 				controller.carregarCampos(produto);
 				controller.setProduto(produto);
 
@@ -1300,11 +1317,11 @@ public class PrincipalFormController implements Initializable, DataChangeListene
 
 		String status = "";
 
-		if (quantidade <= estoque_minimo) {
+		if (quantidade <= estoque_minimo * 3) {
 
 			status = Strings.getStatus1();
 
-		} else if ((quantidade >= estoque_minimo * 3) || (quantidade <= estoque_minimo * 6)) {
+		} else if ((quantidade >= estoque_minimo * 3) && (quantidade <= estoque_minimo * 6)) {
 
 			status = Strings.getStatus2();
 

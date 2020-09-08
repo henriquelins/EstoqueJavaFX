@@ -53,7 +53,7 @@
             </TableView>
             <ToolBar prefHeight="40.0" prefWidth="200.0">
                <items>
-                  <AnchorPane prefHeight="30.0" prefWidth="1022.0" />
+                  <Label fx:id="labelLogado" />
                </items></ToolBar>
          </children>
       </VBox>

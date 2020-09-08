@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import gui.LoginFormController;
 import gui.util.Alerts;
+import gui.util.Constraints;
 import gui.util.Utils;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
@@ -28,13 +29,20 @@ public class MovimentacaoService {
 			switch (movimentacao.getTipo()) {
 
 			case ("ENTRADA DE PRODUTOS (+)"):
-
+				
+				estoqueAtual = movimentacao.getQuantidadeAnterior() + movimentacao.getValorMovimento();
+			
+			
+			
 				Optional<ButtonType> result1 = Alerts.showConfirmation("Confirmação",
-						"Você deseja dar entrada no estoque do produto " + movimentacao.getProduto().getNome().toUpperCase() + " ?");
+						"Entrada no produto " + movimentacao.getProduto().getNome().toUpperCase() + " ? "
+								+ "Com a entrada de " + Constraints.tresDigitos(movimentacao.getValorMovimento()) 
+								+ " unid(s) adicionado(s) ao saldo atual " + Constraints.tresDigitos(movimentacao.getQuantidadeAnterior()) 
+								+ " unid(s), o novo saldo será de " + Constraints.tresDigitos(estoqueAtual) 
+								+ " unid(s).");
 
 				if (result1.get() == ButtonType.OK) {
 
-					estoqueAtual = movimentacao.getQuantidadeAnterior() + movimentacao.getValorMovimento();
 					daoProd.updateEstoqueAtual(estoqueAtual, movimentacao.getProduto().getIdProduto());
 					dao.insert(movimentacao);
 					
@@ -52,13 +60,19 @@ public class MovimentacaoService {
 				break;
 
 			case ("SAÍDA DE PRODUTOS (-)"):
+				
+				estoqueAtual = movimentacao.getQuantidadeAnterior() - movimentacao.getValorMovimento();
 
 				Optional<ButtonType> result2 = Alerts.showConfirmation("Confirmação",
-						"Você deseja dar saída no estoque do produto " + movimentacao.getProduto().getNome().toUpperCase() + " ?");
+						"Saída no produto " + movimentacao.getProduto().getNome().toUpperCase() + " ? "
+								+ "Com a saída de " + Constraints.tresDigitos(movimentacao.getValorMovimento()) 
+								+ " unid(s) subtraído(s) do saldo atual de " + Constraints.tresDigitos(movimentacao.getQuantidadeAnterior()) 
+								+ " unid(s), o novo saldo será de " + Constraints.tresDigitos(estoqueAtual) 
+								+ " unid(s).");
 
 				if (result2.get() == ButtonType.OK) {
 
-					estoqueAtual = movimentacao.getQuantidadeAnterior() - movimentacao.getValorMovimento();
+					
 					daoProd.updateEstoqueAtual(estoqueAtual, movimentacao.getProduto().getIdProduto());
 					dao.insert(movimentacao);
 					

@@ -49,6 +49,11 @@ public class Strings {
 		return "Cadastro de Usuários";
 
 	}
+	
+	public static String getTitleLembrete() {
+		
+		return "Lembrete para os Usuários";
+	}
 
 	// Properties
 
@@ -100,7 +105,7 @@ public class Strings {
 
 	public static String getImageSplash() {
 
-		return "/imagens/conecta_2.png";
+		return "/imagens/inicio_sce.png";
 
 	}
 
@@ -199,6 +204,12 @@ public class Strings {
 
 		return "/gui/LogSegurancaView.fxml";
 	}
+	
+	public static String getLembreteView() {
+
+		return "/gui/LembreteView.fxml";
+	}
+
 
 	public static String getSobreView() {
 
@@ -393,5 +404,7 @@ public class Strings {
 		return "Fazer restauração do banco";
 
 	}
+
+	
 
 }

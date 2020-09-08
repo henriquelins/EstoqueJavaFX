@@ -393,4 +393,53 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 		return produto;
 
 	}
+
+	@Override
+	public List<Produto> findEstoqueBaixo() {
+	
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		List<Produto> list = new ArrayList<>();
+
+		try {
+
+			conn.setAutoCommit(false);
+
+			st = conn.prepareStatement("SELECT * FROM produto WHERE quantidade <= (estoque_minimo*3)");
+			rs = st.executeQuery();
+
+			
+
+			while (rs.next()) {
+
+				Produto produto = instantiateProduto(rs);
+				list.add(produto);
+
+			}
+
+			conn.commit();
+
+			return list;
+
+		} catch (SQLException e) {
+
+			try {
+
+				conn.rollback();
+				throw new DbException("Transaction rolled back. Cause by: " + e.getLocalizedMessage());
+
+			} catch (SQLException e1) {
+
+				throw new DbException("Error trying to rollback. Cause by: " + e.getLocalizedMessage());
+			}
+
+		} finally {
+
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+
+		}
+
+		
+	}
 }

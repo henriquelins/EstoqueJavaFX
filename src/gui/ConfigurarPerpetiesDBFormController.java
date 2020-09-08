@@ -1,11 +1,8 @@
 package gui;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -18,11 +15,11 @@ import gui.util.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import properties.PropertiesFile;
 
 public class ConfigurarPerpetiesDBFormController implements Initializable {
@@ -58,7 +55,7 @@ public class ConfigurarPerpetiesDBFormController implements Initializable {
 			textFieldUrl.setEditable(true);
 			textFieldPassword.setEditable(true);
 			textFieldUser.setEditable(true);
-			
+
 			buttonConfirmar.setDisable(true);
 			buttonEditarSalvar.setText("SALVAR");
 
@@ -74,7 +71,7 @@ public class ConfigurarPerpetiesDBFormController implements Initializable {
 
 			PropertiesFile.writePropertiesDB(textFieldUrl.getText(), textFieldPassword.getText(),
 					textFieldUser.getText());
-			
+
 			buttonConfirmar.setDisable(false);
 			buttonEditarSalvar.setText("EDITAR");
 		}
@@ -82,22 +79,24 @@ public class ConfigurarPerpetiesDBFormController implements Initializable {
 	}
 
 	@FXML
-	public void onButtonConfirmarAction(ActionEvent event) {
+	public void onButtonConfirmarAction(ActionEvent event) throws SQLException {
 
 		Utils.currentStage(event).close();
+		
+		boolean conexao = false;
+		
+		try {
+			
+			conexao = testarConexao();
+			
+		} catch (Exception e1) {
+			
+			conexao = false;
+		}
 
-		Connection conn = null;
-		conn = DB.getConnectionTeste();
 
-		if (conn != null) {
-
-			try {
-
-				// impede que seja criada uma nova instância do programa
-				SCE1Main.setPortSocket(Integer.parseInt(
-						PropertiesFile.loadPropertiesSocket().getProperty(Strings.getPropertiessocketPort())));
-				SCE1Main.setServerSocket(new ServerSocket(SCE1Main.getPortSocket()));
-				SCE1Main.setSocket(new Socket(InetAddress.getLocalHost().getHostAddress(), SCE1Main.getPortSocket()));
+		if (conexao) {
+		
 
 				try {
 
@@ -109,19 +108,13 @@ public class ConfigurarPerpetiesDBFormController implements Initializable {
 							AlertType.ERROR);
 
 				}
-				
-			} catch (IOException e) {
 
-				Alerts.showAlert("Controle de Estoque", "Erro ao abrir o programa",
-						"Já existe uma instância do programa aberta!", AlertType.ERROR);
-
-			}
+					
 
 		} else {
 
 			Optional<ButtonType> result = Alerts.showConfirmation("Erro ao abrir o banco de dados",
-					"Erro: " + SCE1Main.erro + " .Você deseja configurar as propriedades do banco de dados ?");
-
+					"Erro: " + SCE1Main.erro + " .Você deseja configurar as propriedades do banco de dados?");
 
 			if (result.get() == ButtonType.OK) {
 
@@ -130,6 +123,9 @@ public class ConfigurarPerpetiesDBFormController implements Initializable {
 			}
 
 		}
+		
+
+		
 
 	}
 
@@ -155,5 +151,21 @@ public class ConfigurarPerpetiesDBFormController implements Initializable {
 		textFieldUser.setEditable(false);
 
 	}
+	
+	// testar conexão
+		public static boolean testarConexao() throws Exception {
 
+			boolean conexao = false;
+			Connection connection = new DB().getConnectionTeste();
+
+			if (connection != null) {
+
+				conexao = true;
+			}
+
+			connection.close();
+
+			return conexao;
+
+		}
 }
